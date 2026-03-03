@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Store - Login</title>
+    <link rel="stylesheet" href=""> <!--Will be used later-->
+    <script>
+        function togglePassword() {
+            var x = document.getElementById("password");
+            var icon = document.getElementById("toggleIcon");
+            if (x.type === "password") {
+                x.type = "text";
+                icon.innerHTML = "🔒";
+            } else {
+                x.type = "password";
+                icon.innerHTML = "👁️";
+            }
+        }
+    </script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <img src="assets/duck-logo.png" alt="Duck Library Logo" width="30">
+            <span>Duck Library</span>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="/home.html">Home</a></li>
+                <li><a href="/catalog.html">Catalog</a></li>
+                <li><a href="/pricing.html">Pricing</a></li>
+                <li><a href="/about.html">About</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+            <a href="sign_up.html" class="btn-signup">Sign Up</a>
+        </div>
+    </header>
+    <br>
+    <main class="login-container">
+        <header class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Enter your credentials to access your personal library.</p>
+        </header>
+        
+        <form action="" method="post"> <!--action here must be back end file-->
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <br>
+                <input type="email" id="email" name="user_email" placeholder="name@example.com" required>
+            </div>
+            <br>
+            
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="password">Password</label>
+                    <a href="forgot_password.html" class="forgot-link">Forgot Password?</a>
+                </div>
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="user_password" placeholder="Enter your password" required>
+                    <span id="toggleIcon" onclick="togglePassword()">
+                        👁️
+                    </span>
+                </div>
+            </div>
+            <br>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="remember" name="user_remember">
+                <label for="remember">Remember me for 30 days</label>
+            </div>
+            <br>
+            
+            <div class="submit-group">
+                <input type="submit" value="Sign In">
+            </div>
+        </form>
+        
+        <section class="social-login-group">
+            <hr>
+            <p>OR CONTINUE WITH</p>
+            
+            <div class="social-buttons">
+                <a href="/auth/google" class="btn-social"> <!--href here must be back end file-->
+                    <img src="assets/google-logo.jpg" alt="" width="18"> Google
+                </a>
+                <a href="/auth/apple" class="btn-social">
+                    <img src="assets/apple-logo.jpg" alt="" width="18"> Apple
+                </a>
+            </div>
+
+            <p class="signup-link">
+                Don't have an account? <a href="sign_up.html">Sign up for free</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p><small>&copy; 2026 Duck Library. All rights reserved.</small></p>
+    </footer>
+</body>
+</html>
