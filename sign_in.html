@@ -21,10 +21,10 @@
 </head>
 <body>
     <header class="main-header">
-        <div class="logo">
+        <section class="logo">
             <img src="assets/duck-logo.png" alt="Duck Library Logo" width="30">
             <span>Duck Library</span>
-        </div>
+        </section>
 
         <nav>
             <ul>
@@ -35,11 +35,13 @@
             </ul>
         </nav>
 
-        <div class="header-actions">
+        <section class="header-actions">
             <a href="sign_up.html" class="btn-signup">Sign Up</a>
-        </div>
+        </section>
     </header>
+
     <br>
+
     <main class="login-container">
         <header class="login-header">
             <h1>Welcome Back</h1>
@@ -47,50 +49,56 @@
         </header>
         
         <form action="" method="post"> <!--action here must be back end file-->
-            <div class="form-group">
+
+            <fieldset class="form-group">
                 <label for="email">Email Address</label>
                 <br>
                 <input type="email" id="email" name="user_email" placeholder="name@example.com" required>
-            </div>
+            </fieldset>
+
             <br>
             
-            <div class="form-group">
-                <div class="label-row">
+            <fieldset class="form-group">
+                <section class="label-row">
                     <label for="password">Password</label>
                     <a href="forgot_password.html" class="forgot-link">Forgot Password?</a>
-                </div>
-                <div class="input-wrapper">
+                </section>
+
+                <section class="input-wrapper">
                     <input type="password" id="password" name="user_password" placeholder="Enter your password" required>
                     <span id="toggleIcon" onclick="togglePassword()">
                         👁️
                     </span>
-                </div>
-            </div>
+                </section>
+            </fieldset>
+
             <br>
             
-            <div class="checkbox-group">
+            <section class="checkbox-group">
                 <input type="checkbox" id="remember" name="user_remember">
                 <label for="remember">Remember me for 30 days</label>
-            </div>
+            </section>
+
             <br>
             
-            <div class="submit-group">
+            <section class="submit-group">
                 <input type="submit" value="Sign In">
-            </div>
+            </section>
+
         </form>
         
         <section class="social-login-group">
             <hr>
             <p>OR CONTINUE WITH</p>
             
-            <div class="social-buttons">
-                <a href="/auth/google" class="btn-social"> <!--href here must be back end file-->
+            <section class="social-buttons">
+                <a href="/auth/google" class="btn-social">
                     <img src="assets/google-logo.jpg" alt="" width="18"> Google
                 </a>
                 <a href="/auth/apple" class="btn-social">
                     <img src="assets/apple-logo.jpg" alt="" width="18"> Apple
                 </a>
-            </div>
+            </section>
 
             <p class="signup-link">
                 Don't have an account? <a href="sign_up.html">Sign up for free</a>
