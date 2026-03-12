@@ -1,12 +1,8 @@
-/* ==========================================================================
-   CSS Variables (Design Tokens)
-   ========================================================================== */
+
    :root {
     /* Colors */
     --bg-main: #0a0b0d; /* Deepest black/grey */
-    --bg-secondary: #121418; /* Dark grey for sidebar/header */
     --bg-card: #151821; /* Slightly lighter for cards */
-    --bg-panel: #161924; /* Panels */
     --bg-hover: #1e2232;
     --border-color: #2a2e40;
     
@@ -29,10 +25,7 @@
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     
     /* Spacing & Layout */
-    --sidebar-width: 260px;
-    --header-height: 70px;
     --border-radius: 12px;
-    --border-radius-sm: 8px;
     --transition: all 0.2s ease;
 }
 
@@ -449,16 +442,9 @@ td {
 }
 
 @media (max-width: 900px) {
-    .sidebar { width: 80px; }
-    .sidebar-header, .nav-item span, .nav-item i { justify-content: center; }
-    .sidebar-header h2, .nav-item { font-size: 0; }
-    .nav-item i { font-size: 1.2rem; }
-    .main-wrapper { margin-left: 80px; }
-    .top-nav { display: none; }
+    .main-wrapper { margin-left: 0; }
 }
 
 @media (max-width: 600px) {
     .stats-row { grid-template-columns: 1fr; }
-    .search-bar { width: 150px; }
-    .user-info { display: none; }
 }
