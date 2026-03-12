@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books & Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="Book-&-inventory.css">
 </head>
+<main class="container">
 <header>
-    <div>
-        <div>
-            <h1>Books & Inventory</h1>
+    <div class="header">
+        <div >
+            <h1 >Books & Inventory</h1>
             <p>Manage your global catalog and real-time stock levels.</p>
         </div>
-        <button>
+        <button class ="add-btn">
             <i class="fas fa-plus"></i>
             Add New Book
         </button>
     </div>
 </header>
-<body>
+<body >
     <table>
-    <tr>
+    <tr >
         <th>Book Title & Author</th>
         <th>ISBN-13</th>
         <th>SKU</th>
@@ -30,33 +32,33 @@
     </tr>
     <tr>
         <td>
-            <div class="book-info">
+            <div >
                 <h4>Book Title</h4>
                 <span>Author Name</span>
             </div>
         </td>
         <td>
-            <div class="isbn-13">
+            <div>
                 <span>978-0525559474</span>
             </div>
         </td>
         <td>
-            <div class="sku">
+            <div>
                 <span>LUM-001</span>
             </div>
         </td>
         <td>
-            <div class="stock-level">
-                <span>128</span>
+            <div class="progress">
+                <div class="progress-bar" style="width: 100%"> </div><span>128</span>
             </div>
         </td>
         <td>
-            <div class="status">
+            <div class="status-green">
                 <span>In Stock</span>
             </div>
         </td>
         <td>
-            <div class="actions">
+            <div>
                 <span><i class="fas fa-pen-to-square action-icon"></i></span>
             </div>
         </td>
@@ -79,12 +81,13 @@
         </div>
     </td>
     <td>
-        <div>
+        <div class="progress">
+            <div class="progress-bar-yellow" style="width: 20%"></div>
             <span>4</span>
         </div>
     </td>
     <td>
-        <div>
+        <div class="status-yellow">
             <span>low stock</span>
         </div>
     </td>
@@ -112,13 +115,14 @@
         </div>
     </td>
     <td>
-        <div>
-            <span>0</span>
+        <div class="progress">
+            <div class="progress-bar" style="width: 0%"></div>
+            <span style="color: red">0</span>
         </div>
     </td>
     <td>
-        <div>
-            <span>sold out</span>
+        <div class="status-red">
+            <span >sold out</span>
         </div>
     </td>
     <td>
@@ -145,12 +149,13 @@
         </div>
     </td>
     <td>
-        <div>
+        <div class="progress" >
+            <div class="progress-bar" style="width: 45%"></div>
             <span>45</span>
         </div>
     </td>
     <td>
-        <div>
+        <div class="status-green">
             <span>In Stock</span>
         </div>
     </td>
@@ -161,12 +166,13 @@
     </td>
    </tr>
    </table>
-   <div>
+<div class="pagination">
     <span>Showing 4 of 2,482 books</span>
-    <div>
+    <div class="pagination button">
         <button>Previous</button>
         <button>Next</button>
     </div>
 </div>
 </body>
+</main>
 </html>
