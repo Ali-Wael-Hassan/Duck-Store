@@ -4,20 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duck Store - Login</title>
-    <link rel="stylesheet" href=""> <!--Will be used later-->
-    <script>
-        function togglePassword() {
-            var x = document.getElementById("password");
-            var icon = document.getElementById("toggleIcon");
-            if (x.type === "password") {
-                x.type = "text";
-                icon.innerHTML = "🔒";
-            } else {
-                x.type = "password";
-                icon.innerHTML = "👁️";
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
     <header class="main-header">
@@ -48,15 +35,14 @@
             <p>Enter your credentials to access your personal library.</p>
         </header>
         
-        <form action="" method="post"> <!--action here must be back end file-->
+        <form action="" method="post">
 
             <fieldset class="form-group">
-                <label for="email">Email Address</label>
-                <br>
+                <section class="label-row">
+                    <label for="email">Email Address</label>
+                </section>
                 <input type="email" id="email" name="user_email" placeholder="name@example.com" required>
             </fieldset>
-
-            <br>
             
             <fieldset class="form-group">
                 <section class="label-row">
@@ -66,20 +52,13 @@
 
                 <section class="input-wrapper">
                     <input type="password" id="password" name="user_password" placeholder="Enter your password" required>
-                    <span id="toggleIcon" onclick="togglePassword()">
-                        👁️
-                    </span>
                 </section>
             </fieldset>
-
-            <br>
             
             <section class="checkbox-group">
                 <input type="checkbox" id="remember" name="user_remember">
                 <label for="remember">Remember me for 30 days</label>
             </section>
-
-            <br>
             
             <section class="submit-group">
                 <input type="submit" value="Sign In">
@@ -88,15 +67,15 @@
         </form>
         
         <section class="social-login-group">
-            <hr>
-            <p>OR CONTINUE WITH</p>
+            <div class="divider">
+                <hr>
+                <span>OR CONTINUE WITH</span>
+                <hr>
+            </div>
             
             <section class="social-buttons">
                 <a href="/auth/google" class="btn-social">
                     <img src="assets/google-logo.jpg" alt="" width="18"> Google
-                </a>
-                <a href="/auth/apple" class="btn-social">
-                    <img src="assets/apple-logo.jpg" alt="" width="18"> Apple
                 </a>
             </section>
 
