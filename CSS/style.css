@@ -65,7 +65,7 @@ body {
 .signup-page {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    width: 90%;
+    width: 60%;
     margin: 2.5rem auto;
     background: var(--card-bg);
     border-radius: 1rem;
