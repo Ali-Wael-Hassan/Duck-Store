@@ -4,7 +4,7 @@
     <title>Duck Library | Gamification</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="genral_style.css">
+    <link rel="stylesheet" href="styletest.css">
 </head>
 
 <body>
@@ -32,7 +32,6 @@
             <header id="content_header">
                 <h1>Gamification Configuration</h1>
                 <p>Configure how users earn gold points across the Lumina platform.</p>
-                <button id="save_button">Save All Changes</button>
                 <nav id="content_nav">
                     <button class="tab">Point Values</button>
                     <button class="tab">Levels & Ranks</button>
@@ -40,7 +39,7 @@
                     <button class="tab">Multipliers</button>
                 </nav>
             </header>
-            <div id="form_space">
+            <div id="config_points">
                 <form id="points_form" action="">
                     <section id="daily_rewards">
                         <header id=daily_rewards_header>
@@ -79,11 +78,99 @@
                         </footer>
                     </section>
                 </form>
+                <footer id="form_actions">
+                    <button id="reset">Reset to Defaults</button>
+                    <button id="save">Update Configuration</button>
+                </footer>
             </div>
-            <footer id="form_actions">
-                <button id="reset">Reset to Defaults</button>
-                <button id="save">Update Configuration</button>
-            </footer>
+            <div id="config_levels">
+                <header id="rank_header">
+                    <h3>Levels & Ranks Configuration</h3>
+                    <button id="new_rank">Add New Rank</button>
+                </header>
+                <main id="rank_body">
+                    <table id="ranks">
+                        <th id="rank_head">
+                        <td class="rank_head_item">Rank Name</td>
+                        <td class="rank_head_item">XP threshold</td>
+                        <td class="rank_head_item">Badge Icon</td>
+                        <td class="rank_head_item">Perks & rewards</td>
+                        <td class="rank_head_item">Action</td>
+                        </th>
+                        <tr class="rank">
+                            <td>rank</td>
+                        </tr>
+                        <tfoot>
+                            <td>showing</td>
+                            <td><button id="show_more_ranks">1</button></td>
+                        </tfoot>
+                    </table>
+                    <footer id="Levels_foot">
+                        <article id="av_rank">
+                            av rank
+                        </article>
+                        <article id="total_masters">total_masters</article>
+                        <article id="actev_perks">actev_perks</article>
+                    </footer>
+                </main>
+            </div>
+            <div id="config_events">
+                <header id="events_header">
+                    <h3>Events Configuration</h3>
+                    <button id="new_events">Add New Event</button>
+                </header>
+                <main id="events_body">
+                    <table id="events">
+                        <th id="event_head">
+                        <td class="event_head_item">Event Name</td>
+                        <td class="event_head_item">Points</td>
+                        <td class="event_head_item">Trequency Limit</td>
+                        <td class="event_head_item">status</td>
+                        <td class="event_head_item">Action</td>
+                        </th>
+                        <tr class="event">
+                            <td>rank</td>
+                        </tr>
+                        <tfoot>
+                            <td>showing</td>
+                            <td><button id="show_more_events">1</button></td>
+                        </tfoot>
+                    </table>
+                    <footer id="events_foot">
+                        <article id="av_d_ernings">
+                            av rank
+                        </article>
+                        <article id="total_actev_events">total Actev events </article>
+                        <article id="pop_trigger">pop trigger</article>
+                    </footer>
+                </main>
+            </div>
+            <div id="config_multi">
+                <header id="multis_header">
+                    <h3>Multipliers Configuration</h3>
+                    <button id="new_multi">Achedule Multiplier</button>
+                </header>
+                <main id="multis_body">
+                    <table id="multis">
+                        <th id="multi_head">
+                        <td class="multi_head_item">multiplier name</td>
+                        <td class="multi_head_item">value</td>
+                        <td class="multi_head_item">active dates</td>
+                        <td class="multi_head_item">target group</td>
+                        <td class="multi_head_item">status</td>
+                        <td class="multi_head_item">Action</td>
+                        </th>
+                        <tr class="multi">
+                            <td>multi</td>
+                        </tr>
+                    </table>
+                    <footer id="multi_foot">
+                        <article id="notify">
+                            notify
+                        </article>
+                    </footer>
+                </main>
+            </div>
         </main>
     </div>
 </body>
