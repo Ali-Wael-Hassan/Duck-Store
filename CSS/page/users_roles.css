@@ -1,0 +1,260 @@
+﻿body {
+    margin: 0;
+    font-family: Arial;
+    background: #0b1220;
+    color: white;
+}
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #060f1f;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    border-right: 1px solid #1e293b;
+}
+
+.logo {
+    color: #facc15;
+    font-size: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #cbd5f5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.sidebar li.active a {
+    background: #facc15;
+    color: black;
+}
+
+.navbar {
+    position: fixed;
+    left: 240px;
+    right: 0;
+    top: 0;
+    height: 70px;
+    background: #060f1f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    background: #0f172a;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+    .search input {
+        background: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        margin-left: 10px;
+    }
+
+.icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.profile {
+    width: 35px;
+    height: 35px;
+    background: #facc15;
+    border-radius: 50%;
+}
+
+.content {
+    margin-left: 240px;
+    padding: 100px 40px;
+}
+
+.tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tab {
+    padding: 6px 14px;
+    background: #1e293b;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+    .tab.active {
+        background: #facc15;
+        color: black;
+    }
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.add {
+    background: #facc15;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.role-filter button {
+    margin-left: 5px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #1e293b;
+    color: white;
+}
+
+    .role-filter button.active {
+        background: #facc15;
+        color: black;
+    }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #060f1f;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+th {
+    text-align: left;
+    padding: 15px;
+    color: #94a3b8;
+    font-size: 12px;
+    border-bottom: 1px solid #1e293b;
+}
+
+td {
+    padding: 18px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+}
+
+.role {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.admin {
+    background: #facc15;
+    color: black;
+}
+
+.scholar {
+    background: #1e40af;
+}
+
+.user {
+    background: #374151;
+}
+
+.active-status {
+    color: #22c55e;
+}
+
+.offline {
+    color: #94a3b8;
+}
+
+.edit {
+    background: #facc15;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.matrix {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+    .matrix th, .matrix td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #1e293b;
+        color: white;
+        font-size: 13px;
+    }
+
+.circle {
+    width: 18px;
+    height: 18px;
+    background: #374151;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: inline-block;
+}
+
+    .circle.active {
+        background: #22c55e;
+        position: relative;
+    }
+
+        .circle.active::after {
+            content: '✔';
+            color: white;
+            font-size: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }

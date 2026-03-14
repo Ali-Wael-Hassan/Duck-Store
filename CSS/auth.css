@@ -1,0 +1,16 @@
+.auth-title{
+    font-size:1.8rem;
+    font-weight:600;
+}
+
+.auth-subtitle{
+    color:var(--text-muted);
+    font-size:.9rem;
+    margin-top:.3rem;
+}
+
+.auth-footer{
+    margin-top:1.5rem;
+    font-size:.9rem;
+    text-align:center;
+}
