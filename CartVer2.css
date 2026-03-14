@@ -1,0 +1,323 @@
+/* ==========================================================================
+   1. GLOBAL STYLES & VARIABLES
+   ========================================================================== */
+:root {
+  --bg-main: #0f111a;
+  --bg-surface: #151823;
+  --bg-card: #1e2336;
+  --border-color: #252a3d;
+  --accent-gold: #ffcc00;
+  --accent-blue: #316dff;
+  --accent-green: #00ff80;
+  --text-white: #ffffff;
+  --text-muted: #a0a8c0;
+  --text-dim: #636a7e;
+  --max-width: 1400px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-white);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   2. HEADER & NAVIGATION
+   ========================================================================== */
+header {
+  background: var(--bg-surface);
+  padding: 15px 50px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Fixed Logo - Removed 10px restriction */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: bold;
+}
+
+.logo img {
+  height: 35px; /* Adjust height to scale nicely */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Fixed Search Bar - Centered icon */
+.search-bar {
+  position: relative;
+  width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.search-bar input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid #2a314d;
+  padding: 10px 15px 10px 40px; /* Left padding for icon */
+  border-radius: 6px;
+  color: white;
+  outline: none;
+}
+
+.main-nav {
+  display: flex;
+  gap: 30px;
+  font-size: 0.9rem;
+}
+
+.main-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.main-nav a:hover {
+  color: var(--text-white);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-group {
+  position: relative;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--accent-gold);
+  color: black;
+  font-size: 0.7rem;
+  padding: 2px 5px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.user-profile img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid #2a314d;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   3. MAIN LAYOUT
+   ========================================================================== */
+.cart-wrapper {
+  display: flex;
+  max-width: var(--max-width);
+  margin: 40px auto;
+  padding: 0 50px;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.cart-main {
+  flex: 3;
+}
+
+.cart-sidebar {
+  flex: 1.2;
+}
+
+/* Fixed Breadcrumb - Cursor feedback */
+.breadcrumb { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 10px; }
+
+.breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.breadcrumb a:hover {
+  color: var(--text-white);
+}
+
+.breadcrumb span { color: white; font-weight: bold; }
+
+h1 { font-size: 2.5rem; margin-bottom: 5px; }
+.subtitle { color: var(--text-dim); margin-bottom: 30px; }
+
+/* ==========================================================================
+   4. CART & TABLE STRUCTURE
+   ========================================================================== */
+.cart-labels {
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 1fr;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.cart-row {
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 1fr;
+  align-items: center;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.product-col { display: flex; gap: 20px; }
+.product-col img { width: 90px; height: 120px; border-radius: 6px; object-fit: cover; }
+.details h3 { font-size: 1.1rem; margin-bottom: 5px; }
+.author { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 10px; }
+
+.badge-stock {
+  background: rgba(0, 255, 128, 0.1);
+  color: var(--accent-green);
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.badge-bestseller {
+  background: rgba(255, 204, 0, 0.1);
+  color: var(--accent-gold);
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: var(--bg-card);
+  padding: 8px 15px;
+  border-radius: var(--radius-sm);
+  width: fit-content;
+  margin: 0 auto;
+  border: 1px solid #2a314d;
+}
+
+.qty-box button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.total-col {
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   5. SIDEBAR & SUMMARY CARDS
+   ========================================================================== */
+.summary-card {
+  background: var(--bg-surface);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  position: sticky;
+  top: 20px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  color: var(--text-muted);
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 25px 0;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.final-price { color: var(--accent-gold); }
+
+.promo-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.promo-input input {
+  flex: 1;
+  background: var(--bg-main);
+  border: 1px solid #2a314d;
+  padding: 12px;
+  border-radius: 6px;
+  color: white;
+}
+
+/* ==========================================================================
+   6. BUTTONS & FORMS
+   ========================================================================== */
+.btn-checkout {
+  width: 100%;
+  background: var(--accent-gold);
+  color: black;
+  border: none;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.row-btns button {
+  background: var(--bg-card);
+  border: 1px solid #2a314d;
+  color: white;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.center { text-align: center; }
+.right { text-align: right; }
+.gold { color: var(--accent-gold); font-weight: bold; }
