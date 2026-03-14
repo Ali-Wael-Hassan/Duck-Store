@@ -1,0 +1,369 @@
+/* ==========================================================================
+   1. GLOBAL STYLES & VARIABLES
+   ========================================================================== */
+:root {
+    /* Colors */
+    --bg-deep: #0c0e14;
+    --bg-surface: #161922;
+    --bg-input: #1f222e;
+    --border-main: #2a2e3a;
+    
+    /* Accents */
+    --accent-blue: #316dff;
+    --accent-gold: #ffc107;
+    --accent-red: #ff3131;
+    
+    /* Text */
+    --text-white: #ffffff;
+    --text-muted: #b0b4c3;
+    --text-dim: #636a7e;
+
+    /* Layout */
+    --max-width: 1600px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --transition: 0.2s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-white);
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+/* ==========================================================================
+   2. HEADER
+   ========================================================================== */
+header {
+    background-color: var(--bg-surface);
+    padding: 15px 40px;
+    border-bottom: 1px solid var(--border-main);
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.logo img { height: 32px; }
+
+/* Search Bar */
+.search-bar {
+    position: relative;
+    width: 350px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+}
+
+.search-bar input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-main);
+    border-radius: var(--radius-md);
+    padding: 12px 12px 12px 40px;
+    color: var(--text-white);
+    outline: none;
+}
+
+.search-bar input::placeholder { color: var(--text-dim); }
+
+/* Navigation */
+.main-nav {
+    display: flex;
+    gap: 25px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.main-nav a.active {
+    color: var(--text-white);
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.avatar {
+    height: 36px;
+    width: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-main);
+}
+
+/* ==========================================================================
+   3. MAIN LAYOUT & SIDEBAR
+   ========================================================================== */
+.main-layout {
+    display: flex;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 40px;
+    gap: 40px;
+}
+
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.filter-section { margin-bottom: 35px; }
+
+.filter-section h3 {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    margin-bottom: 15px;
+}
+
+.filter-section ul { list-style: none; }
+
+.filter-section li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.filter-section li label, .filter-section li .count-up {
+    cursor: pointer;
+}
+
+.count { color: var(--text-dim); font-size: 0.85rem; }
+
+/* Custom Form Elements */
+input[type="checkbox"] {
+    appearance: none;
+    height: 18px;
+    width: 18px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-main);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+input[type="checkbox"]:checked::after {
+    content: "✕";
+    position: absolute;
+    color: var(--text-white);
+    font-size: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.price-inputs input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-main);
+    border-radius: 6px;
+    padding: 10px;
+    color: var(--text-white);
+    text-align: center;
+}
+
+/* ==========================================================================
+   4. CONTENT & TOOLBAR
+   ========================================================================== */
+.content { flex-grow: 1; }
+
+.breadcrumb {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.breadcrumb:hover {
+    color: var(--text-white);
+}
+
+.content-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.tag {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-main);
+    color: var(--text-white);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tag.active, .tag:hover {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+/* View Controls */
+.grid-list-toggle {
+    display: flex;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-main);
+    border-radius: var(--radius-md);
+    padding: 4px;
+}
+
+.grid-list-toggle button {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.grid-list-toggle button.active {
+    background-color: var(--bg-input);
+    color: var(--text-white);
+}
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.book-card {
+    cursor: pointer;
+    transition: transform var(--transition);
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-cover {
+    height: 320px;
+    background-color: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.book-cover img {
+    max-height: 80%;
+    max-width: 80%;
+    object-fit: contain;
+}
+
+.book-details .title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.book-details .author {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price { font-size: 1.1rem; font-weight: 600; }
+
+.old-price {
+    color: var(--text-dim);
+    text-decoration: line-through;
+    font-size: 0.9rem;
+    margin-left: 8px;
+}
+
+.rating { color: var(--accent-gold); font-size: 0.9rem; font-weight: 500; }
+
+/* Badges */
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.bestseller { 
+    background-color: var(--accent-gold);
+    color: #000; 
+}
+.ebook { 
+    background-color: var(--text-white); 
+    color: #000; 
+}
+.discount { 
+    background-color: var(--accent-red);
+    color: var(--text-white);
+    left: auto; right: 10px;
+}
