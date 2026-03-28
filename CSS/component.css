@@ -153,6 +153,14 @@ p {
     line-height: 1.5;
 }
 
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline-block;
+}
+
 aside {
     display: flex;
     flex-direction: column;
