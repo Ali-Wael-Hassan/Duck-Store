@@ -1,7 +1,7 @@
 window.onload = () => {
 
     google.accounts.id.initialize({
-        client_id: "YOUR_CLIENT_ID",
+        client_id: "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com",
         callback: handleCredentialResponse
     });
 
@@ -32,10 +32,12 @@ window.onload = () => {
 };
 
 function googleLogin() {
+    console.log("Google button clicked");
     google.accounts.id.prompt();
 }
 
 function handleCredentialResponse(response) {
+    console.log("Google response received", response);
     const data = parseJwt(response.credential);
 
     const user = {
