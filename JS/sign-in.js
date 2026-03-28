@@ -11,8 +11,8 @@ function initGoogleSignIn() {
     google.accounts.id.initialize({
         client_id: "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com",
         callback: handleCredentialResponse,
-        use_fedcm_for_prompt: true
     });
+
     googleInitialized = true;
     console.log("Google Sign-In initialized");
 }
@@ -46,11 +46,25 @@ window.onload = () => {
 
 function googleLogin() {
     if (!googleInitialized) {
-        console.warn("Google Sign-In not ready yet, trying again...");
-        initGoogleSignIn();
-        setTimeout(() => google.accounts.id.prompt(), 500);
+        console.warn("Google Sign-In not ready yet, waiting...");
+        const waitAndPrompt = setInterval(() => {
+            if (googleInitialized) {
+                clearInterval(waitAndPrompt);
+                google.accounts.id.prompt(handlePromptMomentNotification);
+            }
+        }, 200);
     } else {
-        google.accounts.id.prompt();
+        google.accounts.id.prompt(handlePromptMomentNotification);
+    }
+}
+
+function handlePromptMomentNotification(notification) {
+    if (notification.isNotDisplayed()) {
+        console.warn("One Tap not displayed:", notification.getNotDisplayedReason());
+        console.info("Use the rendered Google button below the form instead.");
+    }
+    if (notification.isSkippedMoment()) {
+        console.warn("One Tap skipped:", notification.getSkippedReason());
     }
 }
 
