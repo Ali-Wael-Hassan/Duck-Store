@@ -1,4 +1,3 @@
-// sign-in.js
 let googleInitialized = false;
 
 function initGoogleSignIn() {
@@ -11,17 +10,16 @@ function initGoogleSignIn() {
 
     google.accounts.id.initialize({
         client_id: "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com",
-        callback: handleCredentialResponse
+        callback: handleCredentialResponse,
+        use_fedcm_for_prompt: true
     });
     googleInitialized = true;
     console.log("Google Sign-In initialized");
 }
 
-// Start initialization when the page loads
 window.onload = () => {
     initGoogleSignIn();
 
-    // Check for existing user and redirect if already logged in
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
         const user = JSON.parse(savedUser);
