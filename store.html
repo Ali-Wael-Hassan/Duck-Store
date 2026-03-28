@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Store | Fiction Best Sellers</title>
+    <link rel="stylesheet" href="browse.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">DUCK Store</div>
+        <ul class="nav-links">
+            <li><a href="home.html">HOME</a></li>
+            <li><a href="store.html">STORE</a></li>
+            <li><a href="myBooks.html">MYBOOKS</a></li>
+            <li><a href="community.html">COMMUNITY</a></li>
+            <li><a href="reward.html">REWARDS</a></li>
+            <li>
+                <form class="search-bar">
+                    <input type="text" placeholder="Search titles, authors..." name="search">
+                </form>
+            </li>
+            <li><button id="notification_button" aria-label="Notifications">Notifications</button></li>
+            <li><button id="settings_button" aria-label="Settings">Settings</button></li>
+            <li><a href="user_profile.html">PROFILE</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <section class="filter-section">
+                <h3>CATEGORIES</h3>
+                <ul>
+                    <li><input type="checkbox" id="fiction" checked><label for="fiction">Fiction</label><span class="count">1.2k</span></li>
+                    <li><input type="checkbox" id="non-fiction"><label for="non-fiction">Non-Fiction</label><span class="count">850</span></li>
+                    <li><input type="checkbox" id="sci-fi"><label for="sci-fi">Science Fiction</label><span class="count">420</span></li>
+                    <li><input type="checkbox" id="biography"><label for="biography">Biography</label><span class="count">310</span></li>
+                </ul>
+            </section>
+
+            <section class="filter-section">
+                <h3>PRICE RANGE</h3>
+                <div class="price-inputs">
+                    <input type="number" value="0" aria-label="Min Price">
+                    <span class="range-divider">-</span>
+                    <input type="number" value="100" aria-label="Max Price">
+                </div>
+                <div class="slider-container">
+                    <input type="range" min="0" max="100" value="70" class="slider" aria-label="Price range slider">
+                </div>
+            </section>
+
+            <section class="filter-section">
+                <h3>RATING</h3>
+                <ul>
+                    <li><input type="checkbox" id="rating5"><label for="rating5">★★★★★</label><span class="count-up">& Up</span></li>
+                    <li><input type="checkbox" id="rating4"><label for="rating4">★★★★☆</label><span class="count-up">& Up</span></li>
+                    <li><input type="checkbox" id="rating3"><label for="rating3">★★★☆☆</label><span class="count-up">& Up</span></li>
+                </ul>
+            </section>
+
+            <section class="filter-section">
+                <h3>FORMAT</h3>
+                <div class="tag-group">
+                    <button class="tag active">Hardcover</button>
+                    <button class="tag">Paperback</button>
+                    <button class="tag">E-Book</button>
+                    <button class="tag">Audiobook</button>
+                </div>
+            </section>
+        </aside>
+
+        <main class="content">
+            <header class="content-header">
+                <div class="breadcrumb">Store &gt; Books &gt; Fiction</div>
+                <h1>Fiction Best Sellers</h1>
+                <p class="results-meta">Showing 1-12 of 1,248 results</p>
+            </header>
+
+            <div class="toolbar">
+                <div class="active-filters">
+                    <span class="filter-tag">Fiction ✕</span>
+                    <span class="filter-tag">Hardcover ✕</span>
+                    <a href="#" class="clear-all">Clear all</a>
+                </div>
+                
+                <div class="quick-filter">
+                    <input type="text" id="page-filter" placeholder="Filter this page...">
+                </div>
+
+                <div class="view-controls">
+                    <select class="sort-dropdown" aria-label="Sort books">
+                        <option>Sort by: Popularity</option>
+                        <option>Sort by: Newest</option>
+                    </select>
+                    <div class="grid-list-toggle">
+                        <button class="active">Grid</button>
+                        <button>List</button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="book-grid">
+                <article class="book-card">
+                    <a href="midnight-library-details.html">
+                        <div class="book-cover">
+                            <span class="badge bestseller">BESTSELLER</span>
+                            <img src="The_Midnight_Library.jpg" alt="The Midnight Library Cover">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="title">The Midnight Library</h3>
+                            <p class="author">Matt Haig</p>
+                            <div class="price-row">
+                                <span class="price">$14.99</span>
+                                <span class="rating">★ 4.8</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+
+                <article class="book-card">
+                    <a href="project-hail-mary-details.html">
+                        <div class="book-cover">
+                            <span class="badge ebook">E-BOOK</span>
+                            <img src="Project_Hail_Mary.jpg" alt="Project Hail Mary Cover">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="title">Project Hail Mary</h3>
+                            <p class="author">Andy Weir</p>
+                            <div class="price-row">
+                                <span class="price">$11.99</span>
+                                <span class="rating">★ 4.9</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+
+                <article class="book-card">
+                    <a href="great-gatsby-details.html">
+                        <div class="book-cover">
+                            <img src="The_Great_Gatsby.jpg" alt="The Great Gatsby Cover">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="title">The Great Gatsby</h3>
+                            <p class="author">F. Scott Fitzgerald</p>
+                            <div class="price-row">
+                                <span class="price">$9.99</span>
+                                <span class="rating">★ 4.5</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+
+                <article class="book-card">
+                    <a href="atomic-habits-details.html">
+                        <div class="book-cover">
+                            <span class="badge discount">-20%</span>
+                            <img src="Atomic_Habits.png" alt="Atomic Habits Cover">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="title">Atomic Habits</h3>
+                            <p class="author">James Clear</p>
+                            <div class="price-row">
+                                <span class="price">$16.00 <span class="old-price">$20.00</span></span>
+                                <span class="rating">★ 5.0</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>

@@ -3,16 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Books Admin</title>
+    <title>DUCK Store | Admin Dashboard</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="dashboard.css">
     
 </head>
 <body>
+    <header id="navbar">
+        <nav id="site_nav">
+            <img id="site_logo" src="" alt="site logo">
+            <button id="notification_button">notifications</button>
+            <button id="settings_button">Settings</button>
+            <a href="user_profile.html">user</a>
+        </nav>
+    </header>
+    <div class="sidebar">
+        <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
+        <ul>
+            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
+            <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
+            <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
+            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
+        </ul>
+    </div>
+
     <div class="app-container">
         <div class="main-wrapper">
             <main class="main-content">

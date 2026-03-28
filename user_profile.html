@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Store | Profile & Achievements</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">DUCK Store</div>
+        <ul class="nav-links">
+            <li><a href="home.html">HOME</a></li>
+            <li><a href="store.html">STORE</a></li>
+            <li><a href="myBooks.html">MYBOOKS</a></li>
+            <li><a href="community.html">COMMUNITY</a></li>
+            <li><a href="reward.html">REWARDS</a></li>
+            <li>
+                <form class="search-bar">
+                    <input type="text" placeholder="Search titles, authors..." name="search">
+                </form>
+            </li>
+            <li><button id="notification_button" aria-label="Notifications">Notifications</button></li>
+            <li><button id="settings_button" aria-label="Settings">Settings</button></li>
+            <li><a href="user_profile.html">PROFILE</a></li>
+        </ul>
+    </nav>
+
+    <main class="profile-container">
+        <header class="start">
+            <h2>Achievements & Badges</h2>
+            <p>Track your literary milestones and unlock exclusive rewards as you explore the world of books.</p>
+            <div class="header-actions">
+                <button class="btn-share">📤 Share Profile</button>
+                <button class="btn-leader" onclick="window.location.href='community.html'">📊 View Leaderboard</button>
+            </div>
+        </header>
+
+        <section class="stats-overview">
+            <div class="unlocked card">
+                <h4>TOTAL UNLOCKED</h4>
+                <div class="badges">12</div>
+                <p>Badges Earned</p>
+            </div>
+
+            <div class="rank card">
+                <h4>GLOBAL RANK</h4>
+                <span class="rank-value">#452</span>
+                <p>Top 5% of Readers</p>
+            </div>
+
+            <div class="milestone card">
+                <h4>NEXT MILESTONE</h4>
+                <span class="next_stone">"Grand Scholar"</span>
+                <div class="progress-mini">
+                    <div></div>
+                </div>
+                <p>8/10 Books Read</p>
+            </div>
+        </section>
+
+        <section class="achievements-detail">
+            <div class="streaks">
+                <h3>Reading Streaks</h3>
+                <div class="streak-item">
+                    <span>🔥</span>
+                    <strong>14 Day Streak!</strong>
+                    <span>Keep reading to unlock the "Phoenix" badge.</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="genre">
+                <h3>Genre Master</h3>
+                <div class="tag-group">
+                    <span class="badge">Sci-Fi Expert (Lvl 5)</span>
+                    <span class="badge">History Buff (Lvl 2)</span>
+                    <span class="badge">Mystery Novice</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="community">
+                <h3>Community Contributor</h3>
+                <div class="button-grid">
+                    <button class="btn-review">✅ First Review</button>
+                    <button class="btn-chatter">💬 Chatterbox (0/50 chats)</button>
+                    <button class="btn-inf">✨ Influencer</button>
+                    <button class="btn-sharer">✅ Sharer</button>
+                    <button class="btn-curator">📚 Curator</button>
+                    <button class="btn-mentor">🎓 Mentor</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="config-section">
+            <h2>Profile Customization</h2>
+
+            <div class="exp-grid">
+                <div class="item">
+                    <label><strong>Edit Display Name:</strong></label><br>
+                    <input type="text" placeholder="Enter your scholar name...">
+                </div>
+
+                <div class="item">
+                    <label><strong>Profile Privacy Level:</strong></label><br>
+                    <input type="range" min="1" max="3" step="1">
+                    <div>
+                        <span>Public</span>
+                        <span>Friends</span>
+                        <span>Private</span>
+                    </div>
+                </div>
+
+                <div class="tem">
+                    <label><strong>Custom Profile Color:</strong></label><br>
+                    <input type="color" value="#ffcc00">
+                    <span>(Changes badge highlight colors)</span>
+                </div>
+
+                <div class="item">
+                    <label><strong>Birthdate (For Birthday Rewards):</strong></label><br>
+                    <input type="date">
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>
