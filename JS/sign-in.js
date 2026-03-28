@@ -1,20 +1,55 @@
-let googleInitialized = false;
+const GOOGLE_CLIENT_ID = "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com";
+
+let tokenClient = null;
 
 function initGoogleSignIn() {
-    if (googleInitialized) return;
-    if (!window.google || !window.google.accounts || !window.google.accounts.id) {
-        console.log("Waiting for Google script...");
+    if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
         setTimeout(initGoogleSignIn, 200);
         return;
     }
 
-    google.accounts.id.initialize({
-        client_id: "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: "openid email profile",
+        callback: handleTokenResponse,
     });
 
-    googleInitialized = true;
     console.log("Google Sign-In initialized");
+}
+
+async function handleTokenResponse(tokenResponse) {
+    if (tokenResponse.error) {
+        console.error("Google OAuth error:", tokenResponse.error);
+        return;
+    }
+
+    try {
+        const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+        });
+        const data = await res.json();
+
+        const user = {
+            name: data.name,
+            email: data.email,
+            picture: data.picture,
+            role: "user"
+        };
+
+        localStorage.setItem("user", JSON.stringify(user));
+        redirectUser(user.role);
+    } catch (err) {
+        console.error("Failed to fetch Google user info:", err);
+    }
+}
+
+function googleLogin() {
+    if (!tokenClient) {
+        console.warn("Google Sign-In not ready yet, retrying...");
+        setTimeout(googleLogin, 300);
+        return;
+    }
+    tokenClient.requestAccessToken({ prompt: "select_account" });
 }
 
 window.onload = () => {
@@ -44,46 +79,6 @@ window.onload = () => {
     }
 };
 
-function googleLogin() {
-    if (!googleInitialized) {
-        console.warn("Google Sign-In not ready yet, waiting...");
-        const waitAndPrompt = setInterval(() => {
-            if (googleInitialized) {
-                clearInterval(waitAndPrompt);
-                google.accounts.id.prompt(handlePromptMomentNotification);
-            }
-        }, 200);
-    } else {
-        google.accounts.id.prompt(handlePromptMomentNotification);
-    }
-}
-
-function handlePromptMomentNotification(notification) {
-    if (notification.isNotDisplayed()) {
-        console.warn("One Tap not displayed:", notification.getNotDisplayedReason());
-        console.info("Use the rendered Google button below the form instead.");
-    }
-    if (notification.isSkippedMoment()) {
-        console.warn("One Tap skipped:", notification.getSkippedReason());
-    }
-}
-
-function handleCredentialResponse(response) {
-    const data = parseJwt(response.credential);
-    const user = {
-        name: data.name,
-        email: data.email,
-        picture: data.picture,
-        role: "user"
-    };
-    localStorage.setItem("user", JSON.stringify(user));
-    redirectUser(user.role);
-}
-
-function parseJwt(token) {
-    return JSON.parse(atob(token.split('.')[1]));
-}
-
 function redirectUser(role) {
     if (role === "admin") {
         window.location.href = "dashboard.html";
@@ -94,5 +89,5 @@ function redirectUser(role) {
 
 function logout() {
     localStorage.removeItem("user");
-    window.location.href = "sign_in.html";
+    window.location.href = "sign-in.html";
 }
