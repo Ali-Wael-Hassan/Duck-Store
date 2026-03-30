@@ -89,5 +89,5 @@ function redirectUser(role) {
 
 function logout() {
     localStorage.removeItem("user");
-    window.location.href = "sign-in.html";
+    window.location.href = "index.html";
 }
