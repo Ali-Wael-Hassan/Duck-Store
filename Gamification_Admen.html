@@ -7,173 +7,169 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="CSS/component.css">
     <link rel="stylesheet" href="CSS/classes.css">
+    <link rel="stylesheet" href="css/Pages/gamification.css">
+    <script src="js/component.js"></script>
+    <!-- <script type="module" src="JS/gamification.js"></script> -->
 </head>
 
 <body>
-    <header id="navbar">
-        <nav id="site_nav">
-            <img id="site_logo" src="" alt="site logo">
-            <button id="notification_button">notifications</button>
-            <button id="settings_button">Settings</button>
-            <a href="user_profile.html">user</a>
-        </nav>
-    </header>
-    <div class="sidebar">
-        <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
-        <ul>
-            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
-            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
-            <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
-            <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
-            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
-        </ul>
-    </div>
+    <nav>
+        <a href="dashboard.Html" class="site-img"></a>
+        <a href="user_profile.html">user</a>
+    </nav>
+    <aside>
 
-    <div id="background">
-        <main id="main_content">
-            <header id="content_header">
-                <h1>Gamification Configuration</h1>
-                <p>Configure how users earn gold points across the Lumina platform.</p>
-                <nav id="content-nav">
-                    <button class="tab" id="pts-tab" onclick="show_tab('#config-points')">Point Values</button>
-                    <button class="tab" id="lvls-tab" onclick="show_tab('#config-levels')">Levels & Ranks</button>
-                    <button class="tab" id="events-tab" onclick="show_tab('#config-events')">Event Triggers</button>
-                    <button class="tab" id="mults-tab" onclick="show_tab('#config-multi')">Multipliers</button>
+        <a href="dashboard.Html"> Dashboard</a>
+        <a href="Book-&-inventory.Html"> Books & Inventory</a>
+        <a href="users_roles.html">Users & Roles</a>
+        <a href="sales_refunds.html"> Sales & Refunds</a>
+        <a href="Gamification_Admen.html"> Gamification</a>
 
-                </nav>
+    </aside>
+    <main>
+        <section>
+            <h1>Gamification Configuration</h1>
+            <p>Configure how users earn gold points across the Lumina platform.</p>
+            <div id="tab-selectors">
+                <button class="tab-selector" onclick="switch_tab('#config-points')">Point Values</button>
+                <button class="tab-selector" onclick="switch_tab('#config-levels')">Levels & Ranks</button>
+                <button class="tab-selector" onclick="switch_tab('#config-events')">Event Triggers</button>
+                <button class="tab-selector" onclick="switch_tab('#config-multi')">Multipliers</button>
+
+            </div>
+        </section>
+        <section class="tab" id="config-points">
+            <form action="">
+                <section class="card">
+                    <div>
+                        <h3>Daily Login Reward</h3>
+                        <p>Reward users for logging in once every 24 hours.</p>
+                    </div>
+                    <div>
+                        <label>Gold Points Per Login</label>
+                        <input type="number" min="0">
+                        <label>Streak Bonus (Every 7 Days)</label>
+                        <input type="number" min="0">
+                    </div>
+                    <div>
+                        <input type="checkbox" checked>
+                        <label for="push-notification">Send push notification upon successful claim</label>
+                    </div>
+                </section>
+                <section class="card">
+                    <div>
+                        <h3>Book Review Reward</h3>
+                        <p>Points granted when a user submits a valid review.</p>
+                    </div>
+                    <div>
+                        <label>Base Points</label>
+                        <input type="number" min="0">
+                        <label>Bonus Points</label>
+                        <input type="number" min="0">
+                        <label>Min. Character Count</label>
+                        <input type="number" min="0">
+                        <label>Daily Review Limit</label>
+                        <input type="number" min="0">
+                    </div>
+                    <div>
+                        <input type="checkbox" checked>
+                        <label for="award">Award points immediately (Subject to AI moderation)</label>
+                    </div>
+                </section>
+            </form>
+            <div id="form-actions">
+                <button id="reset">Reset to Defaults</button>
+                <button id="save">Update Configuration</button>
+            </div>
+        </section>
+        <section class="tab" id="config-levels" hidden>
+            <div>
+                <h3>Levels & Ranks Configuration</h3>
+                <button id="new-rank">Add New Rank</button>
+            </div>
+            <div>
+                <table>
+                    <thead>
+                        <td>Rank Name</td>
+                        <td>XP threshold</td>
+                        <td>Badge Icon</td>
+                        <td>Perks & rewards</td>
+                        <td>Action</td>
+                    </thead>
+                    <tr>
+                        <td>rank</td>
+                    </tr>
+                    <tfoot>
+                        <td>showing</td>
+                        <td><button>1</button></td>
+                    </tfoot>
+                </table>
+                <section>
+                    <article>
+                        av rank
+                    </article>
+                    <article>total-masters</article>
+                    <article>actev-perks</article>
+                </section>
+        </section>
+        </section>
+        <section class="tab" id="config-events" hidden>
+            <section>
+                <h3>Events Configuration</h3>
+                <button>Add New Event</button>
             </section>
-            <section class="tabs" id="config-points">
-                <form id="points-form" action="">
-                    <section id="daily-rewards">
-                        <section id=daily-rewards-header>
-                            <h3>Daily Login Reward</h3>
-                            <p>Reward users for logging in once every 24 hours.</p>
-                        </section>
-                        <section class="input space">
-                            <label class="input-lable">Gold Points Per Login</label>
-                            <input id="per-day" type="number" min="0">
-                            <label class="input-lable">Streak Bonus (Every 7 Days)</label>
-                            <input id="per-week" type="number" min="0">
-                        </section>
-                        <section id="daily-rewards-footer">
-                            <input type="checkbox" id="push-notification" checked>
-                            <label for="push-notification">Send push notification upon successful claim</label>
-                        </section>
-                    </section>
-                    <section id="review-rewards">
-                        <section id=review-rewards-header>
-                            <h3>Book Review Reward</h3>
-                            <p>Points granted when a user submits a valid review.</p>
-                        </section>
-                        <section class="input space">
-                            <label class="input-lable">Base Points</label>
-                            <input id="base-points" type="number" min="0">
-                            <label class="input-lable">Bonus Points</label>
-                            <input id="bonus-points" type="number" min="0">
-                            <label class="input-lable">Min. Character Count</label>
-                            <input id="min-cunt" type="number" min="0">
-                            <label class="input-lable">Daily Review Limit</label>
-                            <input id="limit" type="number" min="0">
-                        </section>
-                        <section id="review-rewards-footer">
-                            <input id="award" type="checkbox" checked>
-                            <label for="award">Award points immediately (Subject to AI moderation)</label>
-                        </section>
-                    </section>
-                </form>
-                <section id="form-actions">
-                    <button id="reset">Reset to Defaults</button>
-                    <button id="save">Update Configuration</button>
-                </section>
-            </section>
-            <section class="tabs" id="config-levels" hidden>
-                <section id="rank-header">
-                    <h3>Levels & Ranks Configuration</h3>
-                    <button id="new-rank">Add New Rank</button>
-                </section>
-                <section id="rank-body">
-                    <table id="ranks">
-                        <thead id="rank-head">
-                            <td class="rank-head-item">Rank Name</td>
-                            <td class="rank-head-item">XP threshold</td>
-                            <td class="rank-head-item">Badge Icon</td>
-                            <td class="rank-head-item">Perks & rewards</td>
-                            <td class="rank-head-item">Action</td>
-                        </thead>
-                        <tr class="rank">
-                            <td>rank</td>
-                        </tr>
-                        <tfoot>
-                            <td>showing</td>
-                            <td><button id="show-more-ranks">1</button></td>
-                        </tfoot>
-                    </table>
-                    <section id="Levels-foot">
-                        <article id="av-rank">
-                            av rank
-                        </article>
-                        <article id="total-masters">total-masters</article>
-                        <article id="actev-perks">actev-perks</article>
-                    </section>
-                </section>
-            </section>
-            <section class="tabs" id="config-events" hidden>
-                <section id="events-header">
-                    <h3>Events Configuration</h3>
-                    <button id="new-events">Add New Event</button>
-                </section>
-                <section id="events-body">
-                    <table id="events">
-                        <thead id="event-head">
-                            <td class="event-head-item">Event Name</td>
-                            <td class="event-head-item">Points</td>
-                            <td class="event-head-item">Trequency Limit</td>
-                            <td class="event-head-item">status</td>
-                            <td class="event-head-item">Action</td>
-                        </thead>
-                        <tr class="event">
-                            <td>rank</td>
-                        </tr>
-                        <tfoot>
-                            <td>showing</td>
-                            <td><button id="show-more-events">1</button></td>
-                        </tfoot>
-                    </table>
-                    <section id="events-foot">
-                        <article id="av-d-ernings">
-                            av rank
-                        </article>
-                        <article id="total-actev-events">total Actev events </article>
-                        <article id="pop-trigger">pop trigger</article>
-                    </section>
-                </section>
-            </section>
-            <section class="tabs" id="config-multi" hidden>
-                <section id="multis-header">
-                    <h3>Multipliers Configuration</h3>
-                    <button id="new-multi">Achedule Multiplier</button>
-                </section>
-                <section id="multis-body">
-                    <table id="multis">
-                        <thead id="multi-head">
-                            <td class="multi-head-item">multiplier name</td>
-                            <td class="multi-head-item">value</td>
-                            <td class="multi-head-item">active dates</td>
-                            <td class="multi-head-item">target group</td>
-                            <td class="multi-head-item">status</td>
-                            <td class="multi-head-item">Action</td>
-                        </thead>
-                        <tr class="multi">
-                            <td>multi</td>
-                        </tr>
-                    </table>
-                    <section id="multi-foot">
-                        <article id="notify">
-                            notify
-                        </article>
-                    </section>
+            <section>
+                <table>
+                    <thead>
+                        <td>Event Name</td>
+                        <td>Points</td>
+                        <td>Trequency Limit</td>
+                        <td>status</td>
+                        <td>Action</td>
+                    </thead>
+                    <tr>
+                        <td>rank</td>
+                    </tr>
+                    <tfoot>
+                        <td>showing</td>
+                        <td><button>1</button></td>
+                    </tfoot>
+                </table>
+                <section>
+                    <article>
+                        av rank
+                    </article>
+                    <article>total Actev events </article>
+                    <article>pop trigger</article>
                 </section>
             </section>
-        </main>
-    </div>
+        </section>
+        <section class="tab" id="config-multi" hidden>
+            <section>
+                <h3>Multipliers Configuration</h3>
+                <button>Achedule Multiplier</button>
+            </section>
+            <section>
+                <table>
+                    <thead>
+                        <td>multiplier name</td>
+                        <td>value</td>
+                        <td>active dates</td>
+                        <td>target group</td>
+                        <td>status</td>
+                        <td>Action</td>
+                    </thead>
+                    <tr>
+                        <td>multi</td>
+                    </tr>
+                </table>
+                <section>
+                    <article>
+                        notify
+                    </article>
+                </section>
+            </section>
+        </section>
+    </main>
+
 </body>
