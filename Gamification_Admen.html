@@ -4,173 +4,185 @@
     <title>Duck Library | Gamification</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styletest.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        function show_tab(id) {
+
+            const tabs = document.querySelectorAll('.tabs');
+            for (let tab of tabs) {
+                tab.hidden = true;
+            }
+            document.querySelector(id).hidden = false;
+        }
+
+    </script>
 </head>
 
 <body>
-    <header id="site_header">
-        <nav id="site_nav">
-            <img id="site_logo" src="" alt="site logo">
-            <button id="notification_button">notifications</button>
-            <button id="settings_button">Settings</button>
-            <button id="user_button">user</button>
+    <header id="site-header">
+        <nav id="site-nav">
+            <img id="site-logo" src="" alt="site logo">
+            <button id="notification-button">notifications</button>
+            <button id="settings-button">Settings</button>
+            <button id="user-button">user</button>
         </nav>
     </header>
     <div id="background">
         <aside id="sidebar">
-            <ul id="sidebar_list">
-                SYSTEM
-                <li class="sidebar_item"><a href="">Dashboard</a></li>
-                <li class="sidebar_item"><a href="">Books & Inventory</a></li>
-                <li class="sidebar_item"><a href="">Users & Roles</a></li>
-                <li class="sidebar_item"><a href="">Sales & Refunds</a></li>
-                <li class="sidebar_item"><a href="">Gamification</a></li>
-                <li class="sidebar_item"><a href="">Reviews</a></li>
-            </ul>
+
+            SYSTEM
+            <a href="">Dashboard</a>
+            <a href="">Books & Inventory</a>
+            <a href="">Users & Roles</a>
+            <a href="">Sales & Refunds</a>
+            <a href="">Gamification</a>
+            <a href="">Reviews</a>
+
         </aside>
-        <main id="main_content">
-            <header id="content_header">
+        <main class="main-content">
+            <section id="content-header">
                 <h1>Gamification Configuration</h1>
                 <p>Configure how users earn gold points across the Lumina platform.</p>
-                <nav id="content_nav">
-                    <button class="tab">Point Values</button>
-                    <button class="tab">Levels & Ranks</button>
-                    <button class="tab">Event Triggers</button>
-                    <button class="tab">Multipliers</button>
+                <nav id="content-nav">
+                    <button class="tab" id="pts-tab" onclick="show_tab('#config-points')">Point Values</button>
+                    <button class="tab" id="lvls-tab" onclick="show_tab('#config-levels')">Levels & Ranks</button>
+                    <button class="tab" id="events-tab" onclick="show_tab('#config-events')">Event Triggers</button>
+                    <button class="tab" id="mults-tab" onclick="show_tab('#config-multi')">Multipliers</button>
+
                 </nav>
-            </header>
-            <div id="config_points">
-                <form id="points_form" action="">
-                    <section id="daily_rewards">
-                        <header id=daily_rewards_header>
+            </section>
+            <section class="tabs" id="config-points">
+                <form id="points-form" action="">
+                    <section id="daily-rewards">
+                        <section id=daily-rewards-header>
                             <h3>Daily Login Reward</h3>
                             <p>Reward users for logging in once every 24 hours.</p>
-                        </header>
-                        <main class="input space">
-                            <label class="input_lable">Gold Points Per Login</label>
-                            <input id="per_day" type="number" min="0">
-                            <label class="input_lable">Streak Bonus (Every 7 Days)</label>
-                            <input id="per_week" type="number" min="0">
-                        </main>
-                        <footer id="daily_rewards_footer">
-                            <input type="checkbox" id="push_notification" checked>
-                            <label for="push_notification">Send push notification upon successful claim</label>
-                        </footer>
+                        </section>
+                        <section class="input space">
+                            <label class="input-lable">Gold Points Per Login</label>
+                            <input id="per-day" type="number" min="0">
+                            <label class="input-lable">Streak Bonus (Every 7 Days)</label>
+                            <input id="per-week" type="number" min="0">
+                        </section>
+                        <section id="daily-rewards-footer">
+                            <input type="checkbox" id="push-notification" checked>
+                            <label for="push-notification">Send push notification upon successful claim</label>
+                        </section>
                     </section>
-                    <section id="review_rewards">
-                        <header id=review_rewards_header>
+                    <section id="review-rewards">
+                        <section id=review-rewards-header>
                             <h3>Book Review Reward</h3>
                             <p>Points granted when a user submits a valid review.</p>
-                        </header>
-                        <main class="input space">
-                            <label class="input_lable">Base Points</label>
-                            <input id="base_points" type="number" min="0">
-                            <label class="input_lable">Bonus Points</label>
-                            <input id="bonus_points" type="number" min="0">
-                            <label class="input_lable">Min. Character Count</label>
-                            <input id="min_cunt" type="number" min="0">
-                            <label class="input_lable">Daily Review Limit</label>
+                        </section>
+                        <section class="input space">
+                            <label class="input-lable">Base Points</label>
+                            <input id="base-points" type="number" min="0">
+                            <label class="input-lable">Bonus Points</label>
+                            <input id="bonus-points" type="number" min="0">
+                            <label class="input-lable">Min. Character Count</label>
+                            <input id="min-cunt" type="number" min="0">
+                            <label class="input-lable">Daily Review Limit</label>
                             <input id="limit" type="number" min="0">
-                        </main>
-                        <footer id="review_rewards_footer">
+                        </section>
+                        <section id="review-rewards-footer">
                             <input id="award" type="checkbox" checked>
                             <label for="award">Award points immediately (Subject to AI moderation)</label>
-                        </footer>
+                        </section>
                     </section>
                 </form>
-                <footer id="form_actions">
+                <section id="form-actions">
                     <button id="reset">Reset to Defaults</button>
                     <button id="save">Update Configuration</button>
-                </footer>
-            </div>
-            <div id="config_levels">
-                <header id="rank_header">
+                </section>
+            </section>
+            <section class="tabs" id="config-levels" hidden>
+                <section id="rank-header">
                     <h3>Levels & Ranks Configuration</h3>
-                    <button id="new_rank">Add New Rank</button>
-                </header>
-                <main id="rank_body">
+                    <button id="new-rank">Add New Rank</button>
+                </section>
+                <section id="rank-body">
                     <table id="ranks">
-                        <th id="rank_head">
-                        <td class="rank_head_item">Rank Name</td>
-                        <td class="rank_head_item">XP threshold</td>
-                        <td class="rank_head_item">Badge Icon</td>
-                        <td class="rank_head_item">Perks & rewards</td>
-                        <td class="rank_head_item">Action</td>
-                        </th>
+                        <thead id="rank-head">
+                            <td class="rank-head-item">Rank Name</td>
+                            <td class="rank-head-item">XP threshold</td>
+                            <td class="rank-head-item">Badge Icon</td>
+                            <td class="rank-head-item">Perks & rewards</td>
+                            <td class="rank-head-item">Action</td>
+                        </thead>
                         <tr class="rank">
                             <td>rank</td>
                         </tr>
                         <tfoot>
                             <td>showing</td>
-                            <td><button id="show_more_ranks">1</button></td>
+                            <td><button id="show-more-ranks">1</button></td>
                         </tfoot>
                     </table>
-                    <footer id="Levels_foot">
-                        <article id="av_rank">
+                    <section id="Levels-foot">
+                        <article id="av-rank">
                             av rank
                         </article>
-                        <article id="total_masters">total_masters</article>
-                        <article id="actev_perks">actev_perks</article>
-                    </footer>
-                </main>
-            </div>
-            <div id="config_events">
-                <header id="events_header">
+                        <article id="total-masters">total-masters</article>
+                        <article id="actev-perks">actev-perks</article>
+                    </section>
+                </section>
+            </section>
+            <section class="tabs" id="config-events" hidden>
+                <section id="events-header">
                     <h3>Events Configuration</h3>
-                    <button id="new_events">Add New Event</button>
-                </header>
-                <main id="events_body">
+                    <button id="new-events">Add New Event</button>
+                </section>
+                <section id="events-body">
                     <table id="events">
-                        <th id="event_head">
-                        <td class="event_head_item">Event Name</td>
-                        <td class="event_head_item">Points</td>
-                        <td class="event_head_item">Trequency Limit</td>
-                        <td class="event_head_item">status</td>
-                        <td class="event_head_item">Action</td>
-                        </th>
+                        <thead id="event-head">
+                            <td class="event-head-item">Event Name</td>
+                            <td class="event-head-item">Points</td>
+                            <td class="event-head-item">Trequency Limit</td>
+                            <td class="event-head-item">status</td>
+                            <td class="event-head-item">Action</td>
+                        </thead>
                         <tr class="event">
                             <td>rank</td>
                         </tr>
                         <tfoot>
                             <td>showing</td>
-                            <td><button id="show_more_events">1</button></td>
+                            <td><button id="show-more-events">1</button></td>
                         </tfoot>
                     </table>
-                    <footer id="events_foot">
-                        <article id="av_d_ernings">
+                    <section id="events-foot">
+                        <article id="av-d-ernings">
                             av rank
                         </article>
-                        <article id="total_actev_events">total Actev events </article>
-                        <article id="pop_trigger">pop trigger</article>
-                    </footer>
-                </main>
-            </div>
-            <div id="config_multi">
-                <header id="multis_header">
+                        <article id="total-actev-events">total Actev events </article>
+                        <article id="pop-trigger">pop trigger</article>
+                    </section>
+                </section>
+            </section>
+            <section class="tabs" id="config-multi" hidden>
+                <section id="multis-header">
                     <h3>Multipliers Configuration</h3>
-                    <button id="new_multi">Achedule Multiplier</button>
-                </header>
-                <main id="multis_body">
+                    <button id="new-multi">Achedule Multiplier</button>
+                </section>
+                <section id="multis-body">
                     <table id="multis">
-                        <th id="multi_head">
-                        <td class="multi_head_item">multiplier name</td>
-                        <td class="multi_head_item">value</td>
-                        <td class="multi_head_item">active dates</td>
-                        <td class="multi_head_item">target group</td>
-                        <td class="multi_head_item">status</td>
-                        <td class="multi_head_item">Action</td>
-                        </th>
+                        <thead id="multi-head">
+                            <td class="multi-head-item">multiplier name</td>
+                            <td class="multi-head-item">value</td>
+                            <td class="multi-head-item">active dates</td>
+                            <td class="multi-head-item">target group</td>
+                            <td class="multi-head-item">status</td>
+                            <td class="multi-head-item">Action</td>
+                        </thead>
                         <tr class="multi">
                             <td>multi</td>
                         </tr>
                     </table>
-                    <footer id="multi_foot">
+                    <section id="multi-foot">
                         <article id="notify">
                             notify
                         </article>
-                    </footer>
-                </main>
-            </div>
+                    </section>
+                </section>
+            </section>
         </main>
     </div>
 </body>
