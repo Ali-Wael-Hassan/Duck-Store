@@ -1,46 +1,37 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Duck Library | Gamification</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <script>
-        function show_tab(id) {
-
-            const tabs = document.querySelectorAll('.tabs');
-            for (let tab of tabs) {
-                tab.hidden = true;
-            }
-            document.querySelector(id).hidden = false;
-        }
-
-    </script>
+    <title>Duck Store | Gamification Config</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/component.css">
+    <link rel="stylesheet" href="CSS/classes.css">
 </head>
 
 <body>
-    <header id="site-header">
-        <nav id="site-nav">
-            <img id="site-logo" src="" alt="site logo">
-            <button id="notification-button">notifications</button>
-            <button id="settings-button">Settings</button>
-            <button id="user-button">user</button>
+    <header id="navbar">
+        <nav id="site_nav">
+            <img id="site_logo" src="" alt="site logo">
+            <button id="notification_button">notifications</button>
+            <button id="settings_button">Settings</button>
+            <a href="user_profile.html">user</a>
         </nav>
     </header>
+    <div class="sidebar">
+        <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
+        <ul>
+            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
+            <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
+            <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
+            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
+        </ul>
+    </div>
+
     <div id="background">
-        <aside id="sidebar">
-
-            SYSTEM
-            <a href="">Dashboard</a>
-            <a href="">Books & Inventory</a>
-            <a href="">Users & Roles</a>
-            <a href="">Sales & Refunds</a>
-            <a href="">Gamification</a>
-            <a href="">Reviews</a>
-
-        </aside>
-        <main class="main-content">
-            <section id="content-header">
+        <main id="main_content">
+            <header id="content_header">
                 <h1>Gamification Configuration</h1>
                 <p>Configure how users earn gold points across the Lumina platform.</p>
                 <nav id="content-nav">

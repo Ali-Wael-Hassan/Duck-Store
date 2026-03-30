@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Store | Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/component.css">
+    <link rel="stylesheet" href="CSS/classes.css">
+    
+</head>
+<body>
+    <header id="navbar">
+        <nav id="site_nav">
+            <img id="site_logo" src="" alt="site logo">
+            <button id="notification_button">notifications</button>
+            <button id="settings_button">Settings</button>
+            <a href="user_profile.html">user</a>
+        </nav>
+    </header>
+    <div class="sidebar">
+        <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
+        <ul>
+            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
+            <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
+            <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
+            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
+        </ul>
+    </div>
+
+    <div class="app-container">
+        <div class="main-wrapper">
+            <main class="main-content">
+                <!-- Stats Row -->
+                <section class="stats-row">
+                    <!-- Stat Card 1 -->
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="icon-wrapper bg-blue"><i class="fas fa-money-bill-wave"></i></div>
+                            <span class="trend positive">+12.5%</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="stat-label">Total Revenue</span>
+                            <h3 class="stat-value">$45,280.00</h3>
+                            <span class="stat-subtext">Vs $38,400 last month</span>
+                        </div>
+                    </div>
+                    <!-- Stat Card 2 -->
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="icon-wrapper bg-orange"><i class="fas fa-user"></i></div>
+                            <span class="trend negative">-2.1%</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="stat-label">Active Users</span>
+                            <h3 class="stat-value">1,240</h3>
+                            <span class="stat-subtext">12 active right now</span>
+                        </div>
+                    </div>
+                    <!-- Stat Card 3 -->
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="icon-wrapper bg-cyan"><i class="fas fa-shopping-cart"></i></div>
+                            <span class="trend positive">+5.0%</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="stat-label">Pending Orders</span>
+                            <h3 class="stat-value">84</h3>
+                            <span class="stat-subtext">Average processing: 1.2h</span>
+                        </div>
+                    </div>
+                    <!-- Stat Card 4 -->
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <div class="icon-wrapper bg-yellow"><i class="fas fa-star"></i></div>
+                            <span class="badge new-badge">New</span>
+                        </div>
+                        <div class="card-body">
+                            <span class="stat-label">New Reviews</span>
+                            <h3 class="stat-value">12</h3>
+                            <span class="stat-subtext">92% Positive sentiment</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="content-grid-wrapper">
+                    <div class="main-column">
+                        <!-- Sales Performance Chart Placeholder -->
+                        <div class="card panel-card sales-performance">
+                            <div class="panel-header flex-between">
+                                <div>
+                                    <h3>Sales Performance</h3>
+                                    <span class="subtext">Daily revenue overview</span>
+                                </div>
+                                <div class="toggle-group">
+                                    <button class="toggle-btn">Week</button>
+                                    <button class="toggle-btn active">Month</button>
+                                </div>
+                            </div>
+                            <!-- Mock Bar Chart using CSS -->
+                            <div class="chart-area">
+                                <div class="chart-grid">
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 40%" >
+                                            <div class="bar-fill" style="height: 60%" ></div>
+                                        </div>
+                                        <span class="d-label">MON</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 50%" >
+                                            <div class="bar-fill" style="height: 65%" ></div>
+                                        </div>
+                                        <span class="d-label">TUE</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 45%" >
+                                            <div class="bar-fill" style="height: 80%" ></div>
+                                        </div>
+                                        <span class="d-label">WED</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 55%" >
+                                            <div class="bar-fill" style="height: 70%" ></div>
+                                        </div>
+                                        <span class="d-label">THU</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 80%" >
+                                            <div class="bar-fill" style="height: 85%" ></div>
+                                        </div>
+                                        <span class="d-label">FRI</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 40%" >
+                                            <div class="bar-fill" style="height: 50%" ></div>
+                                        </div>
+                                        <span class="d-label">SAT</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <div class="bar-total" style="height: 90%" >
+                                            <div class="bar-fill" style="height: 100%"></div>
+                                        </div>
+                                        <span class="d-label">SUN</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="side-column">
+                        <!-- Trending Books -->
+                        <div class="card panel-card trending-books">
+                            <div class="panel-header">
+                                <h3>Trending Books</h3>
+                            </div>
+                            <div class="book-list">
+                                <!-- Book Item 1 -->
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=100&h=150" alt="Book">
+                                    </div>
+                                    <div class="book-details">
+                                        <h4>Echoes of Silence</h4>
+                                        <span class="subtext">Mystery • 420 sales</span>
+                                    </div>
+                                    <div class="book-price">$24.99</div>
+                                </div>
+                                <!-- Book Item 2 -->
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=100&h=150" alt="Book">
+                                    </div>
+                                    <div class="book-details">
+                                        <h4>The Golden Path</h4>
+                                        <span class="subtext">Fantasy • 385 sales</span>
+                                    </div>
+                                    <div class="book-price">$19.95</div>
+                                </div>
+                                <!-- Book Item 3 -->
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=100&h=150" alt="Book">
+                                    </div>
+                                    <div class="book-details">
+                                        <h4>Neon Horizons</h4>
+                                        <span class="subtext">Sci-Fi • 312 sales</span>
+                                    </div>
+                                    <div class="book-price">$22.00</div>
+                                </div>
+                                <!-- Book Item 4 -->
+                                <div class="book-item">
+                                    <div class="book-cover">
+                                        <img src="https://images.unsplash.com/photo-1476275466078-4007374efac4?auto=format&fit=crop&q=80&w=100&h=150" alt="Book">
+                                    </div>
+                                    <div class="book-details">
+                                        <h4>Timeless Tales</h4>
+                                        <span class="subtext">Classic • 290 sales</span>
+                                    </div>
+                                    <div class="book-price">$15.50</div>
+                                </div>
+                            </div>
+                            <button class="btn-block-subtle mt-15">VIEW FULL CATALOG</button>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="card panel-card recent-transactions">
+                        <div class="panel-header flex-between">
+                            <h3>Recent Transactions</h3>
+                            <a href="#" class="link-btn">Download CSV</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ORDER ID</th>
+                                        <th>CUSTOMER</th>
+                                        <th>DATE</th>
+                                        <th>AMOUNT</th>
+                                        <th>STATUS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#ORD-28492</td>
+                                        <td>
+                                            <div class="customer-cell">
+                                                <div class="avatar-sm bg-yellow-text">JD</div>
+                                                <span>Jane Doe</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">Oct 24, 2023</td>
+                                        <td class="font-bold">$124.50</td>
+                                        <td><span class="status-badge success">Completed</span></td>
+                                        <td class="text-center"><button class="icon-btn-sm"><i class="fas fa-ellipsis-v"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-28491</td>
+                                        <td>
+                                            <div class="customer-cell">
+                                                <div class="avatar-sm bg-blue-text">AS</div>
+                                                <span>Alex Smith</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">Oct 24, 2023</td>
+                                        <td class="font-bold">$42.00</td>
+                                        <td><span class="status-badge warning">Pending</span></td>
+                                        <td class="text-center"><button class="icon-btn-sm"><i class="fas fa-ellipsis-v"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>#ORD-28490</td>
+                                        <td>
+                                            <div class="customer-cell">
+                                                <div class="avatar-sm bg-purple-text">MK</div>
+                                                <span>Michael King</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">Oct 23, 2023</td>
+                                        <td class="font-bold">$89.99</td>
+                                        <td><span class="status-badge success">Completed</span></td>
+                                        <td class="text-center"><button class="icon-btn-sm"><i class="fas fa-ellipsis-v"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination flex-between">
+                            <span class="subtext">SHOWING 1-3 OF 2,492 TRANSACTIONS</span>
+                            <div class="page-controls">
+                                <button class="btn-outline">Previous</button>
+                                <button class="btn-outline active">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html>

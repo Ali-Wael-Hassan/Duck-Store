@@ -1,0 +1,10 @@
+.btn-primary {
+    background: var(--brand-primary);
+    color: var(--background-color);
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+    color: var(--background-color);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); 
+}
