@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/component.css">
+    <link rel="stylesheet" href="CSS/classes.css">
+    <title>Duck Store | Community Leaderboard</title>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">DUCK Books</div>
+    <ul class="nav-links">
+        <li><a href="home.html">HOME</a></li>
+        <li><a href="store.html">STORE</a></li>
+        <li><a href="myBooks.html">MYBOOKS</a></li>
+        <li><a href="community.html">COMMUNITY</a></li>
+        <li><a href="reward.html">REWARDS</a></li>
+        <li>
+            <form class="search-bar">
+                <input type="text" placeholder="Search titles, authors..." name="search">
+            </form>
+        </li>
+        <li><button id="notification_button">notifications</button></li>
+        <li><button id="settings_button">Settings</button></li>
+        <li><a href="user_profile.html">PROFILE</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <header class="leaderboard-header">
+        <span class="global-ranking-tag"><span class="icon">🏆</span> GLOBAL RANKING</span>
+        <h1 class="leaderboard-title">Community Leaderboard</h1>
+        <p class="leaderboard-subtitle">Recognizing our most dedicated scholars, readers, and knowledge contributors.</p>
+    </header>
+
+    <div class="time-filters">
+        <button class="filter-btn">All-time</button>
+    </div>
+
+    <div class="top-3-container">
+        <div class="podium-card rank-2">
+            <div class="avatar-container">
+                <img src="" alt="Elena Vance">
+                <span class="rank-number">2</span>
+            </div>
+            <h2>Elena Vance</h2>
+            <span class="role">Silver Scholar</span>
+            <div class="points">12,450 <span class="points-label">PTS</span></div>
+        </div>
+
+        <div class="podium-card rank-1">
+            <span class="current-leader-tag">Current Leader</span>
+            <div class="avatar-container">
+                <img src="" alt="Marcus Thorne">
+                <span class="rank-number">1</span>
+            </div>
+            <h2>Marcus Thorne</h2>
+            <span class="role">Grand Archivist</span>
+            <div class="points">15,890 <span class="points-label">PTS</span></div>
+        </div>
+
+        <div class="podium-card rank-3">
+            <div class="avatar-container">
+                <img src="" alt="Julian Mars">
+                <span class="rank-number">3</span>
+            </div>
+            <h2>Julian Mars</h2>
+            <span class="role">Bronze Scholar</span>
+            <div class="points">11,200 <span class="points-label">PTS</span></div>
+        </div>
+    </div>
+
+    <section class="top-scholars-section">
+        <div class="top-scholars-header">
+            <h2>Top Scholars</h2>
+            <a href="#" class="view-rankings">View Full Rankings →</a>
+        </div>
+        <table class="scholars-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Scholar</th>
+                    <th>Readings</th>
+                    <th>Reviews</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#4</td>
+                    <td>
+                        <div class="scholar-info">
+                            <img src="" alt="Sophia Reed">
+                            <div>
+                                <span class="scholar-name">Sophia Reed</span>
+                                <span class="scholar-meta">Member since 2023</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>124 books</td>
+                    <td>82</td>
+                    <td class="highlighted-points">9,420</td>
+                </tr>
+                <tr>
+                    <td>#5</td>
+                    <td>
+                        <div class="scholar-info">
+                            <img src="" alt="David Chen">
+                            <div>
+                                <span class="scholar-name">David Chen</span>
+                                <span class="scholar-meta">Member since 2022</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>118 books</td>
+                    <td>105</td>
+                    <td class="highlighted-points">8,950</td>
+                </tr>
+                <tr>
+                    <td>#6</td>
+                    <td>
+                        <div class="scholar-info">
+                            <img src="" alt="Aria Montgomery">
+                            <div>
+                                <span class="scholar-name">Aria Montgomery</span>
+                                <span class="scholar-meta">Member since 2024</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>96 books</td>
+                    <td>42</td>
+                    <td class="highlighted-points">7,810</td>
+                </tr>
+                <tr class="user-row">
+                    <td>#142</td>
+                    <td>
+                        <div class="scholar-info">
+                            <img src="" alt="Alex Smith">
+                            <div>
+                                <span class="scholar-name">You (Alex Smith)</span>
+                                <span class="role">Novice Scholar</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>14 books</td>
+                    <td>3</td>
+                    <td class="highlighted-points">1,250</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Active Members</span>
+            <span class="stat-value">24.5k</span>
+            <div class="stat-trend up">
+                <span class="icon">📈</span> +12% this week
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Books Logged</span>
+            <span class="stat-value">1.2M</span>
+            <div class="stat-trend up">
+                <span class="icon">📈</span> +5% this week
+            </div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Knowledge Points</span>
+            <span class="stat-value">4.8M</span>
+            <div class="stat-trend up">
+                <span class="icon">🏆</span> Reward Tier Reached
+            </div>
+        </div>
+        <div class="event-card stat-card">
+            <span class="stat-label">Current Event</span>
+            <span class="event-title">Summer Read</span>
+            <div class="event-time">
+                <span class="icon">🕒</span> 12 days left
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

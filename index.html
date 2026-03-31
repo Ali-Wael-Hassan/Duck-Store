@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Store | Sign In</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="CSS/component.css">
+    <link rel="stylesheet" href="CSS/classes.css">
+    <link rel="stylesheet" href="CSS/Pages/sign-in.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="JS/sign-in.js"></script>
+</head>
+<body>
+    <header class="text-center m-bottom-lg">
+        <h1 class="brand-logo">
+            <img src="assets/logo.png" alt="DUCK STORE Logo">
+            DUCK <span class="text-accent">STORE</span>
+        </h1>
+        <p class="text-muted">Step into a world of curated wisdom</p>
+    </header>
+
+    <main class="page-center">
+        <section class="card">
+            <header class="card__header card__header--accent m-bottom-lg">
+                <h2>Welcome Back</h2>
+                <p class="text-accent">Access your premium digital library</p>
+            </header>
+
+            <form id="login-form" action="home.html" method="post" class="form-auth">
+                <div class="form-auth__field">
+                    <label class="form-auth__label" for="email-input">Email Address</label>
+                    <div class="form-auth__input-group">
+                        <i class="bi bi-envelope form-auth__icon" aria-hidden="true"></i>
+                        <input id="email-input" class="form-auth__input" type="email" placeholder="name@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-auth__field">
+                    <div class="form-auth__row-space">
+                        <label class="form-auth__label" for="password-input">Password</label>
+                        <a href="#" class="link-accent">Forgot password?</a>
+                    </div>
+                    <div class="form-auth__input-group">
+                        <i class="bi bi-lock form-auth__icon" aria-hidden="true"></i>
+                        <input id="password-input" class="form-auth__input" type="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <div class="banner-security">
+                    <i class="bi bi-shield-check" aria-hidden="true"></i>
+                    <div class="banner-security__content">
+                        <p class="banner-security__title">2FA Security Active</p>
+                        <p class="banner-security__text">Verification required upon login.</p>
+                    </div>
+                </div>
+
+                <div class="form-auth__field-checkbox">
+                    <input type="checkbox" id="admin-toggle">
+                    <label for="admin-toggle" class="form-auth__label">Login as Administrator</label>
+                </div>
+
+                <button type="submit" class="btn btn--primary">Sign Into Library</button>
+
+                <div class="divider">OR CONTINUE WITH</div>
+
+                <button type="button" class="btn btn--outline" onclick="googleLogin()">
+                    <i class="bi bi-google" aria-hidden="true"></i> 
+                    <span>Continue with Google</span>
+                </button>
+            </form>
+
+            <footer class="card__footer">
+                <p class="text-muted">Don't have an account? <a href="sign_up.html" class="link-accent">Request Invitation</a></p>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>
