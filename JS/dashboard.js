@@ -218,6 +218,46 @@ document.addEventListener('DOMContentLoaded', () => {
         
         renderTable();
     }
+    // ── Download CSV ──────────────────────────────────────────────
+    const downloadBtn = document.getElementById('download-csv-btn');
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', () => {
+            const headers = ['Order ID', 'Customer', 'Date', 'Amount', 'Status'];
+            const rows = allTransactions.map(t => [
+                t.id,
+                t.name,
+                t.date,
+                t.amount,
+                t.status
+            ]);
+
+            const csvContent = [headers, ...rows]
+                .map(row => row.map(cell => `"${cell}"`).join(','))
+                .join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url  = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const now  = new Date().toISOString().slice(0, 10);
+
+            link.href     = url;
+            link.download = `transactions_${now}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            // Visual feedback
+            const icon = downloadBtn.querySelector('i');
+            icon.className = 'fas fa-check';
+            downloadBtn.style.opacity = '0.7';
+            setTimeout(() => {
+                icon.className = 'fas fa-download';
+                downloadBtn.style.opacity = '1';
+            }, 1500);
+        });
+    }
+
     const currentUrl = window.location.pathname.split('/').pop();
     const sidebarLinks = document.querySelectorAll('aside a');
     sidebarLinks.forEach(link => {
