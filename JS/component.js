@@ -12,17 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateMain() {
     if (mainComp) {
-      if(nav) {
+      if (nav) {
         const navHeight = nav.offsetHeight;
         mainComp.style.marginTop = `${navHeight}px`;
       }
 
-      if(aside) {
+      if (aside) {
         const asideWidth = aside.offsetWidth;
         mainComp.style.marginLeft = `${asideWidth}px`;
       }
     }
-    
+
   }
 
   function resizeAll() {
