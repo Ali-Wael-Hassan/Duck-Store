@@ -48,10 +48,9 @@ body {
 main {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-main);
     padding: var(--spacing-card);
     width: 100%;
-    max-width: 440px;
+    
 }
 
 /* Links */
@@ -151,6 +150,14 @@ footer {
 p {
     color: var(--text-muted);
     line-height: 1.5;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    display: inline-block;
 }
 
 aside {
