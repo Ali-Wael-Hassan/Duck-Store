@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="CSS/classes.css">
     <link rel="stylesheet" href="css/Pages/gamification.css">
     <script src="js/component.js"></script>
-    <!-- <script type="module" src="JS/gamification.js"></script> -->
+    <script src="JS/gamification.js"></script>
 </head>
 
 <body>
@@ -30,11 +30,11 @@
         <section>
             <h1>Gamification Configuration</h1>
             <p>Configure how users earn gold points across the Lumina platform.</p>
-            <div id="tab-selectors">
-                <button class="tab-selector" onclick="switch_tab('#config-points')">Point Values</button>
-                <button class="tab-selector" onclick="switch_tab('#config-levels')">Levels & Ranks</button>
-                <button class="tab-selector" onclick="switch_tab('#config-events')">Event Triggers</button>
-                <button class="tab-selector" onclick="switch_tab('#config-multi')">Multipliers</button>
+            <div class="tab-selectors">
+                <button class="tab-selector active" onclick="switchTab('#config-points',this)">Point Values</button>
+                <button class="tab-selector" onclick="switchTab('#config-levels',this)">Levels & Ranks</button>
+                <button class="tab-selector" onclick="switchTab('#config-events',this)">Event Triggers</button>
+                <button class="tab-selector" onclick="switchTab('#config-multi',this)">Multipliers</button>
 
             </div>
         </section>
@@ -78,8 +78,8 @@
                 </section>
             </form>
             <div id="form-actions">
-                <button id="reset">Reset to Defaults</button>
-                <button id="save">Update Configuration</button>
+                <button>Reset to Defaults</button>
+                <button class="btn-primary">Update Configuration</button>
             </div>
         </section>
         <section class="tab" id="config-levels" hidden>
