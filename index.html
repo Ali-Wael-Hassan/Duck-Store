@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="CSS/classes.css">
     <link rel="stylesheet" href="CSS/Pages/sign-in.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="JS/sign-in.js"></script>
+    <script src="JS/auth.js"></script>
 </head>
 <body>
     <header class="text-center m-bottom-lg">
@@ -39,7 +39,7 @@
                 <div class="form-auth__field">
                     <div class="form-auth__row-space">
                         <label class="form-auth__label" for="password-input">Password</label>
-                        <a href="#" class="link-accent">Forgot password?</a>
+                        <a href="reset-password.html" class="link-accent">Forgot password?</a>
                     </div>
                     <div class="form-auth__input-group">
                         <i class="bi bi-lock form-auth__icon" aria-hidden="true"></i>
@@ -75,5 +75,30 @@
             </footer>
         </section>
     </main>
+
+    <script>
+        window.onload = () => {
+            initGoogleSignIn();
+
+            savedToken();
+
+            const loginForm = document.getElementById("login-form");
+            const adminCheckbox = document.getElementById("admin-toggle");
+
+            if (loginForm) {
+                loginForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+
+                    const user = {
+                        name: "Manual User",
+                        role: (adminCheckbox && adminCheckbox.checked) ? "admin" : "user"
+                    };
+
+                    localStorage.setItem("user", JSON.stringify(user));
+                    redirectUser(user.role);
+                });
+            }
+        };
+    </script>
 </body>
 </html>

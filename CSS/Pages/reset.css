@@ -1,0 +1,180 @@
+body {
+    justify-content: center;
+    background-color: var(--background-color);
+}
+
+main {
+    max-width: 480px;
+    width: 100%;
+    margin: 1.5rem;
+    border-radius: var(--radius-main);
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Brand header area */
+.brand-header {
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #FFD966, #FFB347);
+    border-radius: 10px;
+    color: #0B0E11;
+    font-weight: 800;
+    font-size: 1.4rem;
+}
+
+.brand-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    background: linear-gradient(120deg, #FFF5CC, #FFE484);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Expiry note styling */
+.expiry-note {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: rgba(255, 215, 0, 0.08);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-input);
+    border-left: 3px solid var(--brand-primary);
+    letter-spacing: 0.3px;
+}
+
+/* Back link – overrides default <a> button styles */
+.back-link {
+    background: none !important;
+    border: none !important;
+    padding: 0.5rem 0 !important;
+    margin: 1rem 0 0 0 !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    width: auto !important;
+    justify-content: flex-start !important;
+    color: var(--brand-primary) !important;
+    font-weight: 500;
+    box-shadow: none !important;
+    transform: none !important;
+    white-space: normal !important;
+    transition: color 0.2s ease, gap 0.2s;
+}
+
+.back-link:hover {
+    color: var(--brand-primary-hover) !important;
+    gap: 0.6rem;
+    background: none !important;
+    border: none !important;
+    transform: translateX(-2px) !important;
+    box-shadow: none !important;
+}
+
+/* Footer links – reset <a> styles to simple text links */
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+}
+
+.footer-nav li {
+    display: inline-block;
+}
+
+.footer-nav a {
+    background: none !important;
+    border: none !important;
+    padding: 0.2rem 0 !important;
+    margin: 0 !important;
+    display: inline-block !important;
+    width: auto !important;
+    color: var(--text-muted) !important;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: none !important;
+    transform: none !important;
+    white-space: normal;
+    transition: color 0.2s;
+}
+
+.footer-nav a:hover {
+    color: var(--brand-primary) !important;
+    background: none !important;
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    text-decoration: underline;
+}
+
+/* Feedback message */
+.form-feedback {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--radius-input);
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.form-feedback.error {
+    background-color: rgba(220, 53, 69, 0.12);
+    border-left: 3px solid #dc3545;
+    color: #ffb3b3;
+}
+
+.form-feedback.success {
+    background-color: rgba(40, 167, 69, 0.12);
+    border-left: 3px solid #28a745;
+    color: #b0ffb0;
+}
+
+/* Loading state for button */
+.btn-primary.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    filter: grayscale(0.1);
+    transform: scale(0.98);
+}
+
+/* Copyright text */
+.copyright {
+    text-align: center;
+    font-size: 0.7rem;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+/* Typography tweaks */
+label {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+input {
+    font-size: 0.95rem;
+}
+
+h1 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
