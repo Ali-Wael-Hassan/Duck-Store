@@ -6,11 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const COUNTER_DURATION_MS = 1500;
     const COUNTER_STEP_MS = 20;
 
- 
-    const handleScrollProgress = () => {
-        const progressBar = document.createElement('div');
-        
-        progressBar.style.cssText = `
+    const progressBarStyle = `
             position: fixed;
             top: 0;
             left: 0;
@@ -20,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
             z-index: 1000;
             transition: width 0.1s ease;
         `;
+    const handleScrollProgress = () => {
+        const progressBar = document.createElement('div');
+        
+        progressBar.style.cssText = progressBarStyle;
         document.body.appendChild(progressBar);
 
         window.addEventListener('scroll', () => {
