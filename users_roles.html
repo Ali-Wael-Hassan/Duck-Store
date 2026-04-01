@@ -2,29 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DUCK Store |Users & Roles</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Users & Roles</title>
     <link rel="stylesheet" href="CSS/component.css">
     <link rel="stylesheet" href="CSS/classes.css">
+    <link rel="stylesheet" href="CSS/Pages/users_roles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <header id="navbar">
-        <nav id="site_nav">
-            <img id="site_logo" src="" alt="site logo">
-            <button id="notification_button">notifications</button>
-            <button id="settings_button">Settings</button>
-            <a href="user_profile.html">user</a>
-        </nav>
-    </header>
     <div class="sidebar">
         <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
         <ul>
-            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
-            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
+            <li><a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
             <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
             <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
-            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
+            <li><a href="#"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
+            <li><a href="#"><i class="fa-solid fa-star"></i> Reviews</a></li>
         </ul>
+    </div>
+
+    <div class="navbar">
+        <div class="search">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search users or roles...">
+        </div>
+        <div class="icons">
+            <i class="fa-solid fa-bell"></i>
+            <i class="fa-solid fa-gear"></i>
+            <div class="profile"></div>
+        </div>
     </div>
 
     <div class="content">
@@ -55,42 +61,124 @@
                 <th>LAST ACTIVE</th>
                 <th>ACTIONS</th>
             </tr>
+        <tbody>
             <tr>
-                <td class="user-cell"><div class="avatar"><i class="fa-solid fa-user"></i></div> Yousef</td>
+                <td class="user-cell">
+                    <div class="avatar">Y</div>
+                    <div class="user-info">
+                        <div class="user-name">Yousef</div>
+                        <div class="user-email">yousef@lumina.com</div>
+                    </div>
+                </td>
                 <td><span class="role admin">Admin</span></td>
-                <td class="active-status">Active</td>
+                <td><span class="status active-status">Active</span></td>
                 <td>20 / 3 / 2026</td>
-                <td><button class="edit">EDIT ROLE</button></td>
+                <td class="action-buttons"><button class="edit" type="button"><i class="fa-solid fa-pen-to-square"></i>Edit Role</button></td>
             </tr>
             <tr>
-                <td class="user-cell"><div class="avatar"><i class="fa-solid fa-user"></i></div> Ali</td>
+                <td class="user-cell">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Ali</div>
+                        <div class="user-email">ali@lumina.com</div>
+                    </div>
+                </td>
                 <td><span class="role scholar">Scholar</span></td>
-                <td class="active-status">Active</td>
+                <td><span class="status active-status">Active</span></td>
                 <td>18 / 3 / 2026</td>
-                <td><button class="edit">EDIT ROLE</button></td>
+                <td class="action-buttons"><button class="edit" type="button"><i class="fa-solid fa-pen-to-square"></i>Edit Role</button></td>
             </tr>
             <tr>
-                <td class="user-cell"><div class="avatar"><i class="fa-solid fa-user"></i></div> Mahmoud</td>
+                <td class="user-cell">
+                    <div class="avatar">M</div>
+                    <div class="user-info">
+                        <div class="user-name">Mahmoud</div>
+                        <div class="user-email">mahmoud@lumina.com</div>
+                    </div>
+                </td>
                 <td><span class="role user">User</span></td>
-                <td class="offline">Offline</td>
+                <td><span class="status offline">Offline</span></td>
                 <td>15 / 3 / 2026</td>
-                <td><button class="edit">EDIT ROLE</button></td>
+                <td class="action-buttons"><button class="edit" type="button"><i class="fa-solid fa-pen-to-square"></i>Edit Role</button></td>
             </tr>
             <tr>
-                <td class="user-cell"><div class="avatar"><i class="fa-solid fa-user"></i></div> Mariam</td>
+                <td class="user-cell">
+                    <div class="avatar">M</div>
+                    <div class="user-info">
+                        <div class="user-name">Mariam</div>
+                        <div class="user-email">mariam@lumina.com</div>
+                    </div>
+                </td>
                 <td><span class="role scholar">Scholar</span></td>
-                <td class="active-status">Active</td>
+                <td><span class="status active-status">Active</span></td>
                 <td>12 / 3 / 2026</td>
-                <td><button class="edit">EDIT ROLE</button></td>
+                <td class="action-buttons"><button class="edit" type="button"><i class="fa-solid fa-pen-to-square"></i>Edit Role</button></td>
             </tr>
             <tr>
-                <td class="user-cell"><div class="avatar"><i class="fa-solid fa-user"></i></div> Ahmed</td>
+                <td class="user-cell">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Ahmed</div>
+                        <div class="user-email">ahmed@lumina.com</div>
+                    </div>
+                </td>
                 <td><span class="role user">User</span></td>
-                <td class="offline">Offline</td>
+                <td><span class="status offline">Offline</span></td>
                 <td>10 / 3 / 2026</td>
-                <td><button class="edit">EDIT ROLE</button></td>
+                <td class="action-buttons"><button class="edit" type="button"><i class="fa-solid fa-pen-to-square"></i>Edit Role</button></td>
             </tr>
+        </tbody>
         </table>
+
+        <div class="modal" id="add-user-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="add-user-heading">
+            <div class="modal-content">
+                <button class="close-modal" type="button"><i class="fa-solid fa-xmark"></i></button>
+                <h2 id="add-user-heading">Add User</h2>
+                <form id="add-user-form">
+                    <label>
+                        Name
+                        <input id="add-user-name" type="text" placeholder="Enter name" required>
+                    </label>
+                    <label>
+                        Email
+                        <input id="add-user-email" type="email" placeholder="Enter email" required>
+                    </label>
+                    <label>
+                        Role
+                        <select id="add-user-role" required>
+                            <option value="admin">Admin</option>
+                            <option value="scholar">Scholar</option>
+                            <option value="user">User</option>
+                        </select>
+                    </label>
+                    <div class="modal-actions">
+                        <button class="button-secondary" type="button">Cancel</button>
+                        <button class="primary" type="submit">Add user</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="modal" id="edit-role-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="edit-role-heading">
+            <div class="modal-content">
+                <button class="close-modal" type="button"><i class="fa-solid fa-xmark"></i></button>
+                <h2 id="edit-role-heading">Edit User Role</h2>
+                <form id="edit-role-form">
+                    <label>
+                        Role
+                        <select id="edit-role" required>
+                            <option value="admin">Admin</option>
+                            <option value="scholar">Scholar</option>
+                            <option value="user">User</option>
+                        </select>
+                    </label>
+                    <div class="modal-actions">
+                        <button class="button-secondary" type="button">Cancel</button>
+                        <button class="primary" type="submit">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <h3>Permissions Matrix Preview</h3>
         <table class="matrix">
@@ -120,6 +208,8 @@
             </tr>
         </table>
 
-    </div>
+    </div> 
+    <script src="JS/users.roles.js"></script>
+
 </body>
 </html>
