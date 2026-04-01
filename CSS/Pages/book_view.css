@@ -270,7 +270,7 @@ hr {
 
 /* Suggested books (Readers also enjoyed) – now at bottom */
 .suggest {
-    flex: 0 0 100%;
+    flex: auto;
     /* take full width */
     margin-top: 2rem;
     background: var(--input-bg);
