@@ -12,6 +12,7 @@ main {
 .page-center {
     min-height: 100vh;
     display: flex;
+    border-radius: var(--radius-main);
     align-items: center;
     justify-content: center;
     width: 100%;

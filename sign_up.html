@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="CSS/classes.css">
     <link rel="stylesheet" href="CSS/Pages/sign-up.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="JS/sign-up.js" defer></script>
+    <script src="JS/auth.js" defer></script>
 </head>
 <body>
     <main class="page-center">
@@ -78,5 +78,23 @@
             </section>
         </article>
     </main>
+
+    <script>
+        window.onload = () => {
+            initGoogleSignIn();
+
+            savedToken();
+
+            const signupForm = document.getElementById("signup-form");
+            if (signupForm) {
+                signupForm.addEventListener("submit", manualSignUp);
+            }
+
+            const googleBtn = document.querySelector(".btn-outline");
+            if (googleBtn) {
+                googleBtn.addEventListener("click", googleSignUp);
+            }
+        };
+    </script>
 </body>
 </html>

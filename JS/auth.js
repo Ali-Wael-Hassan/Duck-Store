@@ -1,6 +1,36 @@
 const GOOGLE_CLIENT_ID = "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com";
 
+// User Token
 let tokenClient = null;
+
+// Start helper method for setting storage
+function setStorageToken(type, data) {
+    localStorage.setItem("user", JSON.stringify(user));
+}
+
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "sign-in.html";
+}
+
+function redirectUser(role) {
+    if (role === "admin") {
+        window.location.href = "dashboard.html";
+    } else {
+        window.location.href = "home.html";
+    }
+}
+
+// End of helpers
+
+// Start Init Google Service
+function initToken() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: "openid email profile",
+        callback: handleTokenResponse,
+    });
+}
 
 function initGoogleSignIn() {
     if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
@@ -8,16 +38,23 @@ function initGoogleSignIn() {
         return;
     }
 
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: "openid email profile",
-        callback: handleGoogleSignUp,
-    });
+    initToken();
 
-    console.log("Google Sign-In initialized for sign-up");
+    console.log("Google Sign-In initialized");
+}
+// End Init Google Service
+
+// Start Handle Token Response
+function initUser(data, role) {
+    return {
+        name: data.name,
+        email: data.email,
+        picture: data.picture,
+        role: role
+    };
 }
 
-async function handleGoogleSignUp(tokenResponse) {
+async function handleTokenResponse(tokenResponse) {
     if (tokenResponse.error) {
         console.error("Google OAuth error:", tokenResponse.error);
         return;
@@ -29,29 +66,41 @@ async function handleGoogleSignUp(tokenResponse) {
         });
         const data = await res.json();
 
-        const user = {
-            name: data.name,
-            email: data.email,
-            picture: data.picture,
-            role: "user"  // Google sign‑up always creates a standard user
-        };
+        const user = initUser(data, "user");
 
-        localStorage.setItem("user", JSON.stringify(user));
+        setStorageToken("user", JSON.stringify(user));
         redirectUser(user.role);
     } catch (err) {
         console.error("Failed to fetch Google user info:", err);
     }
 }
+// End Handle Token Response
 
-function googleSignUp() {
+// Google Login Interface
+function googleLogin() {
     if (!tokenClient) {
         console.warn("Google Sign-In not ready yet, retrying...");
-        setTimeout(googleSignUp, 300);
+        setTimeout(googleLogin, 300);
         return;
     }
     tokenClient.requestAccessToken({ prompt: "select_account" });
 }
 
+// Start Searches for saved token in user storage
+function compareToDB(savedUser) {
+    return true;
+}
+
+function savedToken() {
+    const savedUser = localStorage.getItem("user");
+    if(compareToDB(savedUser)) {
+        const user = JSON.parse(savedUser);
+        redirectUser(user.role);
+    }
+}
+// End Searches for saved token in user storage
+
+// Start SignUp Interface
 function manualSignUp(event) {
     event.preventDefault();
 
@@ -61,11 +110,11 @@ function manualSignUp(event) {
     const adminToggle = document.getElementById("admin-toggle");
     const termsCheckbox = document.getElementById("terms-agreement");
 
-    // Basic validation
     if (!fullName || !email || !password) {
         alert("Please fill in all fields.");
         return;
     }
+
     if (!termsCheckbox.checked) {
         alert("You must agree to the Terms & Privacy.");
         return;
@@ -78,38 +127,7 @@ function manualSignUp(event) {
         role: (adminToggle && adminToggle.checked) ? "admin" : "user"
     };
 
-    localStorage.setItem("user", JSON.stringify(user));
+    setStorageToken("user", user);
     redirectUser(user.role);
 }
-
-function redirectUser(role) {
-    if (role === "admin") {
-        window.location.href = "dashboard.html";
-    } else {
-        window.location.href = "home.html";
-    }
-}
-
-window.onload = () => {
-    initGoogleSignIn();
-
-    // If already logged in, skip sign‑up and go to the appropriate page
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        redirectUser(user.role);
-        return;
-    }
-
-    // Attach manual form submission
-    const signupForm = document.getElementById("signup-form");
-    if (signupForm) {
-        signupForm.addEventListener("submit", manualSignUp);
-    }
-
-    // Attach Google button click
-    const googleBtn = document.querySelector(".btn-outline");
-    if (googleBtn) {
-        googleBtn.addEventListener("click", googleSignUp);
-    }
-};
+// End SignUp Interface
