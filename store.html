@@ -1,178 +1,499 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUCK Store | Fiction Best Sellers</title>
-    <link rel="stylesheet" href="browse.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/Pages/store.css">
     <link rel="stylesheet" href="CSS/classes.css">
+    <link rel="stylesheet" href="CSS/component.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">DUCK Store</div>
-        <ul class="nav-links">
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="store.html">STORE</a></li>
-            <li><a href="myBooks.html">MYBOOKS</a></li>
-            <li><a href="community.html">COMMUNITY</a></li>
-            <li><a href="reward.html">REWARDS</a></li>
-            <li>
-                <form class="search-bar">
-                    <input type="text" placeholder="Search titles, authors..." name="search">
-                </form>
-            </li>
-            <li><button id="notification_button" aria-label="Notifications">Notifications</button></li>
-            <li><button id="settings_button" aria-label="Settings">Settings</button></li>
-            <li><a href="user_profile.html">PROFILE</a></li>
-        </ul>
-    </nav>
-
-    <div class="main-layout">
-        <aside class="sidebar">
-            <section class="filter-section">
-                <h3>CATEGORIES</h3>
-                <ul>
-                    <li><input type="checkbox" id="fiction" checked><label for="fiction">Fiction</label><span class="count">1.2k</span></li>
-                    <li><input type="checkbox" id="non-fiction"><label for="non-fiction">Non-Fiction</label><span class="count">850</span></li>
-                    <li><input type="checkbox" id="sci-fi"><label for="sci-fi">Science Fiction</label><span class="count">420</span></li>
-                    <li><input type="checkbox" id="biography"><label for="biography">Biography</label><span class="count">310</span></li>
-                </ul>
-            </section>
-
-            <section class="filter-section">
-                <h3>PRICE RANGE</h3>
-                <div class="price-inputs">
-                    <input type="number" value="0" aria-label="Min Price">
-                    <span class="range-divider">-</span>
-                    <input type="number" value="100" aria-label="Max Price">
-                </div>
-                <div class="slider-container">
-                    <input type="range" min="0" max="100" value="70" class="slider" aria-label="Price range slider">
-                </div>
-            </section>
-
-            <section class="filter-section">
-                <h3>RATING</h3>
-                <ul>
-                    <li><input type="checkbox" id="rating5"><label for="rating5">★★★★★</label><span class="count-up">& Up</span></li>
-                    <li><input type="checkbox" id="rating4"><label for="rating4">★★★★☆</label><span class="count-up">& Up</span></li>
-                    <li><input type="checkbox" id="rating3"><label for="rating3">★★★☆☆</label><span class="count-up">& Up</span></li>
-                </ul>
-            </section>
-
-            <section class="filter-section">
-                <h3>FORMAT</h3>
-                <div class="tag-group">
-                    <button class="tag active">Hardcover</button>
-                    <button class="tag">Paperback</button>
-                    <button class="tag">E-Book</button>
-                    <button class="tag">Audiobook</button>
-                </div>
-            </section>
-        </aside>
-
-        <main class="content">
-            <header class="content-header">
-                <div class="breadcrumb">Store &gt; Books &gt; Fiction</div>
-                <h1>Fiction Best Sellers</h1>
-                <p class="results-meta">Showing 1-12 of 1,248 results</p>
-            </header>
-
-            <div class="toolbar">
-                <div class="active-filters">
-                    <span class="filter-tag">Fiction ✕</span>
-                    <span class="filter-tag">Hardcover ✕</span>
-                    <a href="#" class="clear-all">Clear all</a>
-                </div>
-                
-                <div class="quick-filter">
-                    <input type="text" id="page-filter" placeholder="Filter this page...">
-                </div>
-
-                <div class="view-controls">
-                    <select class="sort-dropdown" aria-label="Sort books">
-                        <option>Sort by: Popularity</option>
-                        <option>Sort by: Newest</option>
-                    </select>
-                    <div class="grid-list-toggle">
-                        <button class="active">Grid</button>
-                        <button>List</button>
-                    </div>
+    <header class="header">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
                 </div>
             </div>
 
-            <section class="book-grid">
-                <article class="book-card">
-                    <a href="midnight-library-details.html">
-                        <div class="book-cover">
-                            <span class="badge bestseller">BESTSELLER</span>
-                            <img src="The_Midnight_Library.jpg" alt="The Midnight Library Cover">
-                        </div>
-                        <div class="book-details">
-                            <h3 class="title">The Midnight Library</h3>
-                            <p class="author">Matt Haig</p>
-                            <div class="price-row">
-                                <span class="price">$14.99</span>
-                                <span class="rating">★ 4.8</span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+            <nav class="nav" aria-label="Main navigation">
+                <a href="home.html">Home</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="my-books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </nav>
+        </div>
+    </header>
 
-                <article class="book-card">
-                    <a href="project-hail-mary-details.html">
-                        <div class="book-cover">
-                            <span class="badge ebook">E-BOOK</span>
-                            <img src="Project_Hail_Mary.jpg" alt="Project Hail Mary Cover">
-                        </div>
-                        <div class="book-details">
-                            <h3 class="title">Project Hail Mary</h3>
-                            <p class="author">Andy Weir</p>
-                            <div class="price-row">
-                                <span class="price">$11.99</span>
-                                <span class="rating">★ 4.9</span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+    <main class="container main-layout">
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero__content">
+                <h2 id="hero-heading">Fiction <span class="hero__highlight">BEST SELLERS</span></h2>
+                <p>Discover our curated collection of premium fiction titles from award-winning authors worldwide.</p>
+                <div class="hero__buttons">
+                    <button class="btn btn-primary" type="button">Browse New Arrivals</button>
+                    <button class="btn btn-outline" type="button">View Deals</button>
+                </div>
+            </div>
+        </section>
 
-                <article class="book-card">
-                    <a href="great-gatsby-details.html">
-                        <div class="book-cover">
-                            <img src="The_Great_Gatsby.jpg" alt="The Great Gatsby Cover">
-                        </div>
-                        <div class="book-details">
-                            <h3 class="title">The Great Gatsby</h3>
-                            <p class="author">F. Scott Fitzgerald</p>
-                            <div class="price-row">
-                                <span class="price">$9.99</span>
-                                <span class="rating">★ 4.5</span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+        <div class="layout-grid">
+            <aside class="sidebar" aria-label="Filter options">
+                <div class="filter-group">
+                    <h3 class="filter-group__title">
+                        <span class="material-symbols-outlined" aria-hidden="true">category</span>
+                        Categories
+                    </h3>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="fiction" checked>
+                        <span class="filter-item__label">Fiction</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="non-fiction">
+                        <span class="filter-item__label">Non-Fiction</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="science fiction">
+                        <span class="filter-item__label">Science Fiction</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="biography">
+                        <span class="filter-item__label">Biography</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="mystery">
+                        <span class="filter-item__label">Mystery & Thriller</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="self-improvement">
+                        <span class="filter-item__label">Self-Improvement</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="romance">
+                        <span class="filter-item__label">Romance</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-category="fantasy">
+                        <span class="filter-item__label">Fantasy</span>
+                    </label>
+                </div>
 
-                <article class="book-card">
-                    <a href="atomic-habits-details.html">
-                        <div class="book-cover">
-                            <span class="badge discount">-20%</span>
-                            <img src="Atomic_Habits.png" alt="Atomic Habits Cover">
+                <div class="filter-group">
+                    <h3 class="filter-group__title">
+                        <span class="material-symbols-outlined" aria-hidden="true">payments</span>
+                        Price Range (PTS)
+                    </h3>
+                    <div class="price-range">
+                        <div class="price-range__inputs">
+                            <input type="number" class="price-range__min" value="0" placeholder="Min" aria-label="Minimum price">
+                            <span aria-hidden="true">—</span>
+                            <input type="number" class="price-range__max" value="100" placeholder="Max" aria-label="Maximum price">
                         </div>
-                        <div class="book-details">
-                            <h3 class="title">Atomic Habits</h3>
-                            <p class="author">James Clear</p>
-                            <div class="price-row">
-                                <span class="price">$16.00 <span class="old-price">$20.00</span></span>
-                                <span class="rating">★ 5.0</span>
+                        <input type="range" class="price-range__slider" min="0" max="100" value="70" aria-label="Price filter slider">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-group__title">
+                        <span class="material-symbols-outlined" aria-hidden="true">star</span>
+                        Rating
+                    </h3>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-rating="5">
+                        <span class="filter-item__label">★★★★★</span>
+                        <span class="filter-item__count">4.5 & Up</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-rating="4">
+                        <span class="filter-item__label">★★★★☆</span>
+                        <span class="filter-item__count">4.0 & Up</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" class="filter-item__checkbox" data-rating="3">
+                        <span class="filter-item__label">★★★☆☆</span>
+                        <span class="filter-item__count">3.5 & Up</span>
+                    </label>
+                </div>
+            </aside>
+
+            <section class="catalog" aria-labelledby="catalog-heading">
+                <div class="catalog__header">
+                    <div class="breadcrumb" aria-label="Breadcrumb">
+                        <span>Store</span> &gt; <span>Books</span> &gt; <span class="breadcrumb__current">Fiction</span>
+                    </div>
+                    <div class="catalog__controls">
+                        <span class="results-meta">Showing <strong>1-16</strong> of <strong>1,248</strong> premium titles</span>
+                        <div class="sort-by" role="button" tabindex="0" aria-label="Sort by">
+                            <span>Sort by:</span>
+                            <strong>Popularity</strong>
+                            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-grid" id="book-grid">
+                    <!-- Book 1 - The Midnight Library -->
+                    <article class="book-card" data-genre="contemporary fiction" data-price="14.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Midnight_Library.jpg" alt="Cover of The Midnight Library by Matt Haig" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Bestseller</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Contemporary Fiction</p>
+                            <h4 class="book-card__title">The Midnight Library</h4>
+                            <p class="book-card__author">Matt Haig, 2020</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">14.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Midnight Library to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
                             </div>
                         </div>
-                    </a>
-                </article>
+                    </article>
+
+                    <!-- Book 2 - Project Hail Mary -->
+                    <article class="book-card" data-genre="science fiction" data-price="11.99">
+                        <div class="book-card__image-container">
+                            <img src="Project_Hail_Mary.jpg" alt="Cover of Project Hail Mary by Andy Weir" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1509021436665-8f07dbf5bf1d?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">E-Book</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Science Fiction</p>
+                            <h4 class="book-card__title">Project Hail Mary</h4>
+                            <p class="book-card__author">Andy Weir</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">11.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Project Hail Mary to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 3 - The Great Gatsby -->
+                    <article class="book-card" data-genre="classic literature" data-price="9.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Great_Gatsby.jpg" alt="Cover of The Great Gatsby by F. Scott Fitzgerald" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=400&q=80'">
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Classic Literature</p>
+                            <h4 class="book-card__title">The Great Gatsby</h4>
+                            <p class="book-card__author">F. Scott Fitzgerald</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">9.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Great Gatsby to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 4 - Atomic Habits -->
+                    <article class="book-card" data-genre="self-improvement" data-price="16.00">
+                        <div class="book-card__image-container">
+                            <img src="Atomic_Habits.png" alt="Cover of Atomic Habits by James Clear" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1532012197367-684988d375d2?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge book-card__badge--sale">-20% OFF</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Self-Improvement</p>
+                            <h4 class="book-card__title">Atomic Habits</h4>
+                            <p class="book-card__author">James Clear</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">16.00 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Atomic Habits to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 5 - Dune -->
+                    <article class="book-card" data-genre="science fiction" data-price="18.99">
+                        <div class="book-card__image-container">
+                            <img src="Dune.jpg" alt="Cover of Dune by Frank Herbert" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1531901599143-df5010ab9438?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Premium</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Science Fiction</p>
+                            <h4 class="book-card__title">Dune</h4>
+                            <p class="book-card__author">Frank Herbert</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">18.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Dune to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 6 - The Hobbit -->
+                    <article class="book-card" data-genre="fantasy" data-price="12.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Hobbit.jpg" alt="Cover of The Hobbit by J.R.R. Tolkien" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Classic</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Fantasy</p>
+                            <h4 class="book-card__title">The Hobbit</h4>
+                            <p class="book-card__author">J.R.R. Tolkien</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">12.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Hobbit to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 7 - Becoming -->
+                    <article class="book-card" data-genre="biography" data-price="19.99">
+                        <div class="book-card__image-container">
+                            <img src="Becoming.jpg" alt="Cover of Becoming by Michelle Obama" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=400&q=80'">
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Biography</p>
+                            <h4 class="book-card__title">Becoming</h4>
+                            <p class="book-card__author">Michelle Obama</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">19.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Becoming to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 8 - Where the Crawdads Sing -->
+                    <article class="book-card" data-genre="literary fiction" data-price="15.99">
+                        <div class="book-card__image-container">
+                            <img src="Where_the_Crawdads_Sing.jpg" alt="Cover of Where the Crawdads Sing by Delia Owens" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Bestseller</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Literary Fiction</p>
+                            <h4 class="book-card__title">Where the Crawdads Sing</h4>
+                            <p class="book-card__author">Delia Owens</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">15.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Where the Crawdads Sing to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 9 - The Silent Patient -->
+                    <article class="book-card" data-genre="mystery & thriller" data-price="13.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Silent_Patient.jpg" alt="Cover of The Silent Patient by Alex Michaelides" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Trending</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Mystery & Thriller</p>
+                            <h4 class="book-card__title">The Silent Patient</h4>
+                            <p class="book-card__author">Alex Michaelides</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">13.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Silent Patient to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 10 - Educated -->
+                    <article class="book-card" data-genre="memoir" data-price="14.99">
+                        <div class="book-card__image-container">
+                            <img src="Educated.jpg" alt="Cover of Educated by Tara Westover" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=400&q=80'">
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Memoir</p>
+                            <h4 class="book-card__title">Educated</h4>
+                            <p class="book-card__author">Tara Westover</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">14.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Educated to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 11 - The 7 Habits -->
+                    <article class="book-card" data-genre="self-improvement" data-price="17.99">
+                        <div class="book-card__image-container">
+                            <img src="The_7_Habits.jpg" alt="Cover of The 7 Habits of Highly Effective People" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge book-card__badge--sale">-15% OFF</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Self-Improvement</p>
+                            <h4 class="book-card__title">The 7 Habits of Highly Effective People</h4>
+                            <p class="book-card__author">Stephen R. Covey</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">17.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The 7 Habits to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 12 - Normal People -->
+                    <article class="book-card" data-genre="contemporary romance" data-price="12.99">
+                        <div class="book-card__image-container">
+                            <img src="Normal_People.jpg" alt="Cover of Normal People by Sally Rooney" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=400&q=80'">
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Contemporary Romance</p>
+                            <h4 class="book-card__title">Normal People</h4>
+                            <p class="book-card__author">Sally Rooney</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">12.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Normal People to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 13 - Sapiens -->
+                    <article class="book-card" data-genre="history" data-price="21.99">
+                        <div class="book-card__image-container">
+                            <img src="Sapiens.jpg" alt="Cover of Sapiens by Yuval Noah Harari" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Award Winner</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">History</p>
+                            <h4 class="book-card__title">Sapiens: A Brief History of Humankind</h4>
+                            <p class="book-card__author">Yuval Noah Harari</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">21.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Sapiens to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                                        <!-- Book 14 - The Name of the Wind -->
+                    <article class="book-card" data-genre="fantasy" data-price="16.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Name_of_the_Wind.jpg" alt="Cover of The Name of the Wind by Patrick Rothfuss" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1535905558798-027c20f33a5c?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Award Winner</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Fantasy</p>
+                            <h4 class="book-card__title">The Name of the Wind</h4>
+                            <p class="book-card__author">Patrick Rothfuss</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">16.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Name of the Wind to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 15 - The Psychology of Money -->
+                    <article class="book-card" data-genre="finance & investing" data-price="15.99">
+                        <div class="book-card__image-container">
+                            <img src="The_Psychology_of_Money.jpg" alt="Cover of The Psychology of Money by Morgan Housel" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge">Bestseller</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Finance & Investing</p>
+                            <h4 class="book-card__title">The Psychology of Money</h4>
+                            <p class="book-card__author">Morgan Housel</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">15.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add The Psychology of Money to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Book 16 - Fourth Wing -->
+                    <article class="book-card" data-genre="fantasy romance" data-price="18.99">
+                        <div class="book-card__image-container">
+                            <img src="Fourth_Wing.jpg" alt="Cover of Fourth Wing by Rebecca Yarros" class="book-card__image" onerror="this.src='https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&w=400&q=80'">
+                            <div class="book-card__badge book-card__badge--new">New</div>
+                        </div>
+                        <div class="book-card__body">
+                            <p class="book-card__genre">Fantasy Romance</p>
+                            <h4 class="book-card__title">Fourth Wing</h4>
+                            <p class="book-card__author">Rebecca Yarros</p>
+                            <div class="book-card__footer">
+                                <div>
+                                    <span class="price-label">Price</span>
+                                    <span class="price-value">18.99 <span class="price-value__currency">PTS</span></span>
+                                </div>
+                                <button class="cart-btn" type="button" aria-label="Add Fourth Wing to cart">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_bag</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
             </section>
+        </div>
+    </main>
 
-        </main>
-    </div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 DUCK Store Marketplace. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="JS/store.js"></script>
+    <script src="JS/component.js"></script>
 </body>
 </html>

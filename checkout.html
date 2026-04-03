@@ -3,235 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUCK Store | Secure Checkout</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Existing project CSS files - DO NOT MODIFY -->
-    <link rel="stylesheet" href="CSS/component.css">
+    <title>Your Cart - Lumina Books</title>
     <link rel="stylesheet" href="CSS/classes.css">
-    <!-- Checkout specific CSS - only adds new classes, never overrides -->
-    <link rel="stylesheet" href="CSS/checkout.css">
+    <link rel="stylesheet" href="css/component.css">
+    <link rel="stylesheet" href="CSS/Pages/checkout.css">
+    <script src="js/checkout.js"></script>
 </head>
 <body>
-    <!-- Skip link for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <main>
+        <nav class="checkout-progress" aria-label="Checkout Steps">
+            <ol class="steps-list">
+                <li class="step-completed">Cart</li>
+                <li class="step-active" aria-current="step">Shipping</li>
+                <li class="step-upcoming">Payment</li>
+            </ol>
+        </nav>
+        
+        <h1 class="page-title">Your Cart</h1>
+        <div class="checkout-layout">
+            <section class="checkout-details">
 
-    <!-- Original navbar - EXACT MATCH to other pages -->
-    <nav class="navbar">
-        <div class="logo">DUCK Books</div>
-        <ul class="nav-links">
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="store.html">STORE</a></li>
-            <li><a href="myBooks.html">MYBOOKS</a></li>
-            <li><a href="community.html">COMMUNITY</a></li>
-            <li><a href="reward.html">REWARDS</a></li>
-            <li>
-                <form class="search-bar">
-                    <input type="text" placeholder="Search titles, authors..." name="search">
-                </form>
-            </li>
-            <li><button id="notification_button">notifications</button></li>
-            <li><button id="settings_button">Settings</button></li>
-            <li><a href="user_profile.html">PROFILE</a></li>
-        </ul>
-    </nav>
+                <div class="cart-items">
+                    
+                </div>
 
-    <main id="main-content">
-        <section class="checkout-section">
-            <div class="checkout-container">
-                <!-- Progress Steps with semantic HTML -->
-                <nav class="progress-nav" aria-label="Checkout progress">
-                    <ol class="progress-steps">
-                        <li class="progress-step progress-step--completed">
-                            <span class="progress-step__number" aria-hidden="true">1</span>
-                            <span class="progress-step__label">Cart</span>
-                        </li>
-                        <li class="progress-step progress-step--active">
-                            <span class="progress-step__number" aria-hidden="true">2</span>
-                            <span class="progress-step__label">Checkout</span>
-                        </li>
-                        <li class="progress-step">
-                            <span class="progress-step__number" aria-hidden="true">3</span>
-                            <span class="progress-step__label">Confirmation</span>
-                        </li>
-                    </ol>
-                </nav>
-
-                <div class="checkout-layout">
-                    <!-- Left Column: Forms -->
-                    <div class="checkout-form-column">
-                        <header class="checkout-header">
-                            <h1>Secure Checkout</h1>
-                            <p class="checkout-header__subtitle">Step 2 of 3: Enter your shipping and payment details.</p>
-                        </header>
-
-                        <!-- Shipping Address Section -->
-                        <article class="form-card">
-                            <h2 class="form-card__title">
-                                <i class="fas fa-truck" aria-hidden="true"></i>
-                                Shipping Address
-                            </h2>
-
-                            <div class="form-row form-row--two">
-                                <div class="form-group">
-                                    <label class="form-label" for="first-name">First Name <span class="required-star" aria-hidden="true">*</span></label>
-                                    <input type="text" id="first-name" name="first-name" placeholder="Enter first name" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="last-name">Last Name <span class="required-star" aria-hidden="true">*</span></label>
-                                    <input type="text" id="last-name" name="last-name" placeholder="Enter last name" class="form-input" required>
-                                </div>
-                            </div>
-
+                <section class="shipping-section">
+                    <h2 class="section-title">Shipping Details</h2>
+                    <form action="#" method="post" class="shipping-form">
+                        <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="street-address">Street Address <span class="required-star" aria-hidden="true">*</span></label>
-                                <input type="text" id="street-address" name="street-address" placeholder="123 Library Lane" class="form-input" value="123 Library Lane" required>
+                                <label for="first-name">First Name</label>
+                                <input type="text" class="name-field" name="first-name" placeholder="John" required>
                             </div>
-
-                            <div class="form-row form-row--three">
-                                <div class="form-group">
-                                    <label class="form-label" for="city">City <span class="required-star" aria-hidden="true">*</span></label>
-                                    <input type="text" id="city" name="city" placeholder="City" class="form-input" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="state">State <span class="required-star" aria-hidden="true">*</span></label>
-                                    <select id="state" name="state" class="form-input" required>
-                                        <option value="">Select State</option>
-                                        <option value="NY" selected>New York</option>
-                                        <option value="CA">California</option>
-                                        <option value="TX">Texas</option>
-                                        <option value="FL">Florida</option>
-                                        <option value="IL">Illinois</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="zip-code">Zip Code <span class="required-star" aria-hidden="true">*</span></label>
-                                    <input type="text" id="zip-code" name="zip-code" placeholder="10001" class="form-input" value="10001" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" class="name-field" name="last-name" placeholder="Doe" required>
                             </div>
-                        </article>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input type="text" class="address" name="address" placeholder="123 Lumina St, Golden City" required>
+                        </div>
+                    </form>
+                </section>
+            </section>
 
-                        <!-- Payment Method Section -->
-                        <article class="form-card">
-                            <h2 class="form-card__title">
-                                <i class="fas fa-credit-card" aria-hidden="true"></i>
-                                Payment Method
-                            </h2>
+            <div class="order-summary-sidebar">
+                <div class="summary-card">
+                    <h2 class="summary-title">Order Summary</h2>
+                    
+                    <dl class="summary-list">
+                        <div class="summary-row">
+                            <dt>Subtotal (2 items)</dt>
+                            <dd>$43.49</dd>
+                        </div>
+                        <div class="summary-row">
+                            <dt>Estimated Shipping</dt>
+                            <dd>$5.99</dd>
+                        </div>
+                        <div class="summary-row">
+                            <dt>Estimated Tax</dt>
+                            <dd>$3.50</dd>
+                        </div>
+                    </dl>
 
-                            <div class="payment-options" role="radiogroup" aria-label="Payment method">
-                                <label class="payment-option">
-                                    <input type="radio" name="payment-method" value="credit-card" class="payment-option__radio" checked>
-                                    <span class="payment-option__content">
-                                        <i class="fas fa-credit-card" aria-hidden="true"></i>
-                                        Credit Card
-                                    </span>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="payment-method" value="digital-wallet" class="payment-option__radio">
-                                    <span class="payment-option__content">
-                                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                                        Digital Wallet
-                                    </span>
-                                </label>
-                            </div>
-
-                            <div class="credit-card-fields">
-                                <div class="form-group">
-                                    <label class="form-label" for="card-number">Card Number</label>
-                                    <input type="text" id="card-number" name="card-number" placeholder="0000 0000 0000 0000" class="form-input" value="4242 4242 4242 4242">
-                                </div>
-
-                                <div class="form-row form-row--two">
-                                    <div class="form-group">
-                                        <label class="form-label" for="expiry-date">Expiration Date</label>
-                                        <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" class="form-input" value="12/28">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="cardholder-name">Cardholder Name</label>
-                                        <input type="text" id="cardholder-name" name="cardholder-name" placeholder="Name as it appears on card" class="form-input" value="John Doe">
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                    <div class="discount-badge" role="status">
+                        <p class="discount-text">Gold Member Discount</p>
+                        <p class="discount-amount">-$8.70</p>
                     </div>
 
-                    <!-- Right Column: Order Summary & Rewards -->
-                    <aside class="checkout-summary-column">
-                        <!-- Order Summary Card -->
-                        <article class="summary-card">
-                            <h2 class="summary-card__title">Order Summary</h2>
+                    <div class="total-row">
+                        <span>Total</span>
+                        <span class="total-price">$44.28</span>
+                    </div>
 
-                            <ul class="order-items">
-                                <li class="order-item">
-                                    <div class="order-item__info">
-                                        <h3 class="order-item__title">The Alchemist: 25th Anniversary Edition</h3>
-                                        <p class="order-item__meta">Hardcover</p>
-                                    </div>
-                                    <div class="order-item__pricing">
-                                        <span class="order-item__price">$24.99</span>
-                                        <span class="order-item__quantity">Qty: 1</span>
-                                    </div>
-                                </li>
-                                <li class="order-item">
-                                    <div class="order-item__info">
-                                        <h3 class="order-item__title">Atomic Habits</h3>
-                                        <p class="order-item__meta">Paperback</p>
-                                    </div>
-                                    <div class="order-item__pricing">
-                                        <span class="order-item__price">$16.50</span>
-                                        <span class="order-item__quantity">Qty: 1</span>
-                                    </div>
-                                </li>
-                            </ul>
+                    <button type="submit" class="button-primary">
+                        Proceed to Payment
+                        <span class="arrow-icon" aria-hidden="true">→</span>
+                    </button>
 
-                            <div class="order-totals">
-                                <div class="order-totals__row">
-                                    <span>Subtotal</span>
-                                    <span>$41.49</span>
-                                </div>
-                                <div class="order-totals__row">
-                                    <span>Shipping</span>
-                                    <span class="order-totals__shipping">Free</span>
-                                </div>
-                                <div class="order-totals__row">
-                                    <span>Estimated Tax</span>
-                                    <span>$3.50</span>
-                                </div>
-                                <div class="order-totals__row order-totals__row--total">
-                                    <span>Total</span>
-                                    <span class="order-totals__total-amount">$44.99</span>
-                                </div>
-                            </div>
+                    <p class="legal-notice">
+                        Shipping & taxes calculated at checkout. Gold member benefits applied.
+                    </p>
 
-                            <button type="button" class="checkout-btn" id="complete-purchase-btn">
-                                Complete Purchase <i class="fas fa-arrow-right" aria-hidden="true"></i>
-                            </button>
-                            <p class="secure-badge">
-                                <i class="fas fa-lock" aria-hidden="true"></i>
-                                Secure encrypted transaction
-                            </p>
-                        </article>
-
-                        <!-- Rewards Card -->
-                        <article class="rewards-card">
-                            <div class="rewards-card__icon">
-                                <i class="fas fa-gem" aria-hidden="true"></i>
-                            </div>
-                            <div class="rewards-card__content">
-                                <h3 class="rewards-card__title">Checkout Bonus</h3>
-                                <p class="rewards-card__text">Complete this purchase to earn <strong>45 Gold Coins</strong> and unlock the <strong>"Bookworm"</strong> badge.</p>
-                            </div>
-                        </article>
-                    </aside>
+                    <footer class="trust-indicators">
+                        <div class="trust-item">
+                            <strong>Secure Checkout</strong>
+                            <p>256-bit SSL encrypted connection</p>
+                        </div>
+                        <div class="trust-item">
+                            <strong>Earn 44 Lumina Points</strong>
+                            <p>Redeemable for future book deals</p>
+                        </div>
+                    </footer>
                 </div>
-            </div>
-        </section>
+            </div> 
+        </div>
     </main>
 
-    <!-- component.js is already included in your project -->
-    <script src="JS/component.js"></script>
-    <script src="JS/checkout.js"></script>
+    <footer class="page-footer">
+        <div class="footer-nav">
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Contact Support</a>
+        </div>
+        <p class="copyright">&copy; 2024 Lumina Books. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
