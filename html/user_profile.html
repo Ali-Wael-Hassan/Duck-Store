@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliophile Gold - Achievements & Badges</title>
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/Pages/user-profile-style.css">
+    <script src="../js/component.js"></script>
+    <script src="JS/user-profile-script.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="dashboard.Html" class="site-img"></a>
+        <a href="user_profile.html">user</a>
+    </nav>
+    <main class="dashboard-content">
+        <header class="page-intro">
+            <h1 class="page-title">Achievements & Badges</h1>
+            <p class="page-description">Track your literary milestones and unlock exclusive rewards as you explore the
+                world of books.</p>
+            <div class="action-buttons">
+                <button class="btn-secondary">Share Profile</button>
+                <button class="btn-primary">View Leaderboard</button>
+            </div>
+        </header>
+
+        <section class="stats-overview" aria-label="Quick Stats">
+            <article class="stat-card">
+                <h2 class="stat-label">Total Unlocked</h2>
+                <p class="stat-value">12 <span class="stat-total">/ 50</span></p>
+                <progress value="12" max="50" class="progress-bar"></progress>
+            </article>
+
+            <article class="stat-card">
+                <h2 class="stat-label">Global Rank</h2>
+                <p class="stat-value">Top 5%</p>
+                <p class="stat-trend">+240 positions this week</p>
+            </article>
+
+            <article class="stat-card">
+                <h2 class="stat-label">Next Milestone</h2>
+                <p class="milestone-title">"Bookworm"</p>
+                <p class="milestone-requirement">Read 5 more books to unlock</p>
+            </article>
+        </section>
+
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Reading Streaks</h2>
+                <a href="#" class="view-all-link">View all</a>
+            </header>
+            <div class="badge-grid">
+            </div>
+        </section>
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Genre Master</h2>
+                <a href="#" class="view-all-link">View all</a>
+            </header>
+            <div class="genre-grid">
+                <article class="genre-card completed">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">🚀</span>
+                        <span class="status-tag">Completed</span>
+                    </div>
+                    <h3 class="genre-title">Sci-Fi Explorer</h3>
+                    <p class="genre-detail">Read 10 Sci-Fi books</p>
+                    <progress value="10" max="10" class="genre-progress"></progress>
+                </article>
+
+                <article class="genre-card">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">📜</span>
+                        <span class="progress-text">4/10</span>
+                    </div>
+                    <h3 class="genre-title">History Buff</h3>
+                    <p class="genre-detail">Read 10 History books</p>
+                    <progress value="4" max="10" class="genre-progress"></progress>
+                </article>
+
+                <article class="genre-card locked">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">🔍</span>
+                        <span class="status-tag">Locked</span>
+                    </div>
+                    <h3 class="genre-title">Mystery Solver</h3>
+                    <p class="genre-detail">Unlock by reading 1 Mystery book</p>
+                    <progress value="0" max="1" class="genre-progress"></progress>
+                </article>
+            </div>
+        </section>
+
+        <section class="achievement-section">
+            <h2>Community Contributor</h2>
+            <ul class="contributor-grid">
+                <li class="contribution-item">
+                    <a href="/reviews" class="contribution-link"><span aria-hidden="true">📚</span> Book Review</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/chat" class="contribution-link"><span aria-hidden="true">💬</span> Chatterbox</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/influencer" class="contribution-link"><span aria-hidden="true">🌟</span> Influencer</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/share" class="contribution-link"><span aria-hidden="true">🔗</span> Sharer</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/curator" class="contribution-link"><span aria-hidden="true">🎨</span> Curator</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/mentor" class="contribution-link"><span aria-hidden="true">👩‍🏫</span> Mentor</a>
+                </li>
+            </ul>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>Keep reading to unlock more mysteries of the library.</p>
+        </footer>
+    </main>
+
+</body>
+
+</html>
