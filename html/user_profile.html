@@ -4,131 +4,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/component.css">
+    <title>Bibliophile Gold - Achievements & Badges</title>
     <link rel="stylesheet" href="../css/classes.css">
-    <title>DUCK Store | Profile & Achievements</title>
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/Pages/user-profile-style.css">
+    <script src="../js/component.js"></script>
+    <script src="JS/user-profile-script.js"></script>
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="logo">DUCK Store</div>
-        <ul class="nav-links">
-            <li><a href="home.html">HOME</a></li>
-            <li><a href="store.html">STORE</a></li>
-            <li><a href="myBooks.html">MYBOOKS</a></li>
-            <li><a href="community.html">COMMUNITY</a></li>
-            <li><a href="reward.html">REWARDS</a></li>
-            <li>
-                <form class="search-bar">
-                    <input type="text" placeholder="Search titles, authors..." name="search">
-                </form>
-            </li>
-            <li><button id="notification_button" aria-label="Notifications">Notifications</button></li>
-            <li><button id="settings_button" aria-label="Settings">Settings</button></li>
-            <li><a href="user_profile.html">PROFILE</a></li>
-        </ul>
+    <nav>
+        <a href="dashboard.Html" class="site-img"></a>
+        <a href="user_profile.html">user</a>
     </nav>
-
-    <main class="profile-container">
-        <header class="start">
-            <h2>Achievements & Badges</h2>
-            <p>Track your literary milestones and unlock exclusive rewards as you explore the world of books.</p>
-            <div class="header-actions">
-                <button class="btn-share">📤 Share Profile</button>
-                <button class="btn-leader" onclick="window.location.href='community.html'">📊 View Leaderboard</button>
+    <main class="dashboard-content">
+        <header class="page-intro">
+            <h1 class="page-title">Achievements & Badges</h1>
+            <p class="page-description">Track your literary milestones and unlock exclusive rewards as you explore the
+                world of books.</p>
+            <div class="action-buttons">
+                <button class="btn-secondary">Share Profile</button>
+                <button class="btn-primary">View Leaderboard</button>
             </div>
         </header>
 
-        <section class="stats-overview">
-            <div class="unlocked card">
-                <h4>TOTAL UNLOCKED</h4>
-                <div class="badges">12</div>
-                <p>Badges Earned</p>
-            </div>
+        <section class="stats-overview" aria-label="Quick Stats">
+            <article class="stat-card">
+                <h2 class="stat-label">Total Unlocked</h2>
+                <p class="stat-value">12 <span class="stat-total">/ 50</span></p>
+                <progress value="12" max="50" class="progress-bar"></progress>
+            </article>
 
-            <div class="rank card">
-                <h4>GLOBAL RANK</h4>
-                <span class="rank-value">#452</span>
-                <p>Top 5% of Readers</p>
-            </div>
+            <article class="stat-card">
+                <h2 class="stat-label">Global Rank</h2>
+                <p class="stat-value">Top 5%</p>
+                <p class="stat-trend">+240 positions this week</p>
+            </article>
 
-            <div class="milestone card">
-                <h4>NEXT MILESTONE</h4>
-                <span class="next_stone">"Grand Scholar"</span>
-                <div class="progress-mini">
-                    <div></div>
-                </div>
-                <p>8/10 Books Read</p>
-            </div>
+            <article class="stat-card">
+                <h2 class="stat-label">Next Milestone</h2>
+                <p class="milestone-title">"Bookworm"</p>
+                <p class="milestone-requirement">Read 5 more books to unlock</p>
+            </article>
         </section>
 
-        <section class="achievements-detail">
-            <div class="streaks">
-                <h3>Reading Streaks</h3>
-                <div class="streak-item">
-                    <span>🔥</span>
-                    <strong>14 Day Streak!</strong>
-                    <span>Keep reading to unlock the "Phoenix" badge.</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="genre">
-                <h3>Genre Master</h3>
-                <div class="tag-group">
-                    <span class="badge">Sci-Fi Expert (Lvl 5)</span>
-                    <span class="badge">History Buff (Lvl 2)</span>
-                    <span class="badge">Mystery Novice</span>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="community">
-                <h3>Community Contributor</h3>
-                <div class="button-grid">
-                    <button class="btn-review">✅ First Review</button>
-                    <button class="btn-chatter">💬 Chatterbox (0/50 chats)</button>
-                    <button class="btn-inf">✨ Influencer</button>
-                    <button class="btn-sharer">✅ Sharer</button>
-                    <button class="btn-curator">📚 Curator</button>
-                    <button class="btn-mentor">🎓 Mentor</button>
-                </div>
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Reading Streaks</h2>
+                <a href="#" class="view-all-link">View all</a>
+            </header>
+            <div class="badge-grid">
             </div>
         </section>
-
-        <section class="config-section">
-            <h2>Profile Customization</h2>
-
-            <div class="exp-grid">
-                <div class="item">
-                    <label><strong>Edit Display Name:</strong></label><br>
-                    <input type="text" placeholder="Enter your scholar name...">
-                </div>
-
-                <div class="item">
-                    <label><strong>Profile Privacy Level:</strong></label><br>
-                    <input type="range" min="1" max="3" step="1">
-                    <div>
-                        <span>Public</span>
-                        <span>Friends</span>
-                        <span>Private</span>
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Genre Master</h2>
+                <a href="#" class="view-all-link">View all</a>
+            </header>
+            <div class="genre-grid">
+                <article class="genre-card completed">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">🚀</span>
+                        <span class="status-tag">Completed</span>
                     </div>
-                </div>
+                    <h3 class="genre-title">Sci-Fi Explorer</h3>
+                    <p class="genre-detail">Read 10 Sci-Fi books</p>
+                    <progress value="10" max="10" class="genre-progress"></progress>
+                </article>
 
-                <div class="tem">
-                    <label><strong>Custom Profile Color:</strong></label><br>
-                    <input type="color" value="#ffcc00">
-                    <span>(Changes badge highlight colors)</span>
-                </div>
+                <article class="genre-card">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">📜</span>
+                        <span class="progress-text">4/10</span>
+                    </div>
+                    <h3 class="genre-title">History Buff</h3>
+                    <p class="genre-detail">Read 10 History books</p>
+                    <progress value="4" max="10" class="genre-progress"></progress>
+                </article>
 
-                <div class="item">
-                    <label><strong>Birthdate (For Birthday Rewards):</strong></label><br>
-                    <input type="date">
-                </div>
+                <article class="genre-card locked">
+                    <div class="genre-card-header">
+                        <span class="genre-icon" aria-hidden="true">🔍</span>
+                        <span class="status-tag">Locked</span>
+                    </div>
+                    <h3 class="genre-title">Mystery Solver</h3>
+                    <p class="genre-detail">Unlock by reading 1 Mystery book</p>
+                    <progress value="0" max="1" class="genre-progress"></progress>
+                </article>
             </div>
         </section>
+
+        <section class="achievement-section">
+            <h2>Community Contributor</h2>
+            <ul class="contributor-grid">
+                <li class="contribution-item">
+                    <a href="/reviews" class="contribution-link"><span aria-hidden="true">📚</span> Book Review</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/chat" class="contribution-link"><span aria-hidden="true">💬</span> Chatterbox</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/influencer" class="contribution-link"><span aria-hidden="true">🌟</span> Influencer</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/share" class="contribution-link"><span aria-hidden="true">🔗</span> Sharer</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/curator" class="contribution-link"><span aria-hidden="true">🎨</span> Curator</a>
+                </li>
+                <li class="contribution-item">
+                    <a href="/mentor" class="contribution-link"><span aria-hidden="true">👩‍🏫</span> Mentor</a>
+                </li>
+            </ul>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>Keep reading to unlock more mysteries of the library.</p>
+        </footer>
     </main>
 
 </body>

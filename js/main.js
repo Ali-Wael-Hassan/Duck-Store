@@ -2,8 +2,9 @@ import { AuthPage } from './pages/auth-page.js';
 import { BookViewPage } from './pages/book-view.js';
 import { HomePage } from './pages/home-page.js'; 
 import { CommunityPage } from './pages/community-page.js';
-import { RewardPage } from './pages/reward-page.js'; // ADDED IMPORT
+import { RewardPage } from './pages/reward-page.js';
 import { StorageManager } from './core/StorageManager.js';
+import { UserProfilePage } from './pages/user-profile-script.js';
 
 class App {
     constructor() {
@@ -49,6 +50,10 @@ class App {
         const pageType = document.body.dataset.page;
         const GOOGLE_CLIENT_ID = "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com";
 
+        if (pageType === 'profile') {
+            new UserProfilePage();
+        }
+        
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
                 window.location.href = 'home.html';
