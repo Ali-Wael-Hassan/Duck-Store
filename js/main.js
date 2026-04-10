@@ -2,6 +2,7 @@ import { AuthPage } from './pages/auth-page.js';
 import { BookViewPage } from './pages/book-view.js';
 import { HomePage } from './pages/home-page.js'; 
 import { CommunityPage } from './pages/community-page.js';
+import { RewardPage } from './pages/reward-page.js'; // ADDED IMPORT
 import { StorageManager } from './core/StorageManager.js';
 
 class App {
@@ -16,7 +17,8 @@ class App {
 
     initLayoutObservers() {
         document.addEventListener('DOMContentLoaded', () => {
-            const header = document.querySelector('.header') || document.querySelector('.main-nav');
+            // Updated to include .reward-header and .reward-panel for the Rewards layout
+            const header = document.querySelector('.header') || document.querySelector('.main-nav') || document.querySelector('.reward-header');
             const sidebar = document.querySelector('.sidebar') || document.querySelector('.leaderboard-aside');
             const mainComp = document.querySelector('main');
 
@@ -69,6 +71,7 @@ class App {
 
         if (pageType === 'rewards') {
             console.log("Rewards page initialized");
+            new RewardPage(); // INITIALIZED CLASS
         }
     }
 }

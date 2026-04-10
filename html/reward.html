@@ -4,30 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUCK Books | Rewards Hub</title>
+    
     <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/classes.css">
     <link rel="stylesheet" href="../css/Pages/reward.css">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
     <script src="JS/component.js"></script>
 </head>
-<body>
-
-    <nav class="main-nav">
+<body data-page="rewards"> <nav class="main-nav">
         <div class="main-nav__logo">DUCK Books</div>
         <ul class="main-nav__links">
             <li><a href="home.html">HOME</a></li>
             <li><a href="store.html">STORE</a></li>
-            <li><a href="my-books.html">MYBOOKS</a></li>
+            <li><a href="myBooks.html">MYBOOKS</a></li>
             <li><a href="community.html">COMMUNITY</a></li>
-            <li><a href="reward.html">REWARDS</a></li>
+            <li><a href="reward.html" class="active">REWARDS</a></li>
             <li>
-                <form class="search-form" role="search">
-                    <input type="text" placeholder="Search titles, authors..." name="search" aria-label="Search">
+                <form class="search-form" role="search" onsubmit="return false;">
+                    <input type="text" id="reward-search" placeholder="Search rewards..." aria-label="Search">
                 </form>
             </li>
-            <li><button id="notification-btn" aria-label="Notifications">notifications</button></li>
-            <li><button id="settings-btn" aria-label="Settings">Settings</button></li>
-            <li><a href="user-profile.html">PROFILE</a></li>
+            <li><button class="icon-btn" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></button></li>
+            <li><button class="icon-btn" aria-label="Settings"><span class="material-symbols-outlined">settings</span></button></li>
+            <li><a href="user_profile.html">PROFILE</a></li>
         </ul>
     </nav>
 
@@ -35,101 +37,36 @@
         <header class="reward-header">
             <h1>Rewards Hub</h1>
             <p>Unlock exclusive books and collectibles with your Diamond Points.</p>
-            <div class="points-balance">
+            
+            <div class="points-balance" id="points-display">
                 <i class="bi bi-gem" aria-hidden="true"></i>
                 <span class="points-balance__label">CURRENT BALANCE</span>
-                <span class="points-balance__value" id="points-value">1250</span>
+                <span class="points-balance__value" id="points-value">...</span>
                 <span class="points-balance__unit">PTS</span>
             </div>
         </header>
 
         <div class="reward-panels">
             <div id="store-panel" class="reward-panel reward-panel--active">
+                
                 <section class="legend-status">
                     <h2>Your Legend Status</h2>
-                    <ul class="badge-list">
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            30 Day Streak
-                        </li>
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            Book Warm
-                        </li>
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            Reviewer Elite
-                        </li>
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            Socialite
-                        </li>
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            Mystery Badge
-                        </li>
-                        <li class="badge-list__item">
-                            <span class="badge-list__head">🔥</span>
-                            Grand Sage
-                        </li>
-                    </ul>
+                    <ul class="badge-list" id="sidebar-badges">
+                        </ul>
                 </section>
 
                 <section class="redeemable-rewards">
                     <h2>Redeemable Rewards</h2>
-                    <div class="rewards-grid">
-                        <article class="reward-card" id="reward-1">
-                            <div class="reward-card__image">
-                                <span class="reward-card__badge">LIMITED EDITION</span>
-                            </div>
-                            <h3 class="reward-card__title">The Midnight Alchemist</h3>
-                            <p class="reward-card__description">Hardcover signed by author with exclusive foil design.</p>
-                            <div class="reward-card__points">4,500</div>
-                            <button class="redeem-btn" data-cost="4500" data-title="The Midnight Alchemist">REDEEM</button>
-                        </article>
-                        <article class="reward-card" id="reward-2">
-                            <div class="reward-card__image">
-                                <span class="reward-card__badge">LIMITED EDITION</span>
-                            </div>
-                            <h3 class="reward-card__title">Celestial Bundle</h3>
-                            <p class="reward-card__description">Exclusive e-book themes and high-res digital artworks.</p>
-                            <div class="reward-card__points">1,200</div>
-                            <button class="redeem-btn" data-cost="1200" data-title="Celestial Bundle">REDEEM</button>
-                        </article>
-                        <article class="reward-card" id="reward-3">
-                            <div class="reward-card__image">
-                                <span class="reward-card__badge">LIMITED EDITION</span>
-                            </div>
-                            <h3 class="reward-card__title">Lumina Velvet Sleeve</h3>
-                            <p class="reward-card__description">Premium velvet back protected for your travels.</p>
-                            <div class="reward-card__points">2,800</div>
-                            <button class="redeem-btn" data-cost="2800" data-title="Lumina Velvet Sleeve">REDEEM</button>
-                        </article>
-                        <article class="reward-card" id="reward-4">
-                            <div class="reward-card__image">
-                                <span class="reward-card__badge">LIMITED EDITION</span>
-                            </div>
-                            <h3 class="reward-card__title">Chronicler's Tome</h3>
-                            <p class="reward-card__description">Embossed leather journal for your own stories.</p>
-                            <div class="reward-card__points">6,000</div>
-                            <button class="redeem-btn" data-cost="6000" data-title="Chronicler's Tome">REDEEM</button>
-                        </article>
-                    </div>
+                    <div class="rewards-grid" id="rewards-grid">
+                        </div>
                 </section>
             </div>
 
             <div id="badges-panel" class="reward-panel">
                 <section class="earned-badges">
                     <h2>Your Earned Badges</h2>
-                    <ul class="badge-list badge-list--earned">
-                        <li class="badge-list__item">Early Bird Reader</li>
-                        <li class="badge-list__item">30 Day Streak</li>
-                        <li class="badge-list__item">Book Warm</li>
-                        <li class="badge-list__item">Reviewer Elite</li>
-                        <li class="badge-list__item">Socialite</li>
-                        <li class="badge-list__item">Mystery Badge</li>
-                        <li class="badge-list__item">Grand Sage</li>
-                    </ul>
+                    <ul class="badge-list badge-list--earned" id="earned-badges-full">
+                        </ul>
                 </section>
             </div>
 
@@ -143,5 +80,7 @@
             </div>
         </div>
     </main>
+
+    <script type="module" src="../js/main.js"></script>
 </body>
 </html>

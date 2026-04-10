@@ -2,20 +2,16 @@ import { StorageManager } from '../core/StorageManager.js';
 
 export class CommunityPage {
     constructor() {
-        // Fetch users from storage only. No hardcoded fallback array here.
         this.allUsers = StorageManager.get('community_users') || [];
         
-        // Fetch the active session to highlight 'You' in the list
         this.currentUser = StorageManager.get('user_session');
         
-        // Internal state for filtering (search)
         this.filteredUsers = [];
         
         this.init();
     }
 
     init() {
-        // If data is missing (e.g., first load), we can't render yet.
         if (this.allUsers.length === 0) {
             console.warn("CommunityPage: No user data found in StorageManager.");
             this.renderEmptyState();
@@ -30,12 +26,10 @@ export class CommunityPage {
     }
 
     sortAndFilter(query = "") {
-        // 1. Filter by search query if provided
         let users = this.allUsers.filter(u => 
             u.name.toLowerCase().includes(query.toLowerCase())
         );
 
-        // 2. Sort by points descending to establish ranks
         this.filteredUsers = users.sort((a, b) => b.points - a.points);
     }
 
@@ -43,14 +37,12 @@ export class CommunityPage {
         const container = document.getElementById('podium-container');
         if (!container) return;
 
-        // Take the top 3 from the master list (always based on all users, not search)
         const topThree = [...this.allUsers]
             .sort((a, b) => b.points - a.points)
             .slice(0, 3);
 
         if (topThree.length < 3) return;
 
-        // Visual order for CSS: 2nd, 1st, 3rd
         const positions = [
             { ...topThree[1], rank: 2, slot: 'podium__card--2' },
             { ...topThree[0], rank: 1, slot: 'podium__card--1' },
@@ -75,13 +67,11 @@ export class CommunityPage {
         const tbody = document.getElementById('scholars-table-body');
         if (!tbody) return;
 
-        // If search results are empty
         if (this.filteredUsers.length === 0) {
             tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; opacity: 0.5;">No scholars found.</td></tr>`;
             return;
         }
 
-        // Displaying results. Rank is determined by position in sorted master list.
         tbody.innerHTML = this.filteredUsers.map(user => {
             const globalRank = this.allUsers.findIndex(u => u.id === user.id) + 1;
             const isMe = this.currentUser && user.id === this.currentUser.id;
