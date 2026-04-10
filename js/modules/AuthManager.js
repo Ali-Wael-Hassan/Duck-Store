@@ -19,13 +19,38 @@ export class AuthManager {
         });
     }
 
+    // NEW: Helper to sync with Community and Profile requirements
+    _saveSession(userData) {
+        const sessionUser = {
+            id: userData.id || "user_" + Date.now(),
+            name: userData.name,
+            email: userData.email,
+            avatar: userData.picture || `https://i.pravatar.cc/150?u=${userData.name}`,
+            role: userData.role,
+            loggedIn: true,
+            // Community/Profile expectations
+            points: 0, 
+            readings: 0,
+            reviews: 0,
+            joinDate: new Date().getFullYear().toString()
+        };
+
+        // 1. Save for the current session (Object)
+        localStorage.setItem("user_session", JSON.stringify(sessionUser));
+
+        // 2. Save for the Auth legacy check (Array)
+        StorageManager.save("user", [sessionUser]);
+
+        // 3. Add to community leaderboard if not already there
+        const community = StorageManager.get("community_users") || [];
+        if (!community.find(u => u.email === sessionUser.email)) {
+            community.push(sessionUser);
+            StorageManager.save("community_users", community);
+        }
+    }
+
     manualLogin(formData) {
-        alert("Logic reached! Redirecting now...");
         const { email, isAdmin } = formData;
-        
-        /*
-            add authentication here in Back end phase
-        */
         const user = {
             name: email.split('@')[0],
             email: email,
@@ -33,26 +58,20 @@ export class AuthManager {
             picture: null
         };
 
-        StorageManager.save("user", [user]);
+        this._saveSession(user);
         this.redirect(user.role);
     }
 
     manualSignUp(formData) {
         const { fullName, email, isAdmin } = formData;
-
-        /*
-            add check used in Back end phase
-        */
-
         const newUser = {
             name: fullName,
             email: email,
             picture: null,
-            role: isAdmin ? "admin" : "user",
-            joined: new Date().toLocaleDateString()
+            role: isAdmin ? "admin" : "user"
         };
 
-        StorageManager.save("user", [newUser]);
+        this._saveSession(newUser);
         this.redirect(newUser.role);
     }
 
@@ -62,8 +81,12 @@ export class AuthManager {
     }
 
     logout() {
+        // Clear both session keys
+        localStorage.removeItem("user_session");
         StorageManager.save("user", []);
-        window.location.href = "index.html";
+        
+        const isInHtmlFolder = window.location.pathname.includes('/html/');
+        window.location.href = isInHtmlFolder ? "../auth.html" : "auth.html";
     }
 
     async _handleTokenResponse(tokenResponse) {
@@ -81,7 +104,7 @@ export class AuthManager {
                 role: "user"
             };
 
-            StorageManager.save("user", [user]);
+            this._saveSession(user);
             this.redirect(user.role);
         } catch (err) {
             console.error("AuthManager: Google Fetch Failed", err);
@@ -91,17 +114,14 @@ export class AuthManager {
     redirect(role) {
         const isInHtmlFolder = window.location.pathname.includes('/html/');
         const pathPrefix = isInHtmlFolder ? "" : "html/";
-
         const target = (role === "admin") ? `${pathPrefix}dashboard.html` : `${pathPrefix}home.html`;
-        
-        console.log("Attempting redirect to:", target);
         window.location.href = target;
     }
 
     checkExistingSession() {
-        const user = StorageManager.get("user")[0];
-        if (user && !window.location.pathname.includes('home.html')) {
-            this.redirect(user.role);
+        const session = JSON.parse(localStorage.getItem("user_session"));
+        if (session && session.loggedIn && !window.location.pathname.includes('home.html')) {
+            this.redirect(session.role);
         }
     }
 }
