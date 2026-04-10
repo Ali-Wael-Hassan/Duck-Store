@@ -19,7 +19,7 @@ export class StorageManager {
         this.save(key, currentData);
     }
 
-    static initSeedData() {
+    static async initSeedData() {
         if (!localStorage.getItem("books")) {
             console.log("StorageManager: Seeding initial books...");
             const books = [
@@ -33,7 +33,7 @@ export class StorageManager {
                     published: "Jan 2024",
                     rating: 4.5,
                     desc: "A breathtaking journey through the mapped and unmapped constellations.",
-                    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqJzjaJUxr3Q_FmZOS3zkkeQrlR0pFQzDw-w&s",
+                    img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400",
                     reviews: []
                 },
                 { 
@@ -46,7 +46,7 @@ export class StorageManager {
                     published: "May 2023",
                     rating: 4.8,
                     desc: "A truth universally acknowledged, that a single man in possession of a time machine...",
-                    img: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcR_x_q8_hX_G_u_R_w_x_p_v_K_k_j_X_v_o&s",
+                    img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
                     reviews: []
                 }
             ];
@@ -75,11 +75,25 @@ export class StorageManager {
             };
             localStorage.setItem("user_session", JSON.stringify(sessionUser));
         }
-
+        
         if (!localStorage.getItem("featured_promos")) {
             const promos = [
-                { title: "Unlimited Sci-Fi", desc: "Dive into thousands of galactic adventures", type: "scifi", img: "...", btnText: "Start for $9.99/mo", badge: "TRENDING" },
-                { title: "Classic Literature", desc: "Timeless masterpieces", type: "classics", img: "...", btnText: "Explore", badge: "" }
+                { 
+                    title: "Unlimited Sci-Fi", 
+                    desc: "Dive into thousands of galactic adventures", 
+                    type: "scifi", 
+                    img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800", 
+                    btnText: "Start for $9.99/mo", 
+                    badge: "TRENDING" 
+                },
+                { 
+                    title: "Classic Literature", 
+                    desc: "Timeless masterpieces", 
+                    type: "classics", 
+                    img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800", 
+                    btnText: "Explore", 
+                    badge: "" 
+                }
             ];
             localStorage.setItem("featured_promos", JSON.stringify(promos));
         }
@@ -90,7 +104,6 @@ export class StorageManager {
         }
 
         if (!localStorage.getItem("reward_items")) {
-            console.log("StorageManager: Seeding reward catalog...");
             const rewards = [
                 { 
                     id: 1, 
@@ -131,5 +144,7 @@ export class StorageManager {
             ];
             localStorage.setItem("reward_items", JSON.stringify(rewards));
         }
+
+        return Promise.resolve(true);
     }
 }
