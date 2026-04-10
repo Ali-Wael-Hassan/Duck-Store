@@ -61,7 +61,7 @@ class App {
 
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
-                window.location.href = 'html/home.html';
+                // window.location.href = 'html/home.html';
                 return;
             }
             new AuthPage(GOOGLE_CLIENT_ID);
