@@ -84,7 +84,7 @@ export class StorageManager {
                 { 
                     title: "Unlimited Sci-Fi", 
                     desc: "Dive into thousands of galactic adventures", 
-                    type: "scifi", 
+                    type: "scifi",
                     img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800", 
                     btnText: "Start for $9.99/mo", 
                     badge: "TRENDING" 

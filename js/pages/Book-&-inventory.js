@@ -12,11 +12,10 @@ export class InventoryController {
     }
 
     init() {
-        this.books = StorageManager.get("inventory");
+        this.books = StorageManager.get("inventory") || [];
         
-        // Fallback: If inventory is empty, sync from the main books list
         if (this.books.length === 0) {
-            const generalBooks = StorageManager.get("books");
+            const generalBooks = StorageManager.get("books") || [];
             this.books = generalBooks.map(b => ({
                 id: b.id,
                 title: b.title,
@@ -34,13 +33,9 @@ export class InventoryController {
     }
 
     initEventListeners() {
-        // 1. Add New Book Button
         const addBtn = document.getElementById('add-book-btn');
-        if (addBtn) {
-            addBtn.onclick = () => this.addNewBook();
-        }
+        if (addBtn) addBtn.onclick = () => this.addNewBook();
 
-        // 2. Pagination
         const prevBtn = document.querySelector('.page-controls button:first-child');
         const nextBtn = document.querySelector('.page-controls button:last-child');
 
@@ -63,7 +58,6 @@ export class InventoryController {
             };
         }
 
-        // 3. Table Actions (Delete/Edit)
         const tbody = document.getElementById('inventory-tbody');
         if (tbody) {
             tbody.addEventListener('click', (e) => {
@@ -72,33 +66,80 @@ export class InventoryController {
                     const id = parseInt(deleteBtn.dataset.id);
                     if (confirm("Delete this book from system?")) this.deleteBook(id);
                 }
+
+                const editBtn = e.target.closest('.edit-action');
+                if (editBtn) {
+                    const id = parseInt(editBtn.dataset.id);
+                    this.editBook(id);
+                }
             });
         }
     }
 
+    editBook(id) {
+        const inv = StorageManager.get("inventory");
+        const general = StorageManager.get("books");
+
+        const invBook = inv.find(b => b.id === id);
+        const genBook = general.find(b => b.id === id);
+
+        if (!invBook) return;
+
+        // Prompts for editing
+        const newTitle = prompt("Update Title:", invBook.title);
+        if (newTitle === null) return; 
+        
+        const newAuthor = prompt("Update Author:", invBook.author);
+        const newStock = prompt("Update Stock Level:", invBook.stock);
+        
+        // Price is stored in the "books" collection
+        const currentPrice = genBook ? genBook.price : 1500;
+        const newPrice = prompt("Update Price (in cents, e.g. 1500 for $15.00):", currentPrice);
+
+        // 1. Update Inventory Storage (Stock/Title/Author)
+        const invIndex = inv.findIndex(b => b.id === id);
+        if (invIndex !== -1) {
+            inv[invIndex].title = newTitle;
+            inv[invIndex].author = newAuthor;
+            inv[invIndex].stock = parseInt(newStock) || 0;
+            StorageManager.save("inventory", inv);
+        }
+
+        // 2. Update General Books Storage (Price/Title/Author)
+        const genIndex = general.findIndex(b => b.id === id);
+        if (genIndex !== -1) {
+            general[genIndex].title = newTitle;
+            general[genIndex].author = newAuthor;
+            general[genIndex].price = parseInt(newPrice) || currentPrice;
+            StorageManager.save("books", general);
+        }
+
+        // Update local state and UI
+        this.books = inv;
+        this.renderInventory();
+        alert("Book and Price updated successfully!");
+    }
+
     addNewBook() {
-        // Simple prompts for data collection (In a real app, use a Modal form)
         const title = prompt("Enter Book Title:");
         if (!title) return;
         const author = prompt("Enter Author Name:");
-        const price = prompt("Enter Price (in cents, e.g. 1500 for $15.00):", "1500");
+        const price = prompt("Enter Price (in cents):", "1500");
         const stock = prompt("Initial Stock Level:", "50");
 
-        const newId = Date.now(); // Unique ID based on timestamp
+        const newId = Date.now();
 
-        // 1. Prepare data for General Book Storage (used in Store/Home)
         const bookEntry = {
             id: newId,
             title: title,
             author: author,
             price: parseInt(price),
             genre: "General",
-            img: "https://via.placeholder.com/400x600?text=New+Book", // Default cover
+            img: "https://via.placeholder.com/400x600?text=New+Book",
             sales: 0,
             rating: 5.0
         };
 
-        // 2. Prepare data for Inventory Storage
         const inventoryEntry = {
             id: newId,
             title: title,
@@ -109,28 +150,22 @@ export class InventoryController {
             maxStock: 100
         };
 
-        // Save to LocalStorage using StorageManager
         StorageManager.pushTo("books", bookEntry);
         StorageManager.pushTo("inventory", inventoryEntry);
 
-        // Update local state and UI
-        this.books.unshift(inventoryEntry); // Add to top of list
-        alert(`${title} has been added to the catalog and inventory!`);
+        this.books.unshift(inventoryEntry);
         this.renderInventory();
     }
 
     deleteBook(id) {
-        // Remove from Inventory
         let inv = StorageManager.get("inventory");
         inv = inv.filter(b => b.id !== id);
         StorageManager.save("inventory", inv);
 
-        // Remove from General Books
         let books = StorageManager.get("books");
         books = books.filter(b => b.id !== id);
         StorageManager.save("books", books);
 
-        // Update UI
         this.books = inv;
         this.renderInventory();
     }
@@ -152,7 +187,7 @@ export class InventoryController {
         const currentSlice = this.books.slice(start, end);
 
         if (paginationLabel) {
-            paginationLabel.innerText = `Showing ${start + 1}-${end} of ${total} books`;
+            paginationLabel.innerText = `Showing ${total === 0 ? 0 : start + 1}-${end} of ${total} books`;
         }
 
         tbody.innerHTML = currentSlice.map(book => {
@@ -162,24 +197,24 @@ export class InventoryController {
 
             return `
                 <tr>
-                    <td data-label="Book Title & Author">
+                    <td>
                         <div>
                             <h4 style="margin:0">${book.title}</h4>
                             <span class="subtext">${book.author}</span>
                         </div>
                     </td>
-                    <td data-label="ISBN-13">${book.isbn}</td>
-                    <td data-label="SKU">${book.sku}</td>
-                    <td data-label="Stock Level">
+                    <td>${book.isbn}</td>
+                    <td>${book.sku}</td>
+                    <td>
                         <div class="progress">
                             <div class="${progressClass}"><div style="width: ${progressPercent}%"></div></div>
                             <span style="${book.stock === 0 ? 'color:red' : ''}">${book.stock}</span>
                         </div>
                     </td>
-                    <td data-label="Status"><span class="${status.class}">${status.text}</span></td>
-                    <td data-label="Actions">
+                    <td><span class="${status.class}">${status.text}</span></td>
+                    <td>
                         <div style="display: flex; gap: 15px;">
-                            <i class="fas fa-pen-to-square action-icon edit-action" style="cursor:pointer"></i>
+                            <i class="fas fa-pen-to-square action-icon edit-action" style="cursor:pointer" data-id="${book.id}"></i>
                             <i class="fas fa-trash action-icon delete-action" style="color: #ff4d4d; cursor:pointer;" data-id="${book.id}"></i>
                         </div>
                     </td>

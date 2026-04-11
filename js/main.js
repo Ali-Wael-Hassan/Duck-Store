@@ -62,14 +62,14 @@ class App {
         const GOOGLE_CLIENT_ID = "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com";
         const isInSubfolder = window.location.pathname.includes('/html/');
 
-        if (this.user && !this.user.loggedIn && pageType != 'auth') {
-                window.location.href = '../index.html';
-                return;
-            }
+        if (this.user && !this.user.loggedIn && pageType != 'auth' && pageType != 'about-us') {
+            window.location.href = '../index.html';
+            return;
+        }
 
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
-                window.location.href = 'html/home.html';
+                window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
                 return;
             }
             new AuthPage(GOOGLE_CLIENT_ID);
@@ -78,7 +78,7 @@ class App {
 
         if (!this.user || !this.user.loggedIn) {
             console.warn("Unauthorized: Booting to login.");
-            window.location.href = isInSubfolder ? '../auth.html' : 'auth.html';
+            window.location.href = isInSubfolder ? 'sign-in.html' : 'html/sign-in.html';
             return;
         }
 
