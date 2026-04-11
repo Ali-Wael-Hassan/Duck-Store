@@ -66,6 +66,7 @@ export class AuthManager {
     }
 
     manualSignUp(formData) {
+        alert("Manual Sign-Up: " + JSON.stringify(formData));
         const { fullName, email, isAdmin } = formData;
         const newUser = {
             name: fullName,
