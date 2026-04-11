@@ -8,6 +8,7 @@ import { DashboardController } from './pages/dashboard-page.js';
 import { InventoryController } from './pages/Book-&-inventory.js';
 import { SalesRefundsController } from './pages/sales_refunds.js';
 import { UsersRolesController } from './pages/users_roles.js';
+import { UserProfile } from './pages/user-profile-script.js';
 
 class App {
     constructor() {
@@ -107,6 +108,9 @@ class App {
                 break;
             case 'users-roles':
                 new UsersRolesController();
+                break;
+            case 'user-profile':
+                new UserProfile();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);

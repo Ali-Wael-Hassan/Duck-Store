@@ -65,19 +65,22 @@ export class StorageManager {
             ];
             localStorage.setItem("community_users", JSON.stringify(communityUsers));
         }
-
-        // if (!localStorage.getItem("user_session")) {
-        //     const sessionUser = { 
-        //         id: "user_session_active", 
-        //         name: "Alex Smith",
-        //         email: "alex@gmail.com",
-        //         role: "user",
-        //         picture: null,
-        //         loggedIn: true, 
-        //         points: 1250 
-        //     };
-        //     localStorage.setItem("user_session", JSON.stringify(sessionUser));
-        // }
+            const sessionUser = { 
+                id: "user_session_active", 
+                name: "Alex Smith",
+                uname: "alexsmith",
+                avatar: "https://i.pravatar.cc/150?u=alex",
+                email: "alex@gmail.com",
+                role: "user",
+                picture: null,
+                loggedIn: true, 
+                points: 1250,
+                readings: 1,
+                reviews: 3,
+                joinDate: '2024'
+            };
+            localStorage.setItem("user_session", JSON.stringify(sessionUser));
+        
         
         if (!localStorage.getItem("featured_promos")) {
             const promos = [
