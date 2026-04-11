@@ -6,47 +6,38 @@ export class DashboardController {
         this.rowsPerPage = 5;
         this.orders = [];
 
-        // Initialize and seed data before starting the controller logic
         StorageManager.initSeedData().then(() => {
             this.init();
         });
     }
 
     init() {
-        // Sync internal data with Storage
         this.orders = StorageManager.get("orders");
         
-        // Initial dashboard render
         this.updateStats();
         this.renderChart('weekly'); // Default to weekly view
         this.renderTrendingBooks();
         this.renderTransactions();
         
-        // Setup interactive listeners
         this.initEventListeners();
     }
 
     initEventListeners() {
-        // 1. Download CSV Button
         const downloadBtn = document.getElementById('download-csv-btn');
         if (downloadBtn) {
             downloadBtn.onclick = () => this.downloadTransactionsCSV();
         }
 
-        // 2. Weekly / Monthly Chart Toggle
         const chartButtons = document.querySelectorAll('.toggle-btn');
         chartButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 chartButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                // Map button text to storage keys
                 const type = btn.textContent.trim().toLowerCase() === 'week' ? 'weekly' : 'monthly';
                 this.renderChart(type);
             });
         });
-
-        // 3. Pagination Buttons
         const prevBtn = document.querySelector('#transactions-pagination button:first-of-type');
         const nextBtn = document.querySelector('#transactions-pagination button:last-of-type');
 
@@ -69,22 +60,18 @@ export class DashboardController {
             };
         }
 
-        // 4. Action Dropdown & Delete Logic (Event Delegation)
         const tbody = document.getElementById('transactions-tbody');
         if (tbody) {
             tbody.addEventListener('click', (e) => {
-                // Handle Toggle Dropdown Visibility
                 const trigger = e.target.closest('.action-trigger');
                 if (trigger) {
                     const menu = trigger.nextElementSibling;
-                    // Close other menus first
                     document.querySelectorAll('.action-menu.show').forEach(m => {
                         if (m !== menu) m.classList.remove('show');
                     });
                     menu.classList.toggle('show');
                 }
 
-                // Handle Delete Click
                 const deleteBtn = e.target.closest('.delete-btn');
                 if (deleteBtn) {
                     const orderId = deleteBtn.getAttribute('data-id');
@@ -95,7 +82,6 @@ export class DashboardController {
             });
         }
 
-        // Close dropdowns if clicking anywhere else
         window.addEventListener('click', (e) => {
             if (!e.target.closest('.action-dropdown')) {
                 document.querySelectorAll('.action-menu.show').forEach(m => m.classList.remove('show'));
@@ -114,7 +100,28 @@ export class DashboardController {
                 const subEl = cards[index].querySelector('.stat-subtext');
                 const trendEl = cards[index].querySelector('.trend');
                 
-                if (valEl) valEl.innerText = stat.value;
+                if (valEl) {
+                    const stringVal = String(stat.value || '0');
+                    const prefix = stringVal.replace(/[\d,\.]/g, ''); 
+                    const target = parseFloat(stringVal.replace(/[^\d.]/g, '')); 
+                    
+                    if (!isNaN(target)) {
+                        let current = 0;
+                        const increment = target / 50; 
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                valEl.textContent = prefix + Math.ceil(current).toLocaleString();
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                valEl.textContent = prefix + target.toLocaleString();
+                            }
+                        };
+                        updateCounter();
+                    } else {
+                        valEl.innerText = stat.value;
+                    }
+                }
                 if (subEl) subEl.innerText = stat.subtext;
                 if (trendEl) trendEl.innerText = stat.trend;
             }
@@ -130,7 +137,21 @@ export class DashboardController {
         if (subtext) subtext.innerText = type === 'weekly' ? 'Daily revenue overview' : 'Monthly revenue overview';
 
         const storageKey = type === 'monthly' ? "sales_performance_monthly" : "sales_performance";
-        const data = StorageManager.get(storageKey);
+        let data = StorageManager.get(storageKey);
+
+        // Fallback or seed data for monthly if it doesn't exist
+        if (type === 'monthly' && (!data || data.length === 0)) {
+            data = [
+                { month: 'JAN', totalHeight: 60, fillHeight: 60 },
+                { month: 'FEB', totalHeight: 65, fillHeight: 65 },
+                { month: 'MAR', totalHeight: 80, fillHeight: 80 },
+                { month: 'APR', totalHeight: 70, fillHeight: 70 },
+                { month: 'MAY', totalHeight: 85, fillHeight: 85 },
+                { month: 'JUN', totalHeight: 50, fillHeight: 50 },
+                { month: 'JUL', totalHeight: 100, fillHeight: 100 }
+            ];
+            StorageManager.save("sales_performance_monthly", data);
+        }
 
         if (!data || data.length === 0) {
             chartGrid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 2rem; opacity:0.5;">No data available.</div>`;
@@ -140,11 +161,21 @@ export class DashboardController {
         chartGrid.innerHTML = data.map(item => `
             <div class="bar-col">
                 <div class="bar-total" style="height: ${item.totalHeight}%">
-                    <div class="bar-fill" style="height: ${item.fillHeight}%"></div>
+                    <div class="bar-fill" style="height: 0%; transition: height 0.5s ease-out;"></div>
+                    <div class="chart-tooltip">Sales: ${item.fillHeight}</div>
                 </div>
                 <span class="d-label">${item.day || item.month}</span>
             </div>
         `).join('');
+
+        setTimeout(() => {
+            const fills = chartGrid.querySelectorAll('.bar-fill');
+            fills.forEach((fill, index) => {
+                setTimeout(() => {
+                    fill.style.height = `${data[index].fillHeight}%`;
+                }, 100 + (index * 50));
+            });
+        }, 50);
     }
 
     renderTrendingBooks() {
