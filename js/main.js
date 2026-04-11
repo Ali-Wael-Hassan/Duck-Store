@@ -6,6 +6,8 @@ import { RewardPage } from './pages/reward-page.js';
 import { StorageManager } from './core/StorageManager.js';
 import { DashboardController } from './pages/dashboard-page.js';
 import { InventoryController } from './pages/Book-&-inventory.js';
+import { SalesRefundsController } from './pages/sales_refunds.js';
+import { UsersRolesController } from './pages/users_roles.js';
 
 class App {
     constructor() {
@@ -60,6 +62,11 @@ class App {
         const GOOGLE_CLIENT_ID = "40217212918-05rtn6rijo91gerq1ug036evpji3l4kg.apps.googleusercontent.com";
         const isInSubfolder = window.location.pathname.includes('/html/');
 
+        if (this.user && !this.user.loggedIn && pageType != 'auth') {
+                window.location.href = '../index.html';
+                return;
+            }
+
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
                 window.location.href = 'html/home.html';
@@ -94,6 +101,12 @@ class App {
                 break;
             case 'inventory':
                 new InventoryController();
+                break;
+            case 'sales-refunds':
+                new SalesRefundsController();
+                break;
+            case 'users-roles':
+                new UsersRolesController();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);

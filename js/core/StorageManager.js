@@ -178,14 +178,14 @@ export class StorageManager {
         // Seed Transactions with more data to test pagination
         if (!localStorage.getItem("orders")) {
             const orders = [
-                { id: 'ORD-28492', customerName: 'Jane Doe', date: 'Oct 24, 2023', total: '124.50', status: 'Completed' },
-                { id: 'ORD-28491', customerName: 'Alex Smith', date: 'Oct 24, 2023', total: '42.00', status: 'Pending' },
-                { id: 'ORD-28490', customerName: 'Michael King', date: 'Oct 23, 2023', total: '89.99', status: 'Completed' },
-                { id: 'ORD-28321', customerName: 'Sarah Connor', date: 'Oct 23, 2023', total: '150.00', status: 'Pending' },
-                { id: 'ORD-28320', customerName: 'John Doe', date: 'Oct 22, 2023', total: '200.00', status: 'Completed' },
-                { id: 'ORD-28319', customerName: 'Ellen Ripley', date: 'Oct 22, 2023', total: '75.50', status: 'Completed' },
-                { id: 'ORD-28318', customerName: 'Marty McFly', date: 'Oct 21, 2023', total: '30.00', status: 'Cancelled' },
-                { id: 'ORD-28317', customerName: 'Bruce Wayne', date: 'Oct 21, 2023', total: '1000.00', status: 'Completed' }
+                { id: 'ORD-28492', customerName: 'Jane Doe', date: 'Oct 24, 2023', total: '124.50', status: 'Completed', bookTitle: 'Temp1'},
+                { id: 'ORD-28491', customerName: 'Alex Smith', date: 'Oct 24, 2023', total: '42.00', status: 'Pending', bookTitle: 'Temp2' },
+                { id: 'ORD-28490', customerName: 'Michael King', date: 'Oct 23, 2023', total: '89.99', status: 'Completed', bookTitle: 'Temp2' },
+                { id: 'ORD-28321', customerName: 'Sarah Connor', date: 'Oct 23, 2023', total: '150.00', status: 'Pending', bookTitle: 'Temp2' },
+                { id: 'ORD-28320', customerName: 'John Doe', date: 'Oct 22, 2023', total: '200.00', status: 'Completed', bookTitle: 'Temp2' },
+                { id: 'ORD-28319', customerName: 'Ellen Ripley', date: 'Oct 22, 2023', total: '75.50', status: 'Completed', bookTitle: 'Temp2' },
+                { id: 'ORD-28318', customerName: 'Marty McFly', date: 'Oct 21, 2023', total: '30.00', status: 'Cancelled', bookTitle: 'Temp2' },
+                { id: 'ORD-28317', customerName: 'Bruce Wayne', date: 'Oct 21, 2023', total: '1000.00', status: 'Completed', bookTitle: 'Temp2' }
             ];
             localStorage.setItem("orders", JSON.stringify(orders));
         }
