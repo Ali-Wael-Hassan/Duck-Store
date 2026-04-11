@@ -1,79 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Lumina Books | Premium Marketplace</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINA | Book Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/Pages/store.css">
 </head>
 <body data-page="store">
 
-    <header class="header">
-        <div class="header__container">
-            <div class="logo">
-                <span class="material-symbols-outlined">menu_book</span>
-                <span class="logo__text">Lumina Books</span>
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">LUMINA</div>
             </div>
-            
-            <div class="search-bar">
-                <span class="material-symbols-outlined">search</span>
-                <input type="text" id="book-search" placeholder="Search for titles, authors, or genres...">
+            <div class="nav">
+                <a href="home.html">Home</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="my-books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
             </div>
-
             <div class="header__actions">
-                <button class="icon-btn"><span class="material-symbols-outlined">diamond</span></button>
-                <div class="profile-thumb"></div>
+                <a href="cart.html" class="action-link"><span class="material-symbols-outlined">shopping_cart</span></a>
+                <a href="profile.html" class="avatar-link"><img src="https://via.placeholder.com/32" class="avatar-img"></a>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="main-content">
-        <div class="store-layout">
-            <aside class="sidebar">
-                <div class="filter-group">
-                    <h3 class="filter-title">
-                        <span class="material-symbols-outlined">category</span> Categories
-                    </h3>
-                    <div id="category-container" class="filter-list">
-                        </div>
-                </div>
-
-                <div class="filter-group">
-                    <h3 class="filter-title">
-                        <span class="material-symbols-outlined">payments</span> Price (PTS)
-                    </h3>
-                    <div class="price-filter">
-                        <input type="range" id="price-slider" min="0" max="50000" value="50000">
-                        <div class="price-labels">
-                            <span>0 PTS</span>
-                            <span id="price-limit">50,000 PTS</span>
-                        </div>
-                    </div>
-                </div>
+    <div class="layout-wrapper">
+        <aside class="store-filters" id="filters-container">
             </aside>
 
-            <section class="catalog">
-                <div class="catalog__meta">
-                    <p>Showing <span id="results-count">0</span> premium titles</p>
-                    <div class="sort-control">
-                        <span>Sort by:</span>
-                        <select id="sort-select">
-                            <option value="popularity">Popularity</option>
-                            <option value="newest">Newest</option>
-                            <option value="price-asc">Price: Low to High</option>
-                        </select>
-                    </div>
-                </div>
+        <main class="store-main">
+            <div class="catalog__header">
+                <div class="catalog__controls" id="catalog-meta"></div>
+            </div>
 
-                <div class="book-grid" id="book-grid">
-                    </div>
-            </section>
-        </div>
-    </main>
+            <div class="book-grid" id="book-grid"></div>
+
+            <div class="pagination" id="pagination-controls">
+                <button class="pagination__btn" id="prev-btn">← Prev</button>
+                <div class="pagination__numbers" id="page-numbers"></div>
+                <button class="pagination__btn" id="next-btn">Next →</button>
+            </div>
+        </main>
+    </div>
 
     <script type="module" src="../js/main.js"></script>
 </body>

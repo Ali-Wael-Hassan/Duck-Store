@@ -9,6 +9,7 @@ import { InventoryController } from './pages/Book-&-inventory.js';
 import { SalesRefundsController } from './pages/sales_refunds.js';
 import { UsersRolesController } from './pages/users_roles.js';
 import { MyBooksPage } from './pages/my_books.js';
+import { StorePage } from './pages/store-page.js';
 
 class App {
     constructor() {
@@ -89,6 +90,9 @@ class App {
                 break;
             case 'my-books':
                 new MyBooksPage();
+                break;
+            case 'store':
+                new StorePage();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);
