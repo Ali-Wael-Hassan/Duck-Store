@@ -1,104 +1,135 @@
+import { StorageManager } from '../core/StorageManager.js';
 
-const BADGE_DATA = [
-    { name: "Daily Reader", level: "Level 3", status: "7 Day Streak", icon: "🔥", active: true },
-    { name: "Night Owl", level: "Level 1", status: "Read after 11 PM", icon: "🦉", active: true },
-    { name: "Social Butterfly", level: "Level 2", status: "10 Comments", icon: "💬", active: true },
-    { name: "Collector", level: "Locked", status: "Buy 5 Books", icon: "📚", active: false },
-    { name: "Reviewer", level: "Locked", status: "Write a Review", icon: "✍️", active: false }
-];
+export class UserProfile {
+    constructor() {
+        const sessionData = localStorage.getItem("user_session");
+        this.user = sessionData ? JSON.parse(sessionData) : null;
 
-document.addEventListener('DOMContentLoaded', () => {
+        if (!this.user || !this.user.loggedIn) {
+            window.location.href = "../auth.html";
+            return;
+        }
 
-    renderBadges();
-    animateProgressBars();
-    initGenreCards();
-    initCommunityLinks();
-    initActionButtons();
-});
-
-function renderBadges() {
-    const grid = document.querySelector('.badge-grid');
-    if (!grid) return;
-
-   
-    grid.innerHTML = BADGE_DATA.map(badge => `
-        <article class="badge-item ${badge.active ? 'active' : 'locked'}">
-            <div class="badge-icon" aria-hidden="true">${badge.icon}</div>
-            <p class="badge-level">${badge.level}</p>
-            <h3 class="badge-name">${badge.name}</h3>
-            <p class="badge-status">${badge.status}</p>
-        </article>
-    `).join('');
-}
-
-
-function animateProgressBars() {
-    const bars = document.querySelectorAll('.progress-bar, .genre-progress');
-    
-    bars.forEach(bar => {
-        const targetValue = bar.getAttribute('value');
-        bar.value = 0; 
-        
-        setTimeout(() => {
-            bar.style.transition = 'all 1.5s ease-in-out';
-            bar.value = targetValue;
-        }, 300);
-    });
-}
-
-
-function initGenreCards() {
-    const genreCards = document.querySelectorAll('.genre-card');
-
-    genreCards.forEach(card => {
-        card.addEventListener('click', () => {
-            if (card.classList.contains('locked')) {
-
-                card.classList.add('shake-effect');
-                setTimeout(() => card.classList.remove('shake-effect'), 500);
-            } else {
-            
-                card.style.transform = 'scale(1.05)';
-                setTimeout(() => card.style.transform = 'scale(1)', 200);
-            }
-        });
-    });
-}
-
-
-function initCommunityLinks() {
-    const communityItems = document.querySelectorAll('.contribution-item');
-
-    communityItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateX(8px)';
-        });
-
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateX(0)';
-        });
-    });
-}
-
-
-function initActionButtons() {
-    const shareBtn = document.querySelector('.btn-secondary');
-    const leaderboardBtn = document.querySelector('.btn-primary');
-
-    if (shareBtn) {
-        shareBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                const originalText = shareBtn.textContent;
-                shareBtn.textContent = "URL Copied!";
-                setTimeout(() => shareBtn.textContent = originalText, 2000);
-            });
-        });
+        this.init();
     }
 
-    if (leaderboardBtn) {
-        leaderboardBtn.addEventListener('click', () => {
-            console.log("Redirecting to Leaderboard...");
-            window.location.href = 'leaderboard.html';
+    init() {
+        this.renderProfileHeader();
+        this.renderStats();
+        this.renderDynamicAchievements(); 
+        this.setupEventListeners();
+        this.animateProgressBars();
+    }
+
+    renderProfileHeader() {
+        const nameEl = document.getElementById('profile-full-name');
+        const emailEl = document.getElementById('profile-email');
+        const avatarEl = document.getElementById('user-avatar');
+
+        if (nameEl) nameEl.textContent = this.user.name;
+        if (emailEl) emailEl.textContent = this.user.email;
+        if (avatarEl) avatarEl.src = this.user.avatar;
+    }
+
+    renderStats() {
+        const readings = this.user.readings || 0;
+        const points = this.user.points || 0;
+
+        const countEl = document.getElementById('stat-unlocked-count');
+        const barEl = document.getElementById('stat-progress-bar');
+        const trendEl = document.getElementById('stat-rank-trend');
+
+        if (countEl) countEl.textContent = readings;
+        if (barEl) {
+            barEl.value = readings;
+            barEl.max = 50; 
+        }
+        if (trendEl) trendEl.textContent = `Total Points: ${points}`;
+    }
+
+    renderDynamicAchievements() {
+        const grid = document.querySelector('.contributor-grid');
+        if (!grid) return;
+
+        const achievementConfig = [
+            { 
+                label: "Book Reviewer", 
+                icon: "📚", 
+                condition: (u) => u.reviews > 0, 
+                desc: `${this.user.reviews} Reviews Written` 
+            },
+            { 
+                label: "Chatterbox", 
+                icon: "💬", 
+                condition: (u) => u.points >= 50, 
+                desc: "Active in community chats" 
+            },
+            { 
+                label: "Avid Reader", 
+                icon: "🌟", 
+                condition: (u) => u.readings >= 5, 
+                desc: "Completed 5+ books" 
+            },
+            { 
+                label: "Lumina Pioneer", 
+                icon: "🚀", 
+                condition: (u) => u.joinDate === "2024", 
+                desc: "Early access member" 
+            }
+        ];
+
+        // Only show items where the condition is true
+        const unlocked = achievementConfig.filter(ach => ach.condition(this.user));
+
+        if (unlocked.length === 0) {
+            grid.innerHTML = `<li class="contribution-item"><i>No achievements unlocked yet. Keep reading!</i></li>`;
+            return;
+        }
+
+        grid.innerHTML = unlocked.map(ach => `
+            <li class="contribution-item">
+                <div class="contribution-link">
+                    <span>${ach.icon}</span> ${ach.label}
+                    <small style="display:block; font-size: 0.75rem; color: var(--text-muted);">${ach.desc}</small>
+                </div>
+            </li>
+        `).join('');
+    }
+
+    setupEventListeners() {
+        // Handle Avatar Change & Sync with Storage
+        const avatarInput = document.getElementById('avatar-upload');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const base64 = event.target.result;
+                    
+                    // 1. Update Session
+                    this.user.avatar = base64;
+                    localStorage.setItem("user_session", JSON.stringify(this.user));
+                    
+                    // 2. Update StorageManager's user list (for community/leaderboards)
+                    const users = StorageManager.get("user"); 
+                    const idx = users.findIndex(u => u.email === this.user.email);
+                    if (idx !== -1) {
+                        users[idx].avatar = base64;
+                        StorageManager.save("user", users);
+                    }
+                    document.getElementById('user-avatar').src = base64;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    animateProgressBars() {
+        const bars = document.querySelectorAll('.progress-bar, .genre-progress');
+        bars.forEach(bar => {
+            const target = bar.value;
+            bar.value = 0;
+            setTimeout(() => bar.value = target, 400);
         });
     }
 }
