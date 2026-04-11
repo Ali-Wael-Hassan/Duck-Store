@@ -66,15 +66,18 @@ export class StorageManager {
             localStorage.setItem("community_users", JSON.stringify(communityUsers));
         }
 
-        if (!localStorage.getItem("user_session")) {
-            const sessionUser = { 
-                id: "user_session_active", 
-                name: "Alex Smith", 
-                loggedIn: true, 
-                points: 1250 
-            };
-            localStorage.setItem("user_session", JSON.stringify(sessionUser));
-        }
+        // if (!localStorage.getItem("user_session")) {
+        //     const sessionUser = { 
+        //         id: "user_session_active", 
+        //         name: "Alex Smith",
+        //         email: "alex@gmail.com",
+        //         role: "user",
+        //         picture: null,
+        //         loggedIn: true, 
+        //         points: 1250 
+        //     };
+        //     localStorage.setItem("user_session", JSON.stringify(sessionUser));
+        // }
         
         if (!localStorage.getItem("featured_promos")) {
             const promos = [
@@ -143,6 +146,59 @@ export class StorageManager {
                 }
             ];
             localStorage.setItem("reward_items", JSON.stringify(rewards));
+        }
+
+        // --- 2. NEW DASHBOARD SPECIFIC SEED DATA ---
+
+        // Seed Top Summary Cards
+        if (!localStorage.getItem("dashboard_stats")) {
+            const stats = [
+                { label: 'Total Revenue', value: '$45,280', trend: '+12.5%', icon: 'fa-money-bill-wave', color: 'bg-blue', subtext: 'Vs last month' },
+                { label: 'Active Users', value: '1,240', trend: '-2.1%', icon: 'fa-user', color: 'bg-orange', subtext: 'Currently online' },
+                { label: 'Pending Orders', value: '84', trend: '+5.0%', icon: 'fa-shopping-cart', color: 'bg-cyan', subtext: 'Awaiting shipping' },
+                { label: 'New Reviews', value: '12', trend: 'New', icon: 'fa-star', color: 'bg-yellow', subtext: 'This week' }
+            ];
+            localStorage.setItem("dashboard_stats", JSON.stringify(stats));
+        }
+
+        // Seed Sales Chart Data
+        if (!localStorage.getItem("sales_performance")) {
+            const performance = [
+                { day: 'SAT', totalHeight: 40, fillHeight: 60 },
+                { day: 'SUN', totalHeight: 50, fillHeight: 65 },
+                { day: 'MON', totalHeight: 45, fillHeight: 80 },
+                { day: 'TUE', totalHeight: 55, fillHeight: 70 },
+                { day: 'WED', totalHeight: 80, fillHeight: 85 },
+                { day: 'THU', totalHeight: 40, fillHeight: 50 },
+                { day: 'FRI', totalHeight: 90, fillHeight: 100 }
+            ];
+            localStorage.setItem("sales_performance", JSON.stringify(performance));
+        }
+
+        // Seed Transactions with more data to test pagination
+        if (!localStorage.getItem("orders")) {
+            const orders = [
+                { id: 'ORD-28492', customerName: 'Jane Doe', date: 'Oct 24, 2023', total: '124.50', status: 'Completed' },
+                { id: 'ORD-28491', customerName: 'Alex Smith', date: 'Oct 24, 2023', total: '42.00', status: 'Pending' },
+                { id: 'ORD-28490', customerName: 'Michael King', date: 'Oct 23, 2023', total: '89.99', status: 'Completed' },
+                { id: 'ORD-28321', customerName: 'Sarah Connor', date: 'Oct 23, 2023', total: '150.00', status: 'Pending' },
+                { id: 'ORD-28320', customerName: 'John Doe', date: 'Oct 22, 2023', total: '200.00', status: 'Completed' },
+                { id: 'ORD-28319', customerName: 'Ellen Ripley', date: 'Oct 22, 2023', total: '75.50', status: 'Completed' },
+                { id: 'ORD-28318', customerName: 'Marty McFly', date: 'Oct 21, 2023', total: '30.00', status: 'Cancelled' },
+                { id: 'ORD-28317', customerName: 'Bruce Wayne', date: 'Oct 21, 2023', total: '1000.00', status: 'Completed' }
+            ];
+            localStorage.setItem("orders", JSON.stringify(orders));
+        }
+
+        if (!localStorage.getItem("inventory")) {
+            const inventory = [
+                { id: 1, title: "Stellar Cartography", author: "Astrid Nova", isbn: "978-0525559474", sku: "LUM-001", stock: 128, maxStock: 150 },
+                { id: 2, title: "Pride & Paradox", author: "Jane Austin-Powers", isbn: "978-0593135204", sku: "LUM-002", stock: 4, maxStock: 100 },
+                { id: 3, title: "Project Hail Mary", author: "Andy Weir", isbn: "978-0593099322", sku: "LUM-003", stock: 0, maxStock: 100 },
+                { id: 4, title: "Circe", author: "Madeline Miller", isbn: "978-0316556347", sku: "LUM-004", stock: 45, maxStock: 100 },
+                { id: 5, title: "Dune: Deluxe Edition", author: "Frank Herbert", isbn: "978-0593099321", sku: "LUM-005", stock: 80, maxStock: 100 }
+            ];
+            localStorage.setItem("inventory", JSON.stringify(inventory));
         }
 
         return Promise.resolve(true);

@@ -3,8 +3,9 @@ import { BookViewPage } from './pages/book-view.js';
 import { HomePage } from './pages/home-page.js'; 
 import { CommunityPage } from './pages/community-page.js';
 import { RewardPage } from './pages/reward-page.js';
-import { UserProfilePage } from './pages/user-profile-script.js';
 import { StorageManager } from './core/StorageManager.js';
+import { DashboardController } from './pages/dashboard-page.js';
+import { InventoryController } from './pages/Book-&-inventory.js';
 
 class App {
     constructor() {
@@ -79,9 +80,6 @@ class App {
             case 'browse':
                 new HomePage();
                 break;
-            case 'profile':
-                new UserProfilePage();
-                break;
             case 'community':
                 new CommunityPage();
                 break;
@@ -90,6 +88,12 @@ class App {
                 break;
             case 'rewards':
                 new RewardPage();
+                break;
+            case 'dashboard':
+                new DashboardController();
+                break;
+            case 'inventory':
+                new InventoryController();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);
