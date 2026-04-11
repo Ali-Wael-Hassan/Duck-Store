@@ -1,3 +1,4 @@
+/* ===== GLOBAL VARIABLES & RESET ===== */
 :root {
     /* Brand Colors */
     --brand-primary: #FFD700;
@@ -21,9 +22,9 @@
     /* Spacing & Typography */
     --spacing-card: 40px;
     --font-main: 'Inter', sans-serif;
-    --font-size-base: 2rem;
-    --font-size-small: 1rem;
-    --transition-speed: 0.5s;
+    --font-size-base: 1rem;
+    --font-size-small: 0.875rem;
+    --transition-speed: 0.3s;
 
     /* Padding */
     --btn-padding-y: 10px;
@@ -34,66 +35,194 @@
     --nav-color: #0F172A;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-main);
     font-family: var(--font-main);
     display: flex;
-    justify-content: left;
-    align-items: center;
+    flex-direction: column;
     min-height: 100vh;
-    margin: 0;
 }
 
-main {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: var(--spacing-card);
-    width: 100%;
-    
+/* ===== TOP NAVIGATION (sticky) ===== */
+.header {
+    border-bottom: 1px solid rgba(192, 168, 106, 0.2);
+    background: rgba(10, 12, 16, 0.95);
+    backdrop-filter: blur(4px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-/* Links */
-a, a:visited {
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+.header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+}
+
+.logo-group {
     display: flex;
     align-items: center;
-    justify-content: space-between;  
-    
-    box-sizing: border-box;
-    
-    margin: 20px 10px 0px; 
+    gap: 12px;
+}
+
+.logo-icon {
+    background: linear-gradient(135deg, #C0A86A, #A8894F);
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+}
+
+.logo-icon span {
+    font-size: 28px;
+    color: #0A0C10;
+}
+
+.logo-text {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(130deg, #FFF8E7, #C0A86A);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.nav {
+    display: flex;
+    gap: 32px;
+}
+
+.nav a {
+    color: #8D94A5;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.2px;
+    transition: color 0.2s ease;
+}
+
+.nav a.active,
+.nav a:hover {
+    color: #C0A86A;
+}
+
+/* ===== HEADER ACTIONS (CART + AVATAR) ===== */
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.action-link,
+.avatar-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: all var(--transition-speed) ease;
+}
+
+.action-link:hover {
+    color: var(--brand-primary);
+}
+
+.avatar-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: border-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.avatar-img:hover {
+    border-color: var(--brand-primary);
+    transform: scale(1.05);
+}
+
+/* ===== LAYOUT: ASIDE (LEFT) + MAIN ===== */
+.layout-wrapper {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+    gap: 32px;
+}
+
+/* Sidebar (aside) - full height, flush left */
+aside {
+    width: 260px;
+    flex-shrink: 0;
+    background-color: var(--nav-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-main);
+    padding: 20px 0;
+    margin: 32px 0;         /* keeps top/bottom margin */
+    margin-left: 0;         /* forces left alignment, removes any unexpected shift */
+    align-self: stretch;
+    position: sticky;
+    top: 90px;
+    transition: all var(--transition-speed) ease;
+}
+
+/* Sidebar links - full width of aside (with small inner spacing) */
+aside a, aside a:visited {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: calc(100% - 20px);  /* takes full width minus 10px on each side */
+    margin: 10px auto;         /* centers horizontally within aside, but with left-aligned content */
     padding: var(--btn-padding-y) var(--btn-padding-x);
-    
     color: var(--text-muted);
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-input);
     text-decoration: none;
-    font-size: inherit;
+    font-size: var(--font-size-small);
     white-space: nowrap;
-    
-    box-sizing: border-box;
-
     transition: all var(--transition-speed) ease;
     cursor: pointer;
 }
 
-aside a, a:visited {
-    width: 90%;
-}
-
-nav a, a:visited {
-    width: auto;
-}
-
-a:hover {
+aside a:hover {
     color: var(--brand-primary);
     border-color: var(--brand-primary-hover);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); 
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     transform: translateY(-3px);
 }
 
-/* Form Elements */
+/* Main content */
+main {
+    flex: 1;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-card);
+    margin: 32px 0;
+    transition: all var(--transition-speed) ease;
+}
+
+/* ===== FORM ELEMENTS ===== */
 label {
     display: block;
     margin-bottom: 8px;
@@ -129,10 +258,7 @@ button {
     font-weight: 700;
     cursor: pointer;
     margin-top: 20px;
-    box-sizing: border-box;
-
     transition: all var(--transition-speed) ease;
-    cursor: pointer;
 }
 
 button:hover {
@@ -141,17 +267,101 @@ button:hover {
     transform: translateY(-3px);
 }
 
+/* ===== FOOTER ===== */
 footer {
     text-align: center;
     margin-top: 24px;
+    padding: 20px;
     font-size: var(--font-size-small);
+    border-top: 1px solid var(--border-color);
+    background-color: var(--nav-color);
 }
 
-p {
-    color: var(--text-muted);
-    line-height: 1.5;
+/* ===== RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+    .layout-wrapper {
+        flex-direction: column;
+        padding: 0 20px;
+        gap: 0;
+    }
+
+    aside {
+        width: 100%;
+        position: static;
+        margin: 20px 0 0 0;
+        padding: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    aside a, aside a:visited {
+        width: auto;
+        margin: 5px;
+        white-space: nowrap;
+    }
+
+    main {
+        margin: 20px 0;
+        padding: 24px;
+    }
+
+    .header__inner {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .nav {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Header actions responsive */
+    .header__actions {
+        gap: 16px;
+    }
+
+    .avatar-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .container {
+        padding: 0 20px;
+    }
 }
 
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    aside a, aside a:visited {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .header__actions {
+        gap: 12px;
+    }
+
+    .avatar-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .action-link span {
+        font-size: 22px;
+    }
+}
+
+/* ===== UTILITIES ===== */
 ul {
     list-style-type: none;
 }
@@ -160,40 +370,7 @@ li {
     display: inline-block;
 }
 
-aside {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 15%;
-    max-width: 200px;
-    min-width: 100px;
-    background-color: var(--nav-color);
-    position: fixed;
-    height: 100vh;
-    top: 60px;
-    padding-top: 20px;
-    box-sizing: border-box;
-    border: 2px solid var(--border-color);
-    border-top: none;
-    container-type: inline-size;
-}
-
-nav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.5rem 1rem;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    border: 2px solid var(--border-color);
-    background-color: var(--nav-color);
-    position: fixed;
-    width: 100%;
-    height: auto;
-    padding: 0px 10px 20px;
-    box-sizing: border-box;
-    container-type: inline-size;
+p {
+    color: var(--text-muted);
+    line-height: 1.5;
 }

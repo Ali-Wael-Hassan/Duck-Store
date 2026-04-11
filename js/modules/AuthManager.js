@@ -52,10 +52,13 @@ export class AuthManager {
     manualLogin(formData) {
         const { email, isAdmin } = formData;
         const user = {
+            id: 1,
             name: email.split('@')[0],
             email: email,
             role: isAdmin ? "admin" : "user",
-            picture: null
+            picture: null,
+            loggedIn: true,
+            points: 1250
         };
 
         this._saveSession(user);
@@ -115,6 +118,7 @@ export class AuthManager {
         const isInHtmlFolder = window.location.pathname.includes('/html/');
         const pathPrefix = isInHtmlFolder ? "" : "html/";
         const target = (role === "admin") ? `${pathPrefix}dashboard.html` : `${pathPrefix}home.html`;
+        alert(`redirection: ${target}`);
         window.location.href = target;
     }
 

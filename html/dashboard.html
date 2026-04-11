@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Books | Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/Pages/dashboard.css">
+</head>
+<body data-page="dashboard">
+
+    <nav class="header">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+                </div>
+                <div class="logo-text">LUMINA</div>
+            </div>
+            <div class="nav" aria-label="Main navigation">
+                <a href="home.html">Home</a>
+                <a href="store.html">Store</a>
+                <a href="my-books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="cart.html" class="action-link" aria-label="Shopping Cart">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+                <a href="user_profile.html" class="avatar-link" aria-label="User Profile">
+                    <img src="https://via.placeholder.com/32" alt="User avatar" id="user-avatar" class="avatar-img">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="Book-&-inventory.html"><i class="fa-solid fa-book"></i> Books & Inventory</a>
+            <a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a>
+            <a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <section class="stats-row" id="stats-container">
+                <div class="stat-card shadow-sm">
+                    <div class="card-header">
+                        <div class="icon-wrapper bg-blue"><i class="fas fa-money-bill-wave"></i></div>
+                        <span class="trend" id="revenue-trend">...</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="stat-label">Total Revenue</span>
+                        <h3 class="stat-value" id="stat-revenue">$0</h3>
+                        <span class="stat-subtext" id="revenue-subtext">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="stat-card shadow-sm">
+                    <div class="card-header">
+                        <div class="icon-wrapper bg-orange"><i class="fas fa-user"></i></div>
+                        <span class="trend" id="users-trend">...</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="stat-label">Active Users</span>
+                        <h3 class="stat-value" id="stat-users">0</h3>
+                        <span class="stat-subtext" id="users-subtext">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="stat-card shadow-sm">
+                    <div class="card-header">
+                        <div class="icon-wrapper bg-cyan"><i class="fas fa-shopping-cart"></i></div>
+                        <span class="trend" id="orders-trend">...</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="stat-label">Pending Orders</span>
+                        <h3 class="stat-value" id="stat-orders">0</h3>
+                        <span class="stat-subtext" id="orders-subtext">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="stat-card shadow-sm">
+                    <div class="card-header">
+                        <div class="icon-wrapper bg-yellow"><i class="fas fa-star"></i></div>
+                        <span class="badge new-badge">New</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="stat-label">New Reviews</span>
+                        <h3 class="stat-value" id="stat-reviews">0</h3>
+                        <span class="stat-subtext" id="reviews-subtext">Loading...</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="content-grid-wrapper">
+                <div class="panel-card">
+                    <div class="panel-header flex-between">
+                        <div>
+                            <h3>Sales Performance</h3>
+                            <span class="subtext">Daily revenue overview</span>
+                        </div>
+                        <div class="toggle-group">
+                            <button class="toggle-btn">Week</button>
+                            <button class="toggle-btn active">Month</button>
+                        </div>
+                    </div>
+                    <div class="chart-area">
+                        <div class="chart-grid" id="chart-grid">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="panel-card" id="trending-books-container">
+                    <div class="panel-header">
+                        <h3>Trending Books</h3>
+                    </div>
+                    <div class="book-list" id="trending-books-list">
+                        </div>
+                    <button class="btn-block-subtle mt-15" onclick="location.href='Book-&-inventory.html'">VIEW FULL CATALOG</button>
+                </div>
+
+                <div class="panel-card lg-col-span-2">
+                    <div class="panel-header flex-between">
+                        <h3>Recent Transactions</h3>
+                        <button class="btn-outline" id="download-csv-btn"><i class="fas fa-download"></i> Download CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ORDER ID</th>
+                                    <th>CUSTOMER</th>
+                                    <th>DATE</th>
+                                    <th>AMOUNT</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-tbody">
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination flex-between" id="transactions-pagination">
+                        <span class="subtext">Loading transactions...</span>
+                        <div class="page-controls">
+                            <button class="btn-outline">Previous</button>
+                            <button class="btn-outline active">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>
