@@ -3,198 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUCK Store | Books & Inventory</title>
+    <title>Lumina Books | Books & Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/Pages/Book-&-inventory.css">
 </head>
+<body data-page="inventory">
 
-<body>
-    <header id="navbar">
-        <nav id="site_nav">
-            <img id="site_logo" src="" alt="site logo">
-            <button id="notification_button">notifications</button>
-            <button id="settings_button">Settings</button>
-            <a href="user_profile.html">user</a>
-        </nav>
-    </header>
-    <div class="sidebar">
-        <h2 class="logo"><i class="fa-solid fa-book-open"></i> Lumina Books</h2>
-        <ul>
-            <li><a href="dashboard.Html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
-            <li><a href="Book-&-inventory.Html"><i class="fa-solid fa-book"></i> Books & Inventory</a></li>
-            <li class="active"><a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a></li>
-            <li><a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a></li>
-            <li><a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a></li>
-        </ul>
+    <nav class="header">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+                </div>
+                <div class="logo-text">LUMINA</div>
+            </div>
+            <div class="nav" aria-label="Main navigation">
+                <a href="home.html">Home</a>
+                <a href="store.html">Store</a>
+                <a href="my-books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="cart.html" class="action-link" aria-label="Shopping Cart">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+                <a href="profile.html" class="avatar-link" aria-label="User Profile">
+                    <img src="https://via.placeholder.com/32" alt="User avatar" class="avatar-img" id="nav-avatar">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="Book-&-inventory.html" class="active"><i class="fa-solid fa-book"></i> Books & Inventory</a>
+            <a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a>
+            <a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a>
+        </aside>
+
+        <main class="inventory-main">
+            <div class="inventory-header">
+                <div>
+                    <h1>Books & Inventory</h1>
+                    <p>Manage your global catalog and real-time stock levels.</p>
+                </div>
+                <div>
+                    <button class="btn-primary" id="add-book-btn">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Book Title & Author</th>
+                            <th>ISBN-13</th>
+                            <th>SKU</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading inventory...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination flex-between" id="inventory-pagination">
+                <span class="subtext">Showing 0 of 0 books</span>
+                <div class="page-controls">
+                    <button class="btn-outline">Previous</button>
+                    <button class="btn-outline">Next</button>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <main class="container">
-    <header>
-        <div class="header">
-            <div >
-                <h1 >Books & Inventory</h1>
-                <p>Manage your global catalog and real-time stock levels.</p>
-            </div>
-            <button class ="add-btn">
-                <i class="fas fa-plus"></i>
-                Add New Book
-            </button>
-        </div>
-    </header>
-
-    <table>
-    <tr >
-        <th>Book Title & Author</th>
-        <th>ISBN-13</th>
-        <th>SKU</th>
-        <th>Stock Level</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    <tr>
-        <td>
-            <div >
-                <h4>Book Title</h4>
-                <span>Author Name</span>
-            </div>
-        </td>
-        <td>
-            <div>
-                <span>978-0525559474</span>
-            </div>
-        </td>
-        <td>
-            <div>
-                <span>LUM-001</span>
-            </div>
-        </td>
-        <td>
-            <div class="progress">
-                <div class="progress-bar" style="width: 100%"> </div><span>128</span>
-            </div>
-        </td>
-        <td>
-            <div class="status-green">
-                <span>In Stock</span>
-            </div>
-        </td>
-        <td>
-            <div>
-                <span><i class="fas fa-pen-to-square action-icon"></i></span>
-            </div>
-        </td>
-    </tr>
-   <tr>
-    <td>
-        <div>
-            <h4>Project Hail Mary</h4>
-            <span>Andy Weir</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>978-0593135204</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>LUM-002</span>
-        </div>
-    </td>
-    <td>
-        <div class="progress">
-            <div class="progress-bar-yellow" style="width: 20%"></div>
-            <span>4</span>
-        </div>
-    </td>
-    <td>
-        <div class="status-yellow">
-            <span>low stock</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span><i class="fas fa-pen-to-square action-icon"></i></span>
-        </div>
-    </td>
-   </tr> 
-   <tr>
-    <td>
-        <div>
-            <h4>Dune: Deluxe Edition</h4>
-            <span>Frank Herbert</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>978-0593099322</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>LUM-003</span>
-        </div>
-    </td>
-    <td>
-        <div class="progress">
-            <div class="progress-bar" style="width: 0%"></div>
-            <span style="color: red">0</span>
-        </div>
-    </td>
-    <td>
-        <div class="status-red">
-            <span >sold out</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span><i class="fas fa-pen-to-square action-icon"></i></span>
-        </div>
-    </td>
-   </tr>
-   <tr>
-    <td>
-        <div>
-            <h4>Circe</h4>
-            <span>Madeline Miller</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>978-0316556347</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span>LUM-004</span>
-        </div>
-    </td>
-    <td>
-        <div class="progress" >
-            <div class="progress-bar" style="width: 45%"></div>
-            <span>45</span>
-        </div>
-    </td>
-    <td>
-        <div class="status-green">
-            <span>In Stock</span>
-        </div>
-    </td>
-    <td>
-        <div>
-            <span><i class="fas fa-pen-to-square action-icon"></i></span>
-        </div>
-    </td>
-   </tr>
-   </table>
-<div class="pagination">
-    <span>Showing 4 of 2,482 books</span>
-    <div class="pagination button">
-        <button>Previous</button>
-        <button>Next</button>
-    </div>
-</div>
+    <script type="module" src="../js/main.js"></script>
 </body>
-</main>
 </html>

@@ -10,7 +10,7 @@ export class UserProfilePage {
 
     init() {
         if (!this.user || !this.user.loggedIn) {
-            window.location.href = 'auth.html'; // Protection: Redirect if not logged in
+            window.location.href = 'auth.html';
             return;
         }
 

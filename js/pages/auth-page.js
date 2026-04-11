@@ -18,8 +18,17 @@ export class AuthPage {
     }
 
     bindEvents() {
+        alert("verify");
         if (this.form) {
             this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+        }
+
+        const googleBtn = document.getElementById("google-signin-btn");
+        if (googleBtn) {
+            googleBtn.addEventListener("click", (e) => {
+                e.preventDefault(); 
+                this.googleLogin();
+            });
         }
     }
 
