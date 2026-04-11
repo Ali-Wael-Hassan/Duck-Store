@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Lumina Books | Premium Marketplace</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <link rel="stylesheet" href="../css/Pages/store.css">
+</head>
+<body data-page="store">
+
+    <header class="header">
+        <div class="header__container">
+            <div class="logo">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span class="logo__text">Lumina Books</span>
+            </div>
+            
+            <div class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="book-search" placeholder="Search for titles, authors, or genres...">
+            </div>
+
+            <div class="header__actions">
+                <button class="icon-btn"><span class="material-symbols-outlined">diamond</span></button>
+                <div class="profile-thumb"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="store-layout">
+            <aside class="sidebar">
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        <span class="material-symbols-outlined">category</span> Categories
+                    </h3>
+                    <div id="category-container" class="filter-list">
+                        </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-title">
+                        <span class="material-symbols-outlined">payments</span> Price (PTS)
+                    </h3>
+                    <div class="price-filter">
+                        <input type="range" id="price-slider" min="0" max="50000" value="50000">
+                        <div class="price-labels">
+                            <span>0 PTS</span>
+                            <span id="price-limit">50,000 PTS</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="catalog">
+                <div class="catalog__meta">
+                    <p>Showing <span id="results-count">0</span> premium titles</p>
+                    <div class="sort-control">
+                        <span>Sort by:</span>
+                        <select id="sort-select">
+                            <option value="popularity">Popularity</option>
+                            <option value="newest">Newest</option>
+                            <option value="price-asc">Price: Low to High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="book-grid" id="book-grid">
+                    </div>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>
