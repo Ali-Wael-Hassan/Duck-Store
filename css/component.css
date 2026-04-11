@@ -8,6 +8,7 @@
     --background-color: #0B0E11;
     --card-bg: #161B22;
     --input-bg: #1C2128;
+    --progress-bg: #1e293b;
 
     /* Text Colors */
     --text-main: #FFFFFF;
@@ -176,8 +177,10 @@ aside {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-main);
     padding: 20px 0;
-    margin: 32px 0;         /* keeps top/bottom margin */
-    margin-left: 0;         /* forces left alignment, removes any unexpected shift */
+    margin: 32px 0;
+    /* keeps top/bottom margin */
+    margin-left: 0;
+    /* forces left alignment, removes any unexpected shift */
     align-self: stretch;
     position: sticky;
     top: 90px;
@@ -185,13 +188,16 @@ aside {
 }
 
 /* Sidebar links - full width of aside (with small inner spacing) */
-aside a, aside a:visited {
+aside a,
+aside a:visited {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
-    width: calc(100% - 20px);  /* takes full width minus 10px on each side */
-    margin: 10px auto;         /* centers horizontally within aside, but with left-aligned content */
+    width: calc(100% - 20px);
+    /* takes full width minus 10px on each side */
+    margin: 10px auto;
+    /* centers horizontally within aside, but with left-aligned content */
     padding: var(--btn-padding-y) var(--btn-padding-x);
     color: var(--text-muted);
     background-color: var(--card-bg);
@@ -296,7 +302,8 @@ footer {
         gap: 8px;
     }
 
-    aside a, aside a:visited {
+    aside a,
+    aside a:visited {
         width: auto;
         margin: 5px;
         white-space: nowrap;
@@ -338,7 +345,8 @@ footer {
         font-size: 1.2rem;
     }
 
-    aside a, aside a:visited {
+    aside a,
+    aside a:visited {
         font-size: 0.75rem;
         padding: 6px 12px;
     }
