@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Store | My Books</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/Pages/my_books.css">
+</head>
+
+<body data-page="my-books">
+
+    <nav class="header">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+                </div>
+                <div class="logo-text">LUMINA</div>
+            </div>
+
+            <div class="nav" aria-label="Main navigation">
+                <a href="home.html">Home</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="my-books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+
+            <div class="header__actions">
+                <a href="cart.html" class="action-link" aria-label="Shopping Cart">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                </a>
+                <a href="user_profile.html" class="avatar-link" aria-label="User Profile">
+                    <img src="https://via.placeholder.com/32" alt="User avatar" class="avatar-img">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+
+        <main class="content-area">
+            <div class="content-header">
+                <div>
+                    <h1>My Books</h1>
+                    <p class="subtitle">Manage your active rentals and personal digital collection</p>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-link">All Collection</button>
+                <button class="tab-link active">Active Rentals</button>
+                <button class="tab-link">Completed</button>
+                <button class="tab-link">Wishlist</button>
+            </div>
+
+            <section class="book-grid">
+                <article class="book-card">
+
+                </article>
+
+            </section>
+        </main>
+    </div>
+    <script type="module" src="../js/main.js"></script>
+</body>
+
+</html>

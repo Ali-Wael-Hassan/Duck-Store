@@ -1,6 +1,6 @@
-import { AuthPage } from './pages/auth-page.js'; 
+import { AuthPage } from './pages/auth-page.js';
 import { BookViewPage } from './pages/book-view.js';
-import { HomePage } from './pages/home-page.js'; 
+import { HomePage } from './pages/home-page.js';
 import { CommunityPage } from './pages/community-page.js';
 import { RewardPage } from './pages/reward-page.js';
 import { StorageManager } from './core/StorageManager.js';
@@ -8,6 +8,7 @@ import { DashboardController } from './pages/dashboard-page.js';
 import { InventoryController } from './pages/Book-&-inventory.js';
 import { SalesRefundsController } from './pages/sales_refunds.js';
 import { UsersRolesController } from './pages/users_roles.js';
+import { MyBooksPage } from './pages/my_books.js';
 
 class App {
     constructor() {
@@ -21,40 +22,13 @@ class App {
     async assemble() {
         try {
             await StorageManager.initSeedData();
-            
+
             this.user = StorageManager.get('user_session');
-            
-            this.initLayoutObservers();
-            
+
             await this.init();
         } catch (error) {
             console.error("App Assembly Failed:", error);
         }
-    }
-
-    initLayoutObservers() {
-        const header = document.querySelector('.header') || document.querySelector('.main-nav') || document.querySelector('.reward-header');
-        const sidebar = document.querySelector('.sidebar') || document.querySelector('.leaderboard-aside');
-        const mainComp = document.querySelector('main');
-
-        const updateLayout = () => {
-            if (!mainComp) return;
-            if (header) {
-                const headerHeight = header.offsetHeight;
-                mainComp.style.paddingTop = `${headerHeight}px`;
-                if (sidebar) {
-                    sidebar.style.top = `${headerHeight}px`;
-                    sidebar.style.height = `calc(100vh - ${headerHeight}px)`;
-                }
-            }
-        };
-
-        const resizeObserver = new ResizeObserver(() => updateLayout());
-        if (header) resizeObserver.observe(header);
-        if (sidebar) resizeObserver.observe(sidebar);
-
-        window.addEventListener('resize', updateLayout);
-        updateLayout();
     }
 
     async init() {
@@ -78,7 +52,7 @@ class App {
                 return;
             }
             new AuthPage(GOOGLE_CLIENT_ID);
-            return; 
+            return;
         }
 
         if (!this.user || !this.user.loggedIn) {
@@ -112,6 +86,9 @@ class App {
                 break;
             case 'users-roles':
                 new UsersRolesController();
+                break;
+            case 'my-books':
+                new MyBooksPage();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);
