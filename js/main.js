@@ -66,6 +66,11 @@ class App {
             window.location.href = '../index.html';
             return;
         }
+        
+        if (pageType === 'about-us' && this.user && this.user.loggedIn) {
+            window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
+            return;
+        }
 
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
