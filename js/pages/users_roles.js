@@ -60,7 +60,7 @@ export class UsersRolesController {
             this.applyFilter();
         });
 
-        // BINDING: Edit Role Button (Event Delegation)
+        // Edit Role Button
         const tbody = document.getElementById('user-tbody');
         tbody?.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.edit');
@@ -71,20 +71,19 @@ export class UsersRolesController {
         });
     }
 
-    // Logic to swap/update the role in Storage
+    // swap the role
     handleEditRole(userId) {
         const rawData = StorageManager.get("community_users") || [];
         const userIndex = rawData.findIndex(u => u.id === userId);
 
         if (userIndex !== -1) {
             const currentRole = rawData[userIndex].role || (rawData[userIndex].id === 'user_1' ? 'Admin' : 'User');
-            // Simple swap logic: If Admin -> User, If User -> Admin
             const newRole = currentRole.toLowerCase() === 'admin' ? 'User' : 'Admin';
             
             if (confirm(`Change ${rawData[userIndex].name}'s role to ${newRole}?`)) {
                 rawData[userIndex].role = newRole;
-                StorageManager.save("community_users", rawData); // Save back to correct key
-                this.refreshData(); // Refresh UI
+                StorageManager.save("community_users", rawData);
+                this.refreshData();
             }
         }
     }
@@ -102,10 +101,19 @@ export class UsersRolesController {
         const paginationInfo = document.getElementById('pagination-info');
         if (!tbody) return;
 
+        // Get the total count of users after any filters
         const total = this.filteredUsers.length;
+
+        // Calculate the number of the FIRST item shown on the current page
         const startDisplay = total === 0 ? 0 : (this.currentPage - 1) * this.rowsPerPage + 1;
+
+        // Calculate the number of the LAST item shown on the current page
         const endDisplay = Math.min(this.currentPage * this.rowsPerPage, total);
+
+        // Determine the index where the array slice should begin
         const startSlice = (this.currentPage - 1) * this.rowsPerPage;
+
+        // Extract only the users belonging to the current page to display in the table
         const currentSlice = this.filteredUsers.slice(startSlice, startSlice + this.rowsPerPage);
 
         if (paginationInfo) {

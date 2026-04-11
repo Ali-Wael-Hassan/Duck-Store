@@ -6,34 +6,34 @@ export class DashboardController {
         this.rowsPerPage = 5;
         this.orders = [];
 
-        // Initialize and seed data before starting the controller logic
+        /* Initialize and seed data before starting the controller logic */
         StorageManager.initSeedData().then(() => {
             this.init();
         });
     }
 
     init() {
-        // Sync internal data with Storage
+        /* Sync internal data with Storage */
         this.orders = StorageManager.get("orders");
         
-        // Initial dashboard render
+        /* Initial dashboard render */
         this.updateStats();
-        this.renderChart('weekly'); // Default to weekly view
+        this.renderChart('weekly');
         this.renderTrendingBooks();
         this.renderTransactions();
         
-        // Setup interactive listeners
+        /* Setup interactive listeners */
         this.initEventListeners();
     }
 
     initEventListeners() {
-        // 1. Download CSV Button
+        /* Download CSV Button */
         const downloadBtn = document.getElementById('download-csv-btn');
         if (downloadBtn) {
             downloadBtn.onclick = () => this.downloadTransactionsCSV();
         }
 
-        // 2. Weekly / Monthly Chart Toggle
+        /* 2. Weekly / Monthly Chart Toggle */
         const chartButtons = document.querySelectorAll('.toggle-btn');
         chartButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -46,7 +46,7 @@ export class DashboardController {
             });
         });
 
-        // 3. Pagination Buttons
+        /* Pagination Buttons */
         const prevBtn = document.querySelector('#transactions-pagination button:first-of-type');
         const nextBtn = document.querySelector('#transactions-pagination button:last-of-type');
 
@@ -69,22 +69,22 @@ export class DashboardController {
             };
         }
 
-        // 4. Action Dropdown & Delete Logic (Event Delegation)
+       /* Drop Down */
         const tbody = document.getElementById('transactions-tbody');
         if (tbody) {
             tbody.addEventListener('click', (e) => {
-                // Handle Toggle Dropdown Visibility
+                /* Gets first ancestor that has this class */
                 const trigger = e.target.closest('.action-trigger');
                 if (trigger) {
                     const menu = trigger.nextElementSibling;
-                    // Close other menus first
+                    /* Close other menus first */
                     document.querySelectorAll('.action-menu.show').forEach(m => {
                         if (m !== menu) m.classList.remove('show');
                     });
                     menu.classList.toggle('show');
                 }
 
-                // Handle Delete Click
+                /* Handle Delete Click */
                 const deleteBtn = e.target.closest('.delete-btn');
                 if (deleteBtn) {
                     const orderId = deleteBtn.getAttribute('data-id');
@@ -95,7 +95,7 @@ export class DashboardController {
             });
         }
 
-        // Close dropdowns if clicking anywhere else
+        /* Close dropdowns if clicking anywhere else */
         window.addEventListener('click', (e) => {
             if (!e.target.closest('.action-dropdown')) {
                 document.querySelectorAll('.action-menu.show').forEach(m => m.classList.remove('show'));
@@ -224,7 +224,7 @@ export class DashboardController {
         allOrders = allOrders.filter(o => o.id !== orderId);
         
         // Save back to storage
-        localStorage.setItem("orders", JSON.stringify(allOrders));
+        StorageManager.save("orders", allOrders);
         this.orders = allOrders;
 
         const totalPages = Math.ceil(this.orders.length / this.rowsPerPage);

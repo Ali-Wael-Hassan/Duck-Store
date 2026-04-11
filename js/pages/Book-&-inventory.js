@@ -6,39 +6,53 @@ export class InventoryController {
         this.rowsPerPage = 5;
         this.books = [];
 
+        /* Initiate the seed data (safety as it has been made in main.js) */
         StorageManager.initSeedData().then(() => {
             this.init();
         });
     }
 
     init() {
+        /* fetch the data from the storage */
         this.books = StorageManager.get("inventory") || [];
         
+        /* if the current books unloaded */
         if (this.books.length === 0) {
+            /* books array */
             const generalBooks = StorageManager.get("books") || [];
+            /* the current books array with the specific format */
             this.books = generalBooks.map(b => ({
                 id: b.id,
                 title: b.title,
                 author: b.author,
                 isbn: "978-" + Math.floor(Math.random() * 1000000000),
-                sku: "LUM-00" + b.id,
+                sku: "DUCK-00" + b.id,
                 stock: Math.floor(Math.random() * 50),
                 maxStock: 100
             }));
+
+            /* save to the storage */
             StorageManager.save("inventory", this.books);
         }
 
+        /* render the data */
         this.renderInventory();
+        /* initiate the listeners */
         this.initEventListeners();
     }
 
     initEventListeners() {
+        /* get the button */
         const addBtn = document.getElementById('add-book-btn');
+
+        /* make the onclick with the callback addNewBook() method */
         if (addBtn) addBtn.onclick = () => this.addNewBook();
 
+        /* gets the prevBtn and nextBtn */
         const prevBtn = document.querySelector('.page-controls button:first-child');
         const nextBtn = document.querySelector('.page-controls button:last-child');
 
+        /* match the callback for prevBtn when it isn't null */
         if (prevBtn) {
             prevBtn.onclick = () => {
                 if (this.currentPage > 1) {
@@ -48,17 +62,24 @@ export class InventoryController {
             };
         }
 
+        /* match the callback for nextBtn when it isn't null */
         if (nextBtn) {
             nextBtn.onclick = () => {
+                /* ceil(books.length / rows per page) = start value for the next page */
                 const totalPages = Math.ceil(this.books.length / this.rowsPerPage);
                 if (this.currentPage < totalPages) {
+                    /* update page counter */
                     this.currentPage++;
+                    /* render new data */
                     this.renderInventory();
                 }
             };
         }
 
+        /* get the body of the inventory */
         const tbody = document.getElementById('inventory-tbody');
+
+        /* add the callback with addEventListener  */
         if (tbody) {
             tbody.addEventListener('click', (e) => {
                 const deleteBtn = e.target.closest('.delete-action');

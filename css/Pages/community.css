@@ -1,5 +1,4 @@
 
-/* ----- Main container ----- */
 main {
     max-width: 85%;
     border: none;
@@ -14,7 +13,6 @@ img {
     aspect-ratio: 1 / 1;
 }
 
-/* ----- Header ----- */
 .leaderboard-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -57,7 +55,6 @@ img {
     margin: 0 auto;
 }
 
-/* ----- Time filters (tabs) ----- */
 .time-filters {
     display: flex;
     justify-content: center;
@@ -87,7 +84,6 @@ img {
     color: #0a0c12;
 }
 
-/* ----- Podium (top 3) ----- */
 .podium {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -207,7 +203,6 @@ img {
     color: var(--text-muted);
 }
 
-/* ----- Scholars section (table) ----- */
 .scholars-section {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -311,7 +306,6 @@ img {
     display: block;
 }
 
-/* ----- Stats grid ----- */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -417,7 +411,6 @@ img {
     margin: 0;
 }
 
-/* ----- Responsive adjustments ----- */
 @media (max-width: 768px) {
     .leaderboard-main {
         padding: 1rem;

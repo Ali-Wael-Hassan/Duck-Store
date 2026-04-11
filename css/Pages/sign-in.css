@@ -1,6 +1,3 @@
-/* ===== SIGN-IN PAGE – FULLY RESPONSIVE ===== */
-/* Uses global CSS variables from component.css */
-
 body {
     background: radial-gradient(circle at 10% 20%, var(--card-bg), var(--background-color));
     min-height: 100vh;
@@ -32,7 +29,6 @@ main {
     transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-/* Brand Logo */
 .brand-logo {
     display: flex;
     justify-content: center;
@@ -182,7 +178,6 @@ header.text-center p {
     color: #e6c200;
 }
 
-/* 2FA Banner */
 .banner-security {
     display: flex;
     align-items: center;
@@ -219,7 +214,6 @@ header.text-center p {
     line-height: 1.3;
 }
 
-/* Checkbox */
 .form-auth__field-checkbox {
     display: flex;
     align-items: center;
@@ -325,7 +319,6 @@ header.text-center p {
     color: var(--brand-primary);
 }
 
-/* Card Footer */
 .card__footer {
     text-align: center;
     margin-top: 1.5rem;
@@ -355,7 +348,6 @@ header.text-center p {
     color: #e6c200;
 }
 
-/* Utility overrides for links inside forms */
 .form-auth a,
 .card__footer a {
     margin: 0;
@@ -430,7 +422,6 @@ header.text-center p {
     }
 }
 
-/* Mobile landscape (max-width: 520px) – your existing */
 @media (max-width: 520px) {
     main {
         padding: 1.8rem;
@@ -458,7 +449,6 @@ header.text-center p {
     }
 }
 
-/* Mobile portrait (max-width: 480px) */
 @media (max-width: 480px) {
     main {
         padding: 1.5rem;
@@ -521,7 +511,6 @@ header.text-center p {
     }
 }
 
-/* Very small devices (max-width: 360px) */
 @media (max-width: 360px) {
     body {
         padding: 0.5rem;

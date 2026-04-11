@@ -1,11 +1,13 @@
 import { StorageManager } from '../core/StorageManager.js';
 
 export class AuthManager {
+    /* Initiate the google client id (the server hosted on github) */
     constructor(clientId) {
         this.clientId = clientId;
         this.tokenClient = null;
     }
 
+    /* Initiate the client token from google */
     initGoogleService() {
         if (!window.google?.accounts?.oauth2) {
             setTimeout(() => this.initGoogleService(), 200);
@@ -19,7 +21,7 @@ export class AuthManager {
         });
     }
 
-    // NEW: Helper to sync with Community and Profile requirements
+    /* Saving current session with all needed data for other pages */
     _saveSession(userData) {
         const sessionUser = {
             id: userData.id || "user_" + Date.now(),
@@ -28,14 +30,13 @@ export class AuthManager {
             avatar: userData.picture || `https://i.pravatar.cc/150?u=${userData.name}`,
             role: userData.role,
             loggedIn: true,
-            // Community/Profile expectations
             points: 0, 
             readings: 0,
             reviews: 0,
             joinDate: new Date().getFullYear().toString()
         };
 
-        // 1. Save for the current session (Object)
+        // 1. Save for the current session
         localStorage.setItem("user_session", JSON.stringify(sessionUser));
 
         // 2. Save for the Auth legacy check (Array)
@@ -84,7 +85,6 @@ export class AuthManager {
     }
 
     logout() {
-        // Clear both session keys
         localStorage.removeItem("user_session");
         StorageManager.save("user", []);
         

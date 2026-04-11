@@ -209,7 +209,6 @@ main {
     margin-left: 1rem;
 }
 
-/* Footer links */
 .auth-split__footer {
     margin-top: 2rem;
     text-align: center;
@@ -227,7 +226,6 @@ main {
     text-decoration: underline;
 }
 
-/* Brand logo styling */
 .brand-logo {
     display: flex;
     align-items: center;
@@ -247,14 +245,10 @@ main {
     color: var(--brand-primary);
 }
 
-/* Utility margin classes */
 .m-bottom-lg {
     margin-bottom: 2rem;
 }
 
-/* ===== FULLY RESPONSIVE BREAKPOINTS ===== */
-
-/* Tablet landscape and below (≤1024px) */
 @media (max-width: 1024px) {
     .auth-split__side {
         padding: 2.5rem;
@@ -294,7 +288,6 @@ main {
     }
 }
 
-/* Mobile landscape (≤768px) */
 @media (max-width: 768px) {
     .auth-split__side {
         padding: 1.8rem;
@@ -316,7 +309,6 @@ main {
     }
 }
 
-/* Mobile portrait (≤600px) */
 @media (max-width: 600px) {
     .page-center {
         padding: 1rem;
@@ -348,7 +340,6 @@ main {
     }
 }
 
-/* Very small devices (≤480px) */
 @media (max-width: 480px) {
     .auth-split__side {
         padding: 1.2rem;
@@ -388,7 +379,6 @@ main {
     }
 }
 
-/* Extra small devices (≤360px) */
 @media (max-width: 360px) {
     .auth-split__title-large {
         font-size: 1.4rem;

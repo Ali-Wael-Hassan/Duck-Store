@@ -3,34 +3,50 @@ import { ReviewLoader } from '../modules/ReviewLoader.js';
 
 export class BookViewPage {
     constructor() {
+        /* Extract the needed data from the query in the URL */
         const params = new URLSearchParams(window.location.search);
         this.bookId = parseInt(params.get('id'));
+        /* Load Data */
         this.bookData = this.loadBookData();
 
+        /* if null return the error */
         if (!this.bookData) {
             console.error("Book data not found for ID:", this.bookId);
             return;
         }
 
+        /* render to the html page */
         this.render();
+        /* load reviews */
         this.reviews = new ReviewLoader('review-list', this.bookData.reviews || []);
+        /* check whether you own the book or not */
         this.checkExistingOwnership();
         
+        /* expose to the window */
         window.bookPage = this;
     }
 
+    /* load book data */
     loadBookData() {
         const books = StorageManager.get("books") || [];
         return books.find(b => b.id === this.bookId);
     }
 
+    /* add review */
     handleAddReview() {
+        /* ask the user for review */
         const comment = prompt("Share your thoughts on this book:");
+
+        /* return if empty or null */
         if (!comment || comment.trim() === "") return;
 
+        /* ask the user for rate */
         const rate = prompt("Your rate:");
+
+        /* return if empty or null */
         if (!rate || rate.trim() === "") return;
 
+        /* construct the review */
         const newReview = {
             user: "Guest User",
             rating: parseInt(rate, 10),
@@ -38,25 +54,30 @@ export class BookViewPage {
             comment: comment
         };
 
+        /* if null make the array empty */
         if (!this.bookData.reviews) this.bookData.reviews = [];
+
+        /* push the new review to front (the display is handled in the review engine) */
         this.bookData.reviews.push(newReview);
 
-        const rawBooks = localStorage.getItem('books');
-        if (rawBooks) {
-            const allBooks = JSON.parse(rawBooks);
-            
+        /* fetch the data from the storage */
+        const allBooks = StorageManager.get('books');
+        if (allBooks) {
+            /* get the index */
             const index = allBooks.findIndex(b => b.id == this.bookId);
 
+            /* exist */
             if (index !== -1) {
                 allBooks[index] = this.bookData;
                 
-                localStorage.setItem('books', JSON.stringify(allBooks));
+                StorageManager.save('books', allBooks);
                 console.log("Success: Saved to local disk.");
             } else {
                 console.error("Save failed: Could not find book ID", this.bookId, "in master list.");
             }
         }
 
+        /* make it the top review */
         this.reviews.addTop(newReview);
     }
 
@@ -64,6 +85,7 @@ export class BookViewPage {
         const data = this.bookData;
         if (!data) return;
 
+        /* helper method */
         const setVal = (id, val) => {
             const el = document.getElementById(id);
             if (el) el.textContent = val;

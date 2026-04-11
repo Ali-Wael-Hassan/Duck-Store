@@ -2,6 +2,7 @@ import { StorageManager } from '../core/StorageManager.js';
 
 export class CommunityPage {
     constructor() {
+        /* fetch the data */
         this.allUsers = StorageManager.get('community_users') || [];
         
         this.currentUser = StorageManager.get('user_session');
@@ -18,10 +19,19 @@ export class CommunityPage {
             return;
         }
 
+        /* sort and filter */
         this.sortAndFilter();
+
+        /* redner 1st, 2nd, 3rd */
         this.renderPodium();
+        
+        /* render the leader board table(one, to me) */
         this.renderLeaderboardTable();
+
+        /* global stats (Active members, ...etc) */
         this.renderGlobalStats();
+
+        /* setup the callback */
         this.setupEventListeners();
     }
 

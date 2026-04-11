@@ -1,4 +1,4 @@
-/* ===== GLOBAL VARIABLES & RESET ===== */
+/* Global Variables */
 :root {
     /* Brand Colors */
     --brand-primary: #FFD700;
@@ -41,6 +41,7 @@
     box-sizing: border-box;
 }
 
+/* Unified Body */
 body {
     background-color: var(--background-color);
     color: var(--text-main);
@@ -50,35 +51,39 @@ body {
     min-height: 100vh;
 }
 
-/* ===== TOP NAVIGATION (sticky) ===== */
+/* Top Navigation */
 .header {
     border-bottom: 1px solid rgba(192, 168, 106, 0.2);
     background: rgba(10, 12, 16, 0.95);
-    backdrop-filter: blur(4px);
-    position: sticky;
+    backdrop-filter: blur(4px); /* Stylize the background to it to be slightly blured */
+    position: sticky; /* Show it when scrolling */
     top: 0;
-    z-index: 100;
+    z-index: 100; /* Make it on top of every thing */
 }
 
+/* Width of the Nav Bar */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 32px;
 }
 
+/* Layout for elements inside */
 .header__inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Left(1) + Center + Right(1) */
     align-items: center;
     padding: 18px 0;
 }
 
+/* Logo Container */
 .logo-group {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
+/* Icon Placeholder */
 .logo-icon {
     background: linear-gradient(135deg, #C0A86A, #A8894F);
     width: 42px;
@@ -89,26 +94,30 @@ body {
     border-radius: 14px;
 }
 
+/* Name exposed to the API */
 .logo-icon span {
     font-size: 28px;
     color: #0A0C10;
 }
 
+/* Name of the brand */
 .logo-text {
     font-size: 1.6rem;
     font-weight: 800;
     letter-spacing: -0.5px;
     background: linear-gradient(130deg, #FFF8E7, #C0A86A);
     background-clip: text;
-    -webkit-background-clip: text;
+    -webkit-background-clip: text; /* make painting area to text */
     color: transparent;
 }
 
+/* make nav flex for layout (FlowLayout in Java) */
 .nav {
     display: flex;
     gap: 32px;
 }
 
+/* Adjust all anchors inside nav (middle elements) */
 .nav a {
     color: #8D94A5;
     text-decoration: none;
@@ -118,31 +127,35 @@ body {
     transition: color 0.2s ease;
 }
 
+/* Hover Effect using Psuedoclass */
 .nav a.active,
 .nav a:hover {
     color: #C0A86A;
 }
 
-/* ===== HEADER ACTIONS (CART + AVATAR) ===== */
+/* Avatar + Cart (right elements) */
 .header__actions {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+/* Special Class for right elements */
 .action-link,
 .avatar-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: var(--text-muted);
-    transition: all var(--transition-speed) ease;
+    transition: all var(--transition-speed) ease; /* Basic Animation */
 }
 
+/* Hover Effect using Psuedoclass */
 .action-link:hover {
     color: var(--brand-primary);
 }
 
+/* Circular avatar image */
 .avatar-img {
     width: 36px;
     height: 36px;
@@ -152,12 +165,13 @@ body {
     transition: border-color var(--transition-speed), transform var(--transition-speed);
 }
 
+/* Hover Effect using Psuedoclass */
 .avatar-img:hover {
     border-color: var(--brand-primary);
     transform: scale(1.05);
 }
 
-/* ===== LAYOUT: ASIDE (LEFT) + MAIN ===== */
+/* Layout for the page content, aka asize(left) + main(right) */
 .layout-wrapper {
     display: flex;
     flex: 1;
@@ -168,30 +182,30 @@ body {
     gap: 32px;
 }
 
-/* Sidebar (aside) - full height, flush left */
+/* Sidebar (aside) */
 aside {
     width: 260px;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Don't shrink elemnts */
     background-color: var(--nav-color);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-main);
     padding: 20px 0;
-    margin: 32px 0;         /* keeps top/bottom margin */
-    margin-left: 0;         /* forces left alignment, removes any unexpected shift */
+    margin: 32px 0;
+    margin-left: 0;
     align-self: stretch;
     position: sticky;
     top: 90px;
     transition: all var(--transition-speed) ease;
 }
 
-/* Sidebar links - full width of aside (with small inner spacing) */
+/* Sidebar links */
 aside a, aside a:visited {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
-    width: calc(100% - 20px);  /* takes full width minus 10px on each side */
-    margin: 10px auto;         /* centers horizontally within aside, but with left-aligned content */
+    width: calc(100% - 20px);
+    margin: 10px auto;
     padding: var(--btn-padding-y) var(--btn-padding-x);
     color: var(--text-muted);
     background-color: var(--card-bg);
@@ -204,6 +218,7 @@ aside a, aside a:visited {
     cursor: pointer;
 }
 
+/* Hover Effect using Psuedoclass */
 aside a:hover {
     color: var(--brand-primary);
     border-color: var(--brand-primary-hover);
@@ -222,7 +237,7 @@ main {
     transition: all var(--transition-speed) ease;
 }
 
-/* ===== FORM ELEMENTS ===== */
+/* Form Elements */
 label {
     display: block;
     margin-bottom: 8px;
@@ -230,6 +245,7 @@ label {
     font-weight: 500;
 }
 
+/* Stylize input(General) */
 input {
     width: 100%;
     background-color: var(--input-bg);
@@ -242,11 +258,13 @@ input {
     transition: border-color var(--transition-speed);
 }
 
+/* Focus using Psuedoclass */
 input:focus {
-    outline: none;
+    outline: none; /* Outline none to not conflict with border colors */
     border-color: var(--brand-primary);
 }
 
+/* General Styling for Buttons */
 button {
     width: 100%;
     background: var(--card-bg);
@@ -261,13 +279,14 @@ button {
     transition: all var(--transition-speed) ease;
 }
 
+/* Hover Effect using Psuedoclass */
 button:hover {
     color: var(--brand-primary);
     border-color: var(--brand-primary-hover);
-    transform: translateY(-3px);
+    transform: translateY(-3px); /* Move it up slightly */
 }
 
-/* ===== FOOTER ===== */
+/* Footer(rarely used but for safety) */
 footer {
     text-align: center;
     margin-top: 24px;
@@ -277,7 +296,7 @@ footer {
     background-color: var(--nav-color);
 }
 
-/* ===== RESPONSIVENESS ===== */
+/* Tablets */
 @media (max-width: 768px) {
     .layout-wrapper {
         flex-direction: column;
@@ -318,7 +337,6 @@ footer {
         justify-content: center;
     }
 
-    /* Header actions responsive */
     .header__actions {
         gap: 16px;
     }
@@ -333,6 +351,7 @@ footer {
     }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
     .logo-text {
         font-size: 1.2rem;
@@ -361,7 +380,7 @@ footer {
     }
 }
 
-/* ===== UTILITIES ===== */
+/* Basic Utilities */
 ul {
     list-style-type: none;
 }

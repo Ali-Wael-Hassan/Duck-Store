@@ -1,4 +1,5 @@
 export class StorageManager {
+    /* Access the data (DB later) */
     static get(key) {
         try {
             const data = localStorage.getItem(key);
@@ -9,17 +10,21 @@ export class StorageManager {
         }
     }
 
+    /* Save the data (DB later) */
     static save(key, data) {
         localStorage.setItem(key, JSON.stringify(data));
     }
 
+    /* Add new element to some key */
     static pushTo(key, item) {
         const currentData = this.get(key);
         currentData.push(item);
         this.save(key, currentData);
     }
 
+    /* Dummy Data Generation */
     static async initSeedData() {
+        /* Books Seed */
         if (!localStorage.getItem("books")) {
             console.log("StorageManager: Seeding initial books...");
             const books = [
@@ -27,32 +32,33 @@ export class StorageManager {
                     id: 1, 
                     title: "Stellar Cartography", 
                     author: "Astrid Nova", 
-                    price: 15000, 
+                    price: "$15000", 
                     genre: "Science Fiction", 
                     pages: "342",
                     published: "Jan 2024",
                     rating: 4.5,
                     desc: "A breathtaking journey through the mapped and unmapped constellations.",
-                    img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=400",
+                    img: "/assets/dummy/astro.jpg",
                     reviews: []
                 },
                 { 
                     id: 2, 
                     title: "Pride & Paradox", 
                     author: "Jane Austin-Powers", 
-                    price: 12500, 
+                    price: "$12500", 
                     genre: "Classics", 
                     pages: "280",
                     published: "May 2023",
                     rating: 4.8,
                     desc: "A truth universally acknowledged, that a single man in possession of a time machine...",
-                    img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
+                    img: "/assets/dummy/milk.jpg",
                     reviews: []
                 }
             ];
             localStorage.setItem("books", JSON.stringify(books));
         }
 
+        /* Users Seed */
         if (!localStorage.getItem("community_users")) {
             console.log("StorageManager: Seeding community leaderboard...");
             const communityUsers = [
@@ -65,6 +71,8 @@ export class StorageManager {
             ];
             localStorage.setItem("community_users", JSON.stringify(communityUsers));
         }
+
+        /* Deleted Token */
 
         // if (!localStorage.getItem("user_session")) {
         //     const sessionUser = { 
@@ -79,13 +87,14 @@ export class StorageManager {
         //     localStorage.setItem("user_session", JSON.stringify(sessionUser));
         // }
         
+        /* Fetured Promos Seed */
         if (!localStorage.getItem("featured_promos")) {
             const promos = [
                 { 
                     title: "Unlimited Sci-Fi", 
                     desc: "Dive into thousands of galactic adventures", 
                     type: "scifi",
-                    img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800", 
+                    img: "/assets/dummy/earth.jpg", 
                     btnText: "Start for $9.99/mo", 
                     badge: "TRENDING" 
                 },
@@ -93,7 +102,7 @@ export class StorageManager {
                     title: "Classic Literature", 
                     desc: "Timeless masterpieces", 
                     type: "classics", 
-                    img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800", 
+                    img: "/assets/dummy/zero.jpg", 
                     btnText: "Explore", 
                     badge: "" 
                 }
@@ -106,6 +115,7 @@ export class StorageManager {
             localStorage.setItem("curated_config", JSON.stringify(config));
         }
 
+        /* Rewards Seed */
         if (!localStorage.getItem("reward_items")) {
             const rewards = [
                 { 
@@ -115,7 +125,7 @@ export class StorageManager {
                     cost: 4500, 
                     badge: "LIMITED EDITION", 
                     type: "rare",
-                    img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400" 
+                    img: "/assets/dummy/zero.jpg" 
                 },
                 { 
                     id: 2, 
@@ -124,7 +134,7 @@ export class StorageManager {
                     cost: 1200, 
                     badge: "DIGITAL", 
                     type: "digital",
-                    img: "https://images.unsplash.com/photo-1464802686167-b939a6910659?w=400" 
+                    img: "/assets/dummy/stars.jpg" 
                 },
                 { 
                     id: 3, 
@@ -133,7 +143,7 @@ export class StorageManager {
                     cost: 2800, 
                     badge: "PHYSICAL", 
                     type: "common",
-                    img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400" 
+                    img: "/assets/dummy/milk.jpg" 
                 },
                 { 
                     id: 4, 
@@ -142,21 +152,21 @@ export class StorageManager {
                     cost: 6000, 
                     badge: "LEGENDARY", 
                     type: "legendary",
-                    img: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=400" 
+                    img: "/assets/dummy/notes.jpg" 
                 }
             ];
             localStorage.setItem("reward_items", JSON.stringify(rewards));
         }
 
-        // --- 2. NEW DASHBOARD SPECIFIC SEED DATA ---
+        /* Dashboard Seed */
 
         // Seed Top Summary Cards
         if (!localStorage.getItem("dashboard_stats")) {
             const stats = [
-                { label: 'Total Revenue', value: '$45,280', trend: '+12.5%', icon: 'fa-money-bill-wave', color: 'bg-blue', subtext: 'Vs last month' },
-                { label: 'Active Users', value: '1,240', trend: '-2.1%', icon: 'fa-user', color: 'bg-orange', subtext: 'Currently online' },
-                { label: 'Pending Orders', value: '84', trend: '+5.0%', icon: 'fa-shopping-cart', color: 'bg-cyan', subtext: 'Awaiting shipping' },
-                { label: 'New Reviews', value: '12', trend: 'New', icon: 'fa-star', color: 'bg-yellow', subtext: 'This week' }
+                { label: 'Total Revenue', value: '$45,280', trend: '+12.5%', color: 'bg-blue', subtext: 'Vs last month' },
+                { label: 'Active Users', value: '1,240', trend: '-2.1%', color: 'bg-orange', subtext: 'Currently online' },
+                { label: 'Pending Orders', value: '84', trend: '+5.0%', color: 'bg-cyan', subtext: 'Awaiting shipping' },
+                { label: 'New Reviews', value: '12', trend: 'New', color: 'bg-yellow', subtext: 'This week' }
             ];
             localStorage.setItem("dashboard_stats", JSON.stringify(stats));
         }
@@ -190,6 +200,7 @@ export class StorageManager {
             localStorage.setItem("orders", JSON.stringify(orders));
         }
 
+        /* Inventory Seed */
         if (!localStorage.getItem("inventory")) {
             const inventory = [
                 { id: 1, title: "Stellar Cartography", author: "Astrid Nova", isbn: "978-0525559474", sku: "LUM-001", stock: 128, maxStock: 150 },
@@ -201,6 +212,7 @@ export class StorageManager {
             localStorage.setItem("inventory", JSON.stringify(inventory));
         }
 
+        /* Promise for solving the racing condition */
         return Promise.resolve(true);
     }
 }

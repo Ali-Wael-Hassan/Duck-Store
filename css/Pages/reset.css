@@ -11,7 +11,6 @@ main {
     box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
 }
 
-/* Brand header area */
 .brand-header {
     margin-bottom: 1.75rem;
     border-bottom: 1px solid var(--border-color);
@@ -44,7 +43,6 @@ main {
     color: transparent;
 }
 
-/* Expiry note styling */
 .expiry-note {
     margin-top: 0.75rem;
     font-size: 0.75rem;
@@ -56,7 +54,6 @@ main {
     letter-spacing: 0.3px;
 }
 
-/* Back link – overrides default <a> button styles */
 .back-link {
     background: none !important;
     border: none !important;
@@ -84,7 +81,6 @@ main {
     box-shadow: none !important;
 }
 
-/* Footer links – reset <a> styles to simple text links */
 .footer-nav {
     display: flex;
     justify-content: center;
@@ -124,7 +120,6 @@ main {
     text-decoration: underline;
 }
 
-/* Feedback message */
 .form-feedback {
     margin-top: 1rem;
     font-size: 0.85rem;
@@ -146,7 +141,6 @@ main {
     color: #b0ffb0;
 }
 
-/* Loading state for button */
 .btn-primary.loading {
     pointer-events: none;
     opacity: 0.7;
@@ -154,7 +148,6 @@ main {
     transform: scale(0.98);
 }
 
-/* Copyright text */
 .copyright {
     text-align: center;
     font-size: 0.7rem;
@@ -163,7 +156,6 @@ main {
     opacity: 0.8;
 }
 
-/* Typography tweaks */
 label {
     font-weight: 600;
     letter-spacing: 0.3px;

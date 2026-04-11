@@ -78,7 +78,6 @@ main {
     color: var(--text-muted);
 }
 
-/* --- PANELS & HEADINGS --- */
 .reward-panel {
     display: none;
     animation: fadeIn 0.25s ease-out;
@@ -117,7 +116,6 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
-/* --- BADGES --- */
 .badge-list {
     display: flex;
     flex-wrap: wrap;
@@ -175,7 +173,6 @@ h2 {
     justify-content: flex-start;
 }
 
-/* --- REWARD CARDS & GRID --- */
 .rewards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
@@ -301,7 +298,6 @@ h2 {
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
 }
 
-/* --- HISTORY LIST --- */
 .history-list {
     background: var(--card-bg);
     border-radius: var(--radius-main);
@@ -370,7 +366,6 @@ h2 {
     border-radius: 10px;
 }
 
-/* ===== RESPONSIVE MEDIA QUERIES ===== */
 @media (max-width: 768px) {
     main {
         padding: 1rem;
