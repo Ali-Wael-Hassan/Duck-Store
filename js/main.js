@@ -83,7 +83,7 @@ class App {
         window.AuthEngine = new AuthManager(GOOGLE_CLIENT_ID);
 
         if (this.user && !this.user.loggedIn && pageType != 'auth' && pageType != 'about-us') {
-            window.location.href = '../index.html';
+            window.location.href = 'index.html';
             return;
         }
         

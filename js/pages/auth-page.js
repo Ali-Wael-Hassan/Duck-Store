@@ -1,6 +1,6 @@
 /* Wrapper Class for AuthManager */
 
-import { AuthManager } from '../modules/AuthManager.js';
+import { AuthManager } from 'modules/AuthManager.js';
 
 export class AuthPage {
     constructor(googleClientId) {

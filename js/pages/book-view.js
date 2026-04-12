@@ -1,5 +1,5 @@
-import { StorageManager } from '../core/StorageManager.js';
-import { ReviewLoader } from '../modules/ReviewLoader.js';
+import { StorageManager } from 'core/StorageManager.js';
+import { ReviewLoader } from 'modules/ReviewLoader.js';
 
 export class BookViewPage {
     constructor() {

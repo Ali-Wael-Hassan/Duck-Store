@@ -63,7 +63,7 @@ export class StorageManager {
                     published: "May 2020",
                     rating: 4.9,
                     desc: "A spiritual journey into the heart of Islam, focusing on the beauty of Allah's mercy and love.",
-                    img: "/assets/dummy/divine_love.jpg",
+                    img: "assets/dummy/divine_love.jpg",
                     reviews: []
                 },
                 { 
@@ -76,7 +76,7 @@ export class StorageManager {
                     published: "August 2012",
                     rating: 4.8,
                     desc: "Personal insights on breaking free from life's shackles and reconnecting with the Creator.",
-                    img: "/assets/dummy/reclaim.jpg",
+                    img: "assets/dummy/reclaim.jpg",
                     reviews: []
                 },
                 { 
@@ -89,7 +89,7 @@ export class StorageManager {
                     published: "October 2006",
                     rating: 4.9,
                     desc: "One of the most acclaimed biographies of the Prophet Muhammad, written with poetic grace.",
-                    img: "/assets/dummy/seerah.jpg",
+                    img: "assets/dummy/seerah.jpg",
                     reviews: []
                 },
                 { 
@@ -102,7 +102,7 @@ export class StorageManager {
                     published: "1979",
                     rating: 4.7,
                     desc: "A prize-winning biography of the Prophet Muhammad, known for its detail and historical accuracy.",
-                    img: "/assets/dummy/nectar.jpg",
+                    img: "assets/dummy/nectar.jpg",
                     reviews: []
                 },
                 { 
@@ -115,7 +115,7 @@ export class StorageManager {
                     published: "May 2020",
                     rating: 4.9,
                     desc: "A guide to the characteristics and actions that earn the love and pleasure of the Almighty.",
-                    img: "/assets/dummy/allah_loves.jpg",
+                    img: "assets/dummy/allah_loves.jpg",
                     reviews: []
                 },
                 { 
@@ -128,7 +128,7 @@ export class StorageManager {
                     published: "August 2014",
                     rating: 4.8,
                     desc: "Reclaiming the forgotten contributions and history of Muslim civilizations throughout the ages.",
-                    img: "/assets/dummy/history.jpg",
+                    img: "assets/dummy/history.jpg",
                     reviews: []
                 },
                 { 
@@ -141,7 +141,7 @@ export class StorageManager {
                     published: "August 2008",
                     rating: 4.7,
                     desc: "A handbook of agile software craftsmanship that teaches how to write code that works and lasts.",
-                    img: "/assets/dummy/clean_code.jpg",
+                    img: "assets/dummy/clean_code.jpg",
                     reviews: []
                 },
                 { 
@@ -154,7 +154,7 @@ export class StorageManager {
                     published: "October 1999",
                     rating: 4.8,
                     desc: "Your journey to mastery, covering coding best practices and career-long learning strategies.",
-                    img: "/assets/dummy/pragmatic.jpg",
+                    img: "assets/dummy/pragmatic.jpg",
                     reviews: []
                 },
                 { 
@@ -167,7 +167,7 @@ export class StorageManager {
                     published: "December 2018",
                     rating: 4.6,
                     desc: "A modern introduction to programming using JavaScript, covering everything from basics to advanced logic.",
-                    img: "/assets/dummy/eloquent_js.jpg",
+                    img: "assets/dummy/eloquent_js.jpg",
                     reviews: []
                 },
                 { 
@@ -180,7 +180,7 @@ export class StorageManager {
                     published: "May 2019",
                     rating: 4.8,
                     desc: "A fast-paced, thorough introduction to Python that will have you writing programs in no time.",
-                    img: "/assets/dummy/python_crash.jpg",
+                    img: "assets/dummy/python_crash.jpg",
                     reviews: []
                 },
                 { 
@@ -193,7 +193,7 @@ export class StorageManager {
                     published: "July 2015",
                     rating: 4.9,
                     desc: "189 programming questions and solutions to help you ace technical interviews at big tech companies.",
-                    img: "/assets/dummy/cracking.jpg",
+                    img: "assets/dummy/cracking.jpg",
                     reviews: []
                 },
                 { 
@@ -206,7 +206,7 @@ export class StorageManager {
                     published: "April 2022",
                     rating: 4.7,
                     desc: "The 'Bible' of computer science algorithms, providing a comprehensive guide to data structures.",
-                    img: "/assets/dummy/algorithms.jpg",
+                    img: "assets/dummy/algorithms.jpg",
                     reviews: []
                 },
                 { 
@@ -219,7 +219,7 @@ export class StorageManager {
                     published: "February 2015",
                     rating: 4.7,
                     desc: "A look at the evolutionary history of humans, from the Stone Age to the modern Silicon Age.",
-                    img: "/assets/dummy/sapiens.jpg",
+                    img: "assets/dummy/sapiens.jpg",
                     reviews: []
                 },
                 { 
@@ -232,7 +232,7 @@ export class StorageManager {
                     published: "May 2017",
                     rating: 4.7,
                     desc: "Quick, bite-sized lessons on the nature of space and time for the busy modern reader.",
-                    img: "/assets/dummy/tyson.jpg",
+                    img: "assets/dummy/tyson.jpg",
                     reviews: []
                 },
                 { 
@@ -245,7 +245,7 @@ export class StorageManager {
                     published: "October 1980",
                     rating: 4.9,
                     desc: "A masterpiece of scientific storytelling that explores the evolution of the universe and human discovery.",
-                    img: "/assets/dummy/cosmos.jpg",
+                    img: "assets/dummy/cosmos.jpg",
                     reviews: []
                 },
                 { 
@@ -258,7 +258,7 @@ export class StorageManager {
                     published: "May 2006",
                     rating: 4.5,
                     desc: "A revolutionary perspective on evolution, focusing on the gene as the fundamental unit of selection.",
-                    img: "/assets/dummy/gene.jpg",
+                    img: "assets/dummy/gene.jpg",
                     reviews: []
                 },
                 { 
@@ -271,7 +271,7 @@ export class StorageManager {
                     published: "February 2010",
                     rating: 4.7,
                     desc: "The true story of a woman whose cancer cells changed modern medicine forever, sparking ethical debates.",
-                    img: "/assets/dummy/henrietta.jpg",
+                    img: "assets/dummy/henrietta.jpg",
                     reviews: []
                 },
                 { 
@@ -284,7 +284,7 @@ export class StorageManager {
                     published: "September 2017",
                     rating: 4.8,
                     desc: "Unlocking the power of sleep and dreams to improve health, learning, and longevity.",
-                    img: "/assets/dummy/sleep.jpg",
+                    img: "assets/dummy/sleep.jpg",
                     reviews: []
                 },
                 { 
@@ -297,7 +297,7 @@ export class StorageManager {
                     published: "Jan 2024",
                     rating: 4.5,
                     desc: "A breathtaking journey through the mapped and unmapped constellations.",
-                    img: "/assets/dummy/astro.jpg",
+                    img: "assets/dummy/astro.jpg",
                     reviews: []
                 },
                 { 
@@ -310,7 +310,7 @@ export class StorageManager {
                     published: "May 2023",
                     rating: 4.8,
                     desc: "A truth universally acknowledged, that a single man in possession of a time machine...",
-                    img: "/assets/dummy/milk.jpg",
+                    img: "assets/dummy/milk.jpg",
                     reviews: []
                 }
             ];
@@ -367,7 +367,7 @@ export class StorageManager {
                     title: "Master the Code", 
                     desc: "From Python to Algorithms, upgrade your dev skills today", 
                     type: "programming",
-                    img: "/assets/dummy/pragmatic.jpg", 
+                    img: "assets/dummy/pragmatic.jpg", 
                     btnText: "Shop Coding Books", 
                     badge: "CAREER GROWTH" 
                 },
@@ -375,7 +375,7 @@ export class StorageManager {
                     title: "Spiritual Wisdom", 
                     desc: "Explore deep insights into faith and the heart", 
                     type: "religious", 
-                    img: "/assets/dummy/divine_love.jpg", 
+                    img: "assets/dummy/divine_love.jpg", 
                     btnText: "View Collection", 
                     badge: "TOP RATED" 
                 }
@@ -401,7 +401,7 @@ export class StorageManager {
                     cost: 4500,
                     badge: "LIMITED EDITION",
                     type: "rare",
-                    img: "/assets/dummy/zero.jpg" },
+                    img: "assets/dummy/zero.jpg" },
                 {
                     id: 2,
                     title: "Celestial Bundle",
@@ -409,7 +409,7 @@ export class StorageManager {
                     cost: 1200,
                     badge: "DIGITAL",
                     type: "digital",
-                    img: "/assets/dummy/stars.jpg"
+                    img: "assets/dummy/stars.jpg"
                 },
                 {
                     id: 3,
@@ -418,7 +418,7 @@ export class StorageManager {
                     cost: 2800,
                     badge: "PHYSICAL",
                     type: "common",
-                    img: "/assets/dummy/milk.jpg"
+                    img: "assets/dummy/milk.jpg"
                 },
                 {
                     id: 4,
@@ -427,7 +427,7 @@ export class StorageManager {
                     cost: 6000,
                     badge: "LEGENDARY",
                     type: "legendary",
-                    img: "/assets/dummy/notes.jpg"
+                    img: "assets/dummy/notes.jpg"
                 },
                 { 
                     id: 5, 
@@ -436,7 +436,7 @@ export class StorageManager {
                     cost: 3500, 
                     badge: "EDUCATION", 
                     type: "digital", 
-                    img: "/assets/dummy/clean_code.jpg" 
+                    img: "assets/dummy/clean_code.jpg" 
                 },
                 { 
                     id: 6, 
@@ -445,7 +445,7 @@ export class StorageManager {
                     cost: 5500, 
                     badge: "ARTISAN", 
                     type: "rare", 
-                    img: "/assets/dummy/divine_love.jpg" 
+                    img: "assets/dummy/divine_love.jpg" 
                 },
                 { 
                     id: 7, 
@@ -454,7 +454,7 @@ export class StorageManager {
                     cost: 2200, 
                     badge: "LIFESTYLE", 
                     type: "common", 
-                    img: "/assets/dummy/pragmatic.jpg" 
+                    img: "assets/dummy/pragmatic.jpg" 
                 },
                 { 
                     id: 8, 
@@ -463,7 +463,7 @@ export class StorageManager {
                     cost: 8000, 
                     badge: "ULTIMATE", 
                     type: "legendary", 
-                    img: "/assets/dummy/seerah.jpg" 
+                    img: "assets/dummy/seerah.jpg" 
                 }
             ];
             localStorage.setItem("reward_items", JSON.stringify(rewards));
