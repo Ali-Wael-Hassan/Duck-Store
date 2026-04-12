@@ -74,18 +74,19 @@ export class StorageManager {
 
         /* Deleted Token */
 
-        // if (!localStorage.getItem("user_session")) {
-        //     const sessionUser = { 
-        //         id: "user_session_active", 
-        //         name: "Alex Smith",
-        //         email: "alex@gmail.com",
-        //         role: "user",
-        //         picture: null,
-        //         loggedIn: true, 
-        //         points: 1250 
-        //     };
-        //     localStorage.setItem("user_session", JSON.stringify(sessionUser));
-        // }
+        if (!localStorage.getItem("user_session")) {
+            const sessionUser = { 
+                id: "user_session_active", 
+                name: "Alex Smith",
+                email: "alex@gmail.com",
+                role: "user",
+                picture: null,
+                loggedIn: true, 
+                readings: 30,
+                points: 1250 
+            };
+            localStorage.setItem("user_session", JSON.stringify(sessionUser));
+        }
         
         /* Fetured Promos Seed */
         if (!localStorage.getItem("featured_promos")) {

@@ -10,6 +10,7 @@ import { SalesRefundsController } from './pages/sales_refunds.js';
 import { UsersRolesController } from './pages/users_roles.js';
 import { MyBooksPage } from './pages/my_books.js';
 import { StorePage } from './pages/store-page.js';
+import { UserProfile } from './pages/user-profile-script.js';
 
 class App {
     constructor() {
@@ -93,6 +94,9 @@ class App {
                 break;
             case 'store':
                 new StorePage();
+                break;
+            case 'user-profile':
+                new UserProfile();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);
