@@ -1,44 +1,14 @@
-/* ===== ABOUT US PAGE – FULLY RESPONSIVE ===== */
-/* Works with or without global variables – fallbacks provided */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* CSS variables with fallbacks */
-:root {
-  --brand-primary: #FFD700;
-  --brand-primary-hover: #E6C200;
-  --background-color: #0B0E11;
-  --card-bg: #161B22;
-  --input-bg: #1C2128;
-  --text-main: #FFFFFF;
-  --text-muted: #8B949E;
-  --border-color: #30363D;
-}
-
-body {
-  background: var(--background-color, #0B0E11);
-  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: var(--text-main, #FFFFFF);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
 main {
   max-width: 100%;
   overflow-x: hidden;
 }
 
-/* ----- HERO SECTION (full width, responsive height) ----- */
 .hero {
   position: relative;
   height: 80vh;
   min-height: 500px;
   background: linear-gradient(to right, rgba(10, 16, 32, 0.9), rgba(10, 16, 32, 0.6)),
-      url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000') no-repeat center center/cover;
+      url('../../assets/background/library.jpg') no-repeat center center/cover;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -78,7 +48,6 @@ main {
   opacity: 0.9;
 }
 
-/* ----- PHILOSOPHY SECTION (responsive padding & grid) ----- */
 .philosophy {
   padding: 80px 0;
 }
@@ -159,7 +128,6 @@ blockquote {
   line-height: 1.5;
 }
 
-/* ----- GALLERY (responsive images) ----- */
 .gallery {
   padding: 60px 0;
 }
@@ -187,7 +155,6 @@ blockquote {
   cursor: pointer;
 }
 
-/* ----- FOOTER (fully responsive) ----- */
 .footer {
   background-color: #0e1118;
   padding: 60px 20px 40px;
@@ -276,7 +243,6 @@ blockquote {
   margin: 0;
 }
 
-/* ===== RESPONSIVE BREAKPOINTS ===== */
 @media (max-width: 992px) {
   .hero {
     height: 70vh;

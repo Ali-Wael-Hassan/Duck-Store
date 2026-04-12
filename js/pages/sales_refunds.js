@@ -4,7 +4,7 @@ export class SalesRefundsController {
     constructor() {
         this.orders = [];
         this.currentPage = 1;
-        this.rowsPerPage = 5; // Change this number to show more/less rows
+        this.rowsPerPage = 5;
         this.init();
     }
 
@@ -64,20 +64,20 @@ export class SalesRefundsController {
         const paginationLabel = document.querySelector('#sales-pagination .subtext');
         if (!tbody) return;
 
-        // --- Pagination Logic ---
+        // Pagination
         const total = this.orders.length;
         const start = (this.currentPage - 1) * this.rowsPerPage;
         const end = Math.min(start + this.rowsPerPage, total);
         const currentSlice = this.orders.slice(start, end);
 
-        // Update Text: "Showing 1-5 of 12 transactions"
+        // Update Text of Showing"
         if (paginationLabel) {
             paginationLabel.innerText = total > 0 
                 ? `Showing ${start + 1}-${end} of ${total} transactions`
                 : `Showing 0 of 0 transactions`;
         }
 
-        // Update Button States (Disable if at start/end)
+        // Update Button States
         document.getElementById('prev-page').disabled = (this.currentPage === 1);
         document.getElementById('next-page').disabled = (end >= total);
 

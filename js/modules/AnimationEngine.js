@@ -1,3 +1,5 @@
+/* Currently Not Used for (version 1.0) */
+
 export class AnimationEngine {
     constructor(options = {}) {
         this.threshold = options.threshold || 0.1;

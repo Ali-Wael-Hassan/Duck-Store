@@ -56,7 +56,7 @@ export class HomePage {
         if (!grid) return;
 
         grid.innerHTML = '';
-        books.forEach(book => {
+        books.slice(0, 7).forEach(book => {
             const card = document.createElement('div');
             card.className = 'book-item';
             const link = `book-view.html?id=${book.id}&title=${encodeURIComponent(book.title)}`;

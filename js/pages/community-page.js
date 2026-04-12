@@ -2,10 +2,9 @@ import { StorageManager } from '../core/StorageManager.js';
 
 export class CommunityPage {
     constructor() {
+        /* fetch the data */
         this.allUsers = StorageManager.get('community_users') || [];
-        
         this.currentUser = StorageManager.get('user_session');
-        
         this.filteredUsers = [];
         
         this.init();
@@ -18,31 +17,50 @@ export class CommunityPage {
             return;
         }
 
+        /* sort and filter */
         this.sortAndFilter();
+
+        /* render podium (1st, 2nd, 3rd) */
         this.renderPodium();
+        
+        /* render the leaderboard table */
         this.renderLeaderboardTable();
+
+        /* global stats (Active members, total points, etc) */
         this.renderGlobalStats();
+
+        /* setup event listeners */
         this.setupEventListeners();
     }
 
     sortAndFilter(query = "") {
-        let users = this.allUsers.filter(u => 
-            u.name.toLowerCase().includes(query.toLowerCase())
-        );
+        let users = this.allUsers.filter(u => {
+            const userName = u.name || "Anonymous Scholar";
+            return userName.toLowerCase().includes(query.toLowerCase());
+        });
 
-        this.filteredUsers = users.sort((a, b) => b.points - a.points);
+        // Sort descending by points, falling back to 0 if undefined
+        this.filteredUsers = users.sort((a, b) => (b.points || 0) - (a.points || 0));
     }
 
+    /**
+     * Renders the top 3 cards on the podium.
+     */
     renderPodium() {
         const container = document.getElementById('podium-container');
         if (!container) return;
 
+        // Ensure we are working with a fresh sort of all users
         const topThree = [...this.allUsers]
-            .sort((a, b) => b.points - a.points)
+            .sort((a, b) => (b.points || 0) - (a.points || 0))
             .slice(0, 3);
 
-        if (topThree.length < 3) return;
+        if (topThree.length < 3) {
+            container.innerHTML = `<p style="text-align:center; width:100%; opacity:0.5;">Awaiting more competitors...</p>`;
+            return;
+        }
 
+        // Layout mapping: Rank 2 (left), Rank 1 (center), Rank 3 (right)
         const positions = [
             { ...topThree[1], rank: 2, slot: 'podium__card--2' },
             { ...topThree[0], rank: 1, slot: 'podium__card--1' },
@@ -53,54 +71,64 @@ export class CommunityPage {
             <article class="podium__card ${user.slot}">
                 ${user.rank === 1 ? '<span class="podium__leader-tag">Current Leader</span>' : ''}
                 <div class="podium__avatar">
-                    <img src="${user.avatar || 'assets/logo.png'}" alt="${user.name}">
+                    <img src="${user.avatar || '/assets/dummy/a10.jpg'}" alt="${user.name || 'Scholar'}">
                     <span class="podium__rank">${user.rank}</span>
                 </div>
-                <h2 class="podium__name">${user.name}</h2>
-                <span class="podium__role">${this.calculateTier(user.points)}</span>
-                <div class="podium__points">${user.points.toLocaleString()} <span class="podium__points-label">PTS</span></div>
+                <h2 class="podium__name">${user.name || 'Unknown'}</h2>
+                <span class="podium__role">${this.calculateTier(user.points || 0)}</span>
+                <div class="podium__points">${(user.points || 0).toLocaleString()} <span class="podium__points-label">PTS</span></div>
             </article>
         `).join('');
     }
 
+    /**
+     * Renders the main leaderboard list.
+     */
     renderLeaderboardTable() {
         const tbody = document.getElementById('scholars-table-body');
         if (!tbody) return;
 
         if (this.filteredUsers.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; opacity: 0.5;">No scholars found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2rem; opacity: 0.5;">No scholars found matching your search.</td></tr>`;
             return;
         }
 
         tbody.innerHTML = this.filteredUsers.map(user => {
-            const globalRank = this.allUsers.findIndex(u => u.id === user.id) + 1;
-            const isMe = this.currentUser && user.id === this.currentUser.id;
+            // Find global rank from the unfiltered, sorted list
+            const globalRank = this.allUsers
+                .sort((a, b) => (b.points || 0) - (a.points || 0))
+                .findIndex(u => u.id === user.id) + 1;
+            
+            const isMe = this.currentUser && (user.id === this.currentUser.id || user.email === this.currentUser.email);
 
             return `
                 <tr class="${isMe ? 'scholars-table__user-row' : ''}">
                     <td>#${globalRank}</td>
                     <td>
                         <div class="scholar-info">
-                            <img src="${user.avatar || 'assets/logo.png'}" alt="${user.name}">
+                            <img src="${user.avatar || '/assets/dummy/a10.jpg'}" alt="${user.name}">
                             <div>
                                 <span class="scholar-info__name">${isMe ? 'You (' + user.name + ')' : user.name}</span>
-                                <span class="scholar-info__meta">Member since ${user.joinDate || '2024'}</span>
+                                <span class="scholar-info__meta">Member since ${user.joinDate || '2026'}</span>
                             </div>
                         </div>
                     </td>
                     <td>${user.readings || 0} books</td>
                     <td>${user.reviews || 0}</td>
-                    <td class="highlighted-points">${user.points.toLocaleString()}</td>
+                    <td class="highlighted-points">${(user.points || 0).toLocaleString()}</td>
                 </tr>
             `;
         }).join('');
     }
 
+    /**
+     * Renders global aggregate statistics.
+     */
     renderGlobalStats() {
         const container = document.getElementById('stats-container');
         if (!container) return;
 
-        const totalPoints = this.allUsers.reduce((sum, u) => sum + u.points, 0);
+        const totalPoints = this.allUsers.reduce((sum, u) => sum + (u.points || 0), 0);
         const totalBooks = this.allUsers.reduce((sum, u) => sum + (u.readings || 0), 0);
 
         container.innerHTML = `
@@ -152,6 +180,14 @@ export class CommunityPage {
 
     renderEmptyState() {
         const main = document.querySelector('.leaderboard-main');
-        if (main) main.innerHTML = `<div style="text-align:center; padding: 5rem;"><h2>Loading Community Data...</h2></div>`;
+        if (main) {
+            main.innerHTML = `
+                <div style="text-align:center; padding: 5rem; opacity: 0.6;">
+                    <i class="bi bi-people" style="font-size: 3rem;"></i>
+                    <h2>No Scholars Found</h2>
+                    <p>Be the first to join the community!</p>
+                </div>
+            `;
+        }
     }
 }

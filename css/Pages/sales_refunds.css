@@ -1,4 +1,8 @@
-/* ----- MAIN CONTENT AREA ----- */
+.layout-wrapper {
+    margin: 0 0;
+    padding: 0 0;
+}
+
 .sales-main {
     flex: 1;
     background: var(--card-bg);
@@ -7,7 +11,6 @@
     margin: 32px 0;
 }
 
-/* ----- HEADER (title only) ----- */
 .sales-header {
     margin-bottom: 30px;
 }
@@ -17,7 +20,6 @@
     color: var(--text-main);
 }
 
-/* ----- STATS CARDS (responsive grid) ----- */
 .stats-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -53,7 +55,6 @@
     color: #ef4444;
 }
 
-/* ----- TABLE (responsive with card view on mobile) ----- */
 .table-responsive {
     overflow-x: auto;
     margin: 20px 0;
@@ -94,7 +95,6 @@
     font-weight: 600;
 }
 
-/* ----- PAGINATION (Previous / Next buttons) ----- */
 .pagination {
     display: flex;
     justify-content: space-between;
@@ -142,9 +142,6 @@
     color: var(--background-color);
 }
 
-/* ===== RESPONSIVE BREAKPOINTS ===== */
-
-/* Tablet and below (≤900px) */
 @media (max-width: 900px) {
     .sales-main {
         padding: 24px;
@@ -158,7 +155,6 @@
     }
 }
 
-/* Mobile landscape & tablets (≤768px) */
 @media (max-width: 768px) {
     .sales-main {
         padding: 20px;
@@ -176,7 +172,7 @@
     .stat-card p {
         font-size: 1.5rem;
     }
-    /* Convert table to card layout */
+
     .sales-table,
     .sales-table thead,
     .sales-table tbody,
@@ -228,7 +224,6 @@
     }
 }
 
-/* Small mobile devices (≤480px) */
 @media (max-width: 480px) {
     .sales-main {
         padding: 15px;
