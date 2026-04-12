@@ -1,3 +1,8 @@
+.layout-wrapper {
+    margin: 0 0;
+    padding: 0 0;
+}
+
 .hero {
     background: linear-gradient(135deg, #1a1f2e, #0a0c1a);
     border: 1px solid var(--border-color, #30363D);

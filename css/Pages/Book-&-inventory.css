@@ -3,6 +3,11 @@
     margin-top: 20px;
 }
 
+.layout-wrapper {
+    margin: 0 0;
+    padding: 0 0;
+}
+
 .inventory-table {
     width: 100%;
     background: transparent;

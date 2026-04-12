@@ -194,9 +194,7 @@ aside {
     border-radius: var(--radius-main);
     padding: 20px 0;
     margin: 32px 0;
-    /* keeps top/bottom margin */
     margin-left: 0;
-    /* forces left alignment, removes any unexpected shift */
     align-self: stretch;
     position: sticky;
     top: 90px;

@@ -5,6 +5,11 @@
     margin-bottom: 30px;
 }
 
+.layout-wrapper {
+    margin: 0 0;
+    padding: 0 0;
+}
+
 .stat-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);

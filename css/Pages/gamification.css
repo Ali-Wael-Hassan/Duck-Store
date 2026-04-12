@@ -2,6 +2,11 @@ main section {
   margin-bottom: 24px;
 }
 
+.layout-wrapper {
+  margin: 0 0;
+  padding: 0 0;
+}
+
 .card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
