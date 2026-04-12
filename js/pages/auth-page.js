@@ -20,7 +20,6 @@ export class AuthPage {
     }
 
     bindEvents() {
-        alert("verify");
         if (this.form) {
             this.form.addEventListener("submit", (e) => this.handleSubmit(e));
         }

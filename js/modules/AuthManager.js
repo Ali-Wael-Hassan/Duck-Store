@@ -46,8 +46,6 @@ export class AuthManager {
 
     _saveSession(userData) {
         const { password, ...safeUserData } = userData;
-        alert(userData.points);
-        alert(this.inputMap.loginPoints);
 
         const sessionUser = {
             id: safeUserData.id || "user_" + Date.now(),

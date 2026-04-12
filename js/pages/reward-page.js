@@ -113,7 +113,6 @@ export class RewardPage {
                 StorageManager.save('community_users', community);
             }
 
-            alert(`Success! You have redeemed: ${reward.title}`);
             this.renderPoints();
             this.renderRewards();
         }
