@@ -24,6 +24,31 @@ export class StorageManager {
 
     /* Dummy Data Generation */
     static async initSeedData() {
+        if (!localStorage.getItem('gamification-config')) {
+            const defaultValues = {
+                loginPoints: 10,
+                reviewBase: 25,
+                reviewBonus: 50,
+                reviewMinChar: 100,
+                purchaseRate: 2,
+                purchaseMax: 500,
+                signupBonus: 50
+            };
+
+            const newConfig = {};
+            Object.keys(defaultValues).forEach(key => {
+                const element = this.inputMap && this.inputMap[key];
+                
+                if (element && element.value !== undefined && element.value !== "") {
+                    newConfig[key] = parseFloat(element.value);
+                } else {
+                    newConfig[key] = defaultValues[key];
+                }
+            });
+
+            StorageManager.save('gamification-config', newConfig);
+            console.log("Seed successful:", newConfig);
+        }
         /* Books Seed */
         if (!localStorage.getItem("books")) {
             console.log("StorageManager: Seeding initial books...");
@@ -297,15 +322,15 @@ export class StorageManager {
             const activeSession = this.get("user_session");
 
             const communityUsers = [
-                { id: "user_1", name: "Marcus Thorne", points: 15890, readings: 245, reviews: 150, joinDate: '2022', avatar: "/assets/dummy/a1.jpg" },
-                { id: "user_2", name: "Elena Vance", points: 12450, readings: 180, reviews: 95, joinDate: '2023', avatar: "/assets/dummy/a2.jpg" },
-                { id: "user_3", name: "Julian Mars", points: 11200, readings: 150, reviews: 80, joinDate: '2021', avatar: "/assets/dummy/a3.jpg" },
-                { id: "user_4", name: "Sophia Reed", points: 9420, readings: 124, reviews: 82, joinDate: '2023', avatar: "/assets/dummy/a4.jpg" },
-                { id: "user_5", name: "David Chen", points: 8950, readings: 118, reviews: 105, joinDate: '2022', avatar: "/assets/dummy/a5.jpg" },
-                { id: "user_6", name: "Isabella Rossi", points: 7600, readings: 92, reviews: 45, joinDate: '2023', avatar: "/assets/dummy/a6.jpg" },
-                { id: "user_7", name: "Lucas Meyer", points: 6210, readings: 85, reviews: 30, joinDate: '2022', avatar: "/assets/dummy/a7.jpg" },
-                { id: "user_8", name: "Amara Okafor", points: 5400, readings: 74, reviews: 62, joinDate: '2024', avatar: "/assets/dummy/a8.jpg" },
-                { id: "user_9", name: "Kenji Sato", points: 4800, readings: 60, reviews: 25, joinDate: '2023', avatar: "/assets/dummy/a9.jpg" }
+                { id: "user_1", name: "Marcus Thorne", points: 15890, readings: 245, reviews: 150, joinDate: '2022', avatar: "/assets/dummy/a1.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_2", name: "Elena Vance", points: 12450, readings: 180, reviews: 95, joinDate: '2023', avatar: "/assets/dummy/a2.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_3", name: "Julian Mars", points: 11200, readings: 150, reviews: 80, joinDate: '2021', avatar: "/assets/dummy/a3.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_4", name: "Sophia Reed", points: 9420, readings: 124, reviews: 82, joinDate: '2023', avatar: "/assets/dummy/a4.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_5", name: "David Chen", points: 8950, readings: 118, reviews: 105, joinDate: '2022', avatar: "/assets/dummy/a5.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_6", name: "Isabella Rossi", points: 7600, readings: 92, reviews: 45, joinDate: '2023', avatar: "/assets/dummy/a6.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_7", name: "Lucas Meyer", points: 6210, readings: 85, reviews: 30, joinDate: '2022', avatar: "/assets/dummy/a7.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_8", name: "Amara Okafor", points: 5400, readings: 74, reviews: 62, joinDate: '2024', avatar: "/assets/dummy/a8.jpg", userBooks: [], borrowedBooks: [] },
+                { id: "user_9", name: "Kenji Sato", points: 4800, readings: 60, reviews: 25, joinDate: '2023', avatar: "/assets/dummy/a9.jpg", userBooks: [], borrowedBooks: [] }
             ];
 
             if (activeSession) {

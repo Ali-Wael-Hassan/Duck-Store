@@ -12,6 +12,7 @@ import { MyBooksPage } from './pages/my_books.js';
 import { StorePage } from './pages/store-page.js';
 import { UserProfile } from './pages/user-profile-script.js';
 import { AuthManager } from './modules/AuthManager.js';
+import { GamificationAdmin } from './pages/gamification.js';
 
 class App {
     constructor() {
@@ -87,6 +88,14 @@ class App {
         }
         
         if (pageType === 'about-us' && this.user && this.user.loggedIn) {
+            const today = new Date().toDateString();
+
+            if (this.user.lastLogin && new Date(this.user.lastLogin).toDateString() !== today) {
+                this.user.points += window.configManager.inputMap.loginPoints;
+            }
+
+            this.user.lastLogin = today;
+            
             if(this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
             else window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
             return;
@@ -94,6 +103,14 @@ class App {
 
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
+                const today = new Date().toDateString();
+
+                if (this.user.lastLogin && new Date(this.user.lastLogin).toDateString() !== today) {
+                    this.user.points += window.configManager.inputMap.loginPoints;
+                }
+
+                this.user.lastLogin = today;
+
                 if(this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
                 else window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
                 return;
@@ -150,6 +167,9 @@ class App {
                 break;
             case 'user-profile':
                 new UserProfile();
+                break;
+            case 'gamification':
+                new GamificationAdmin();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);

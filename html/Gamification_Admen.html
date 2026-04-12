@@ -8,7 +8,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/classes.css">
@@ -23,26 +22,19 @@
                 <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
                 <div class="logo-text">DUCK</div>
             </div>
-            <div class="nav">
-                <a href="home.html">Home</a>
-                <a href="store.html" class="active">Store</a>
-                <a href="my-books.html">My Books</a>
-                <a href="community.html">Community</a>
-                <a href="reward.html">Rewards</a>
-            </div>
             <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="https://via.placeholder.com/32" class="avatar-img"></a>
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
             </div>
         </div>
     </nav>
 
     <div class="layout-wrapper">
         <aside>
-            <a href="dashboard.html" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            <a href="Book-&-inventory.html"><i class="fa-solid fa-book"></i> Books & Inventory</a>
-            <a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a>
-            <a href="sales_refunds.html"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a>
-            <a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html" class="active"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
         </aside>
 
         <main>
@@ -60,13 +52,7 @@
                         </div>
                         <div>
                             <label>Gold Points Per Login</label>
-                            <input type="number" min="0" value="10">
-                            <label>Streak Bonus (Every 7 Days)</label>
-                            <input type="number" min="0" value="50">
-                        </div>
-                        <div>
-                            <input type="checkbox" checked id="login-notify">
-                            <label for="login-notify">Send push notification upon successful claim</label>
+                            <input type="number" min="0">
                         </div>
                     </div>
                     <div class="card">
@@ -76,17 +62,11 @@
                         </div>
                         <div>
                             <label>Base Points</label>
-                            <input type="number" min="0" value="25">
+                            <input type="number" min="0">
                             <label>Bonus Points (if featured)</label>
-                            <input type="number" min="0" value="50">
+                            <input type="number" min="0">
                             <label>Min. Character Count</label>
-                            <input type="number" min="0" value="100">
-                            <label>Daily Review Limit</label>
-                            <input type="number" min="0" value="5">
-                        </div>
-                        <div>
-                            <input type="checkbox" checked id="review-award">
-                            <label for="review-award">Award points immediately (Subject to AI moderation)</label>
+                            <input type="number" min="0">
                         </div>
                     </div>
                     <div class="card">
@@ -96,9 +76,9 @@
                         </div>
                         <div>
                             <label>Points per $1</label>
-                            <input type="number" min="0" step="0.5" value="2">
+                            <input type="number" min="0" step="0.5">
                             <label>Maximum points per transaction</label>
-                            <input type="number" min="0" value="500">
+                            <input type="number" min="0">
                         </div>
                     </div>
                 </form>

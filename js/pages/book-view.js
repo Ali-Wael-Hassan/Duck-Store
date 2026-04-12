@@ -6,86 +6,145 @@ export class BookViewPage {
         /* Extract the needed data from the query in the URL */
         const params = new URLSearchParams(window.location.search);
         this.bookId = parseInt(params.get('id'));
+
+        this.currentUser = StorageManager.get('user_session');
+
         /* Load Data */
         this.bookData = this.loadBookData();
 
-        /* if null return the error */
+        /* If null return the error */
         if (!this.bookData) {
             console.error("Book data not found for ID:", this.bookId);
             return;
         }
 
-        /* render to the html page */
+        /* Render to the html page */
         this.render();
-        /* load reviews */
+        
+        /* Load reviews */
         this.reviews = new ReviewLoader('review-list', this.bookData.reviews || []);
-        /* check whether you own the book or not */
+        
+        /* Check whether you own the book or not */
         this.checkExistingOwnership();
         
-        /* expose to the window */
+        /* Expose to the window */
         window.bookPage = this;
+
+        /* Load gamification settings */
+        this.inputMap = StorageManager.get('gamification-config') || {
+            loginPoints: 10,
+            reviewBase: 25,
+            reviewBonus: 50,
+            reviewMinChar: 100,
+            purchaseRate: 2,
+            purchaseMax: 500
+        };
     }
 
-    /* load book data */
+    _syncUserStorage() {
+        if (!this.currentUser) return;
+
+        // 1. Update session
+        StorageManager.save("user_session", this.currentUser);
+
+        // 2. Update master list (users)
+        const allUsers = StorageManager.get("users") || [];
+        const i = allUsers.findIndex(u => u.email === this.currentUser.email);
+        if (i !== -1) {
+            allUsers[i] = this.currentUser; 
+            StorageManager.save("users", allUsers);
+        }
+    }
+
+    /* Load book data */
     loadBookData() {
         const books = StorageManager.get("books") || [];
         return books.find(b => b.id === this.bookId);
     }
 
-    /* add review */
+    /* Add review and calculate points */
     handleAddReview() {
-        /* ask the user for review */
         const comment = prompt("Share your thoughts on this book:");
-
-        /* return if empty or null */
         if (!comment || comment.trim() === "") return;
 
-        /* ask the user for rate */
-        const rate = prompt("Your rate:");
-
-        /* return if empty or null */
+        const rate = prompt("Your rate (1-5):");
         if (!rate || rate.trim() === "") return;
 
-        /* construct the review */
         const newReview = {
-            user: "Guest User",
+            user: this.currentUser.name || "Guest",
             rating: parseInt(rate, 10),
             time: new Date().toLocaleDateString(),
             comment: comment
         };
 
-        /* if null make the array empty */
-        if (!this.bookData.reviews) this.bookData.reviews = [];
+        if (this.inputMap && comment.length >= (this.inputMap.reviewMinChar || 0)) {
+            const promos = StorageManager.get("featured_promos") || [];
+            const isFeatured = promos.some(elem => elem.type === this.bookData.type);
+            
+            const pointsToAdd = isFeatured 
+                ? (this.inputMap.reviewBonus || 0) 
+                : (this.inputMap.reviewBase || 0);
 
-        /* push the new review to front (the display is handled in the review engine) */
-        this.bookData.reviews.push(newReview);
-
-        /* fetch the data from the storage */
-        const allBooks = StorageManager.get('books');
-        if (allBooks) {
-            /* get the index */
-            const index = allBooks.findIndex(b => b.id == this.bookId);
-
-            /* exist */
-            if (index !== -1) {
-                allBooks[index] = this.bookData;
-                
-                StorageManager.save('books', allBooks);
-                console.log("Success: Saved to local disk.");
-            } else {
-                console.error("Save failed: Could not find book ID", this.bookId, "in master list.");
-            }
+            this.currentUser.points = (this.currentUser.points || 0) + pointsToAdd;
+            
+            this._syncUserStorage();
+            console.log(`Review points added: ${pointsToAdd}`);
         }
 
-        /* make it the top review */
+        /* Update reviews array */
+        if (!this.bookData.reviews) this.bookData.reviews = [];
+        this.bookData.reviews.unshift(newReview); 
+
+        /* Save book data updates */
+        const allBooks = StorageManager.get('books') || [];
+        const index = allBooks.findIndex(b => b.id == this.bookId);
+        if (index !== -1) {
+            allBooks[index] = this.bookData;
+            StorageManager.save('books', allBooks);
+        }
+
+        /* Update UI */
         this.reviews.addTop(newReview);
+    }
+
+    /* Handle Buy/Borrow and calculate points */
+    handleAction(btn, type) {
+        const entry = {
+            id: this.bookId,
+            title: this.bookData.title,
+            author: this.bookData.author,
+            img: this.bookData.img,
+            rating: this.bookData.rating,
+            time: new Date().toLocaleDateString()
+        };
+        
+        if (!this.currentUser[type]) this.currentUser[type] = [];
+        this.currentUser[type].push(entry);
+
+        if (this.inputMap) {
+            const rawPrice = String(this.bookData.price || "0").replace(/[^0-9.]/g, '');
+            const priceNum = parseFloat(rawPrice) || 0;
+            
+            const earnedPoints = Math.min(
+                (this.inputMap.purchaseRate || 0) * priceNum, 
+                (this.inputMap.purchaseMax || 0)
+            );
+            
+            this.currentUser.points = (this.currentUser.points || 0) + earnedPoints;
+        }
+
+        this._syncUserStorage();
+
+        console.log(`Book added to ${type} for user: ${this.currentUser.email}`);
+
+        const successLabel = type === 'userBooks' ? "OWNED" : "IN LIBRARY";
+        this._disableButton(btn, successLabel);
     }
 
     render() {
         const data = this.bookData;
         if (!data) return;
 
-        /* helper method */
         const setVal = (id, val) => {
             const el = document.getElementById(id);
             if (el) el.textContent = val;
@@ -99,13 +158,10 @@ export class BookViewPage {
 
         const starContainer = document.getElementById('star-rating-container');
         if (starContainer) {
-            const rawRating = data.rating !== undefined ? data.rating : 0;
-            const score = Math.round(Number(rawRating));
-
+            const score = Math.round(Number(data.rating || 0));
             let starsHtml = '';
             for (let i = 1; i <= 5; i++) {
-                const starClass = i <= score ? 'bi-star-fill' : 'bi-star';
-                starsHtml += `<i class="bi ${starClass}"></i> `;
+                starsHtml += `<i class="bi ${i <= score ? 'bi-star-fill' : 'bi-star'}"></i> `;
             }
             starContainer.innerHTML = starsHtml;
         }
@@ -114,24 +170,17 @@ export class BookViewPage {
         const mainSpan = document.getElementById('synopsis-content');
         const extraSpan = document.getElementById('extra-content');
         const readMoreBtn = document.getElementById('readMoreBtn');
-
         const limit = 150; 
 
         if (fullDesc.length > limit) {
             const splitIndex = fullDesc.indexOf(' ', limit);
-
             if (splitIndex !== -1) {
                 mainSpan.textContent = fullDesc.substring(0, splitIndex);
                 extraSpan.textContent = fullDesc.substring(splitIndex); 
                 if (readMoreBtn) readMoreBtn.classList.remove('hidden');
-            } else {
-                mainSpan.textContent = fullDesc;
-                extraSpan.textContent = "";
-                if (readMoreBtn) readMoreBtn.classList.add('hidden');
             }
         } else {
             mainSpan.textContent = fullDesc;
-            extraSpan.textContent = "";
             if (readMoreBtn) readMoreBtn.classList.add('hidden');
         }
 
@@ -144,24 +193,14 @@ export class BookViewPage {
         }
     }
 
-    handleAction(btn, type) {
-        const entry = {
-            id: this.bookId,
-            title: this.bookData.title,
-            author: this.bookData.author,
-            img: this.bookData.img,
-            rating: this.bookData.rating,
-            time: new Date().toLocaleDateString()
-        };
-        StorageManager.pushTo(type, entry);
-        this._disableButton(btn, type === 'userBooks' ? "OWNED" : "IN LIBRARY");
-    }
-
     checkExistingOwnership() {
-        const owned = StorageManager.get("userBooks") || [];
-        const borrowed = StorageManager.get("borrowedBooks") || [];
-        if (owned.some(b => b.id === this.bookId)) this._disableButton(document.getElementById('buyButton'), "OWNED");
-        if (borrowed.some(b => b.id === this.bookId)) this._disableButton(document.getElementById('borrowButton'), "IN LIBRARY");
+        if (!this.currentUser) return;
+
+        const isOwned = (this.currentUser.userBooks || []).some(b => b.id === this.bookId);
+        const isBorrowed = (this.currentUser.borrowedBooks || []).some(b => b.id === this.bookId);
+
+        if (isOwned) this._disableButton(document.getElementById('buyButton'), "OWNED");
+        if (isBorrowed) this._disableButton(document.getElementById('borrowButton'), "IN LIBRARY");
     }
 
     _disableButton(btn, text) {
@@ -174,11 +213,8 @@ export class BookViewPage {
     toggleSynopsis(btnId, contentId) {
         const extra = document.getElementById(contentId);
         const btn = document.getElementById(btnId);
-        
         if (!extra || !btn) return;
-
         const isHidden = extra.classList.toggle('hidden');
-        
         btn.textContent = isHidden ? "Read more →" : "Show less ←";
     }
 

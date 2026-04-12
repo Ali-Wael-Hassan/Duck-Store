@@ -12,7 +12,7 @@ p, li, span, button, input {
     font-size: var(--font-size-small);
 }
 
-.left {
+.left, .right {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -75,6 +75,7 @@ p, li, span, button, input {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-main);
     padding: 15px;
+    margin: 10px;
 }
 
 .card-head {
@@ -82,6 +83,21 @@ p, li, span, button, input {
     align-items: center;
     gap: 12px;
     margin-bottom: 10px;
+}
+
+.card-content {
+    width: 70%;
+    
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    white-space: pre-wrap;
+    
+    overflow: hidden;
+}
+
+.right {
+    width: 85%;;
 }
 
 .avatar {
@@ -174,7 +190,7 @@ img {
         padding: 30px 20px;
     }
 
-    .left {
+    .left, .right {
         max-width: 320px;
         margin: 0 auto;
         width: 100%;
@@ -209,7 +225,7 @@ img {
         gap: 20px;
     }
 
-    .left {
+    .left, .right {
         max-width: 260px;
     }
 
@@ -266,7 +282,7 @@ img {
         padding: 15px 10px;
     }
 
-    .left {
+    .left, .right {
         max-width: 220px;
     }
 

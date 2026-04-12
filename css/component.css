@@ -132,6 +132,8 @@ body {
 
 /* Hover Effect using Psuedoclass */
 .nav a.active,
+aside a.active,
+aside a:hover,
 .nav a:hover {
     color: #C0A86A;
 }
