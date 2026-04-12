@@ -39,18 +39,13 @@ export class CommunityPage {
             return userName.toLowerCase().includes(query.toLowerCase());
         });
 
-        // Sort descending by points, falling back to 0 if undefined
         this.filteredUsers = users.sort((a, b) => (b.points || 0) - (a.points || 0));
     }
 
-    /**
-     * Renders the top 3 cards on the podium.
-     */
     renderPodium() {
         const container = document.getElementById('podium-container');
         if (!container) return;
 
-        // Ensure we are working with a fresh sort of all users
         const topThree = [...this.allUsers]
             .sort((a, b) => (b.points || 0) - (a.points || 0))
             .slice(0, 3);
@@ -60,7 +55,6 @@ export class CommunityPage {
             return;
         }
 
-        // Layout mapping: Rank 2 (left), Rank 1 (center), Rank 3 (right)
         const positions = [
             { ...topThree[1], rank: 2, slot: 'podium__card--2' },
             { ...topThree[0], rank: 1, slot: 'podium__card--1' },
@@ -81,9 +75,6 @@ export class CommunityPage {
         `).join('');
     }
 
-    /**
-     * Renders the main leaderboard list.
-     */
     renderLeaderboardTable() {
         const tbody = document.getElementById('scholars-table-body');
         if (!tbody) return;
@@ -94,7 +85,6 @@ export class CommunityPage {
         }
 
         tbody.innerHTML = this.filteredUsers.map(user => {
-            // Find global rank from the unfiltered, sorted list
             const globalRank = this.allUsers
                 .sort((a, b) => (b.points || 0) - (a.points || 0))
                 .findIndex(u => u.id === user.id) + 1;
@@ -121,9 +111,6 @@ export class CommunityPage {
         }).join('');
     }
 
-    /**
-     * Renders global aggregate statistics.
-     */
     renderGlobalStats() {
         const container = document.getElementById('stats-container');
         if (!container) return;

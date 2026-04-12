@@ -44,6 +44,10 @@
     box-sizing: border-box;
 }
 
+textarea {
+  resize: none;
+}
+
 /* Unified Body */
 body {
     background-color: var(--background-color);

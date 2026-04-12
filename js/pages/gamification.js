@@ -47,7 +47,6 @@ export class GamificationAdmin {
             const element = this.inputMap[key];
             if (!element) return;
             element.value = config[key] !== undefined ? config[key] : this.defaults[key];
-
         });
     }
 
@@ -65,7 +64,7 @@ export class GamificationAdmin {
     resetToDefaults() {
         if (confirm('Reset to defaults?')) {
             this.applyConfigToUI(this.defaults);
-            StorageManager.set(this.configKey, this.defaults);
+            saveConfiguration();
         }
     }
 
