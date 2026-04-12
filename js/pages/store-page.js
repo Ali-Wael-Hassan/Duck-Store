@@ -250,6 +250,32 @@ export class StorePage {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
+
+        document.addEventListener('click', (e) => {
+            const pageBtn = e.target.closest('.pagination__num');
+            if (pageBtn) {
+                this.changePage(parseInt(pageBtn.dataset.page));
+                return;
+            }
+
+            if (e.target.closest('#prev-btn') && this.currentPage > 1) {
+                this.changePage(this.currentPage - 1);
+                return;
+            }
+
+            const totalBooks = (StorageManager.get("books") || []).length;
+            const totalPages = Math.ceil(totalBooks / this.itemsPerPage);
+            
+            if (e.target.closest('#next-btn') && this.currentPage < totalPages) {
+                this.changePage(this.currentPage + 1);
+            }
+        });
+    }
+
+    changePage(newPage) {
+        this.currentPage = newPage;
+        this.renderCatalog();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     renderPagination(total) {

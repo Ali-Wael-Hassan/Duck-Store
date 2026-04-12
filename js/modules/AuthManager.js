@@ -24,25 +24,19 @@ export class AuthManager {
     /* Saving current session with all needed data for other pages */
     _saveSession(userData) {
         const sessionUser = {
-            id: userData.id || "user_" + Date.now(),
-            name: userData.name,
-            email: userData.email,
-            avatar: userData.picture || `https://i.pravatar.cc/150?u=${userData.name}`,
-            role: userData.role,
-            loggedIn: true,
-            points: 0, 
+            id: "user_" + Date.now(),
+            avatar: "/assets/users/guest.png",
+            points: 0,
             readings: 0,
             reviews: 0,
-            joinDate: new Date().getFullYear().toString()
+            joinDate: new Date().getFullYear().toString(),          
+            ...userData,    
+            loggedIn: true 
         };
 
-        // 1. Save for the current session
         localStorage.setItem("user_session", JSON.stringify(sessionUser));
-
-        // 2. Save for the Auth legacy check (Array)
         StorageManager.save("user", [sessionUser]);
 
-        // 3. Add to community leaderboard if not already there
         const community = StorageManager.get("community_users") || [];
         if (!community.find(u => u.email === sessionUser.email)) {
             community.push(sessionUser);
@@ -57,9 +51,14 @@ export class AuthManager {
             name: email.split('@')[0],
             email: email,
             role: isAdmin ? "admin" : "user",
-            picture: null,
+            picture: this.avatar,
             loggedIn: true,
-            points: 1250
+            
+            points: 1250,
+            readings: 14,
+            reviews: 3,
+            joinDate: '2026',
+            avatar: '/assets/users/guest.png'
         };
 
         this._saveSession(user);
@@ -73,7 +72,12 @@ export class AuthManager {
             name: fullName,
             email: email,
             picture: null,
-            role: isAdmin ? "admin" : "user"
+            role: isAdmin ? "admin" : "user",
+            points: 0,
+            readings: 0,
+            reviews: 0,
+            joinDate: '2026',
+            avatar: '/assets/users/guest.png'
         };
 
         this._saveSession(newUser);
@@ -86,11 +90,27 @@ export class AuthManager {
     }
 
     logout() {
+        const session = JSON.parse(localStorage.getItem("user_session"));
+        
+        if (session && session.access_token) {
+            try {
+                google.accounts.oauth2.revoke(session.access_token, () => {
+                    console.log('Google token revoked successfully');
+                });
+            } catch (err) {
+                console.error("Failed to revoke Google token:", err);
+            }
+        }
+
         localStorage.removeItem("user_session");
         StorageManager.save("user", []);
-        
+
+        this.user = null;
+
         const isInHtmlFolder = window.location.pathname.includes('/html/');
-        window.location.href = isInHtmlFolder ? "../auth.html" : "auth.html";
+        const destination = isInHtmlFolder ? "sign-in.html" : "html/sign-in.html";
+        
+        window.location.href = destination;
     }
 
     async _handleTokenResponse(tokenResponse) {

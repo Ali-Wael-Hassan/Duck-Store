@@ -28,7 +28,10 @@ export class MyBooksPage {
 
     renderMyBooks(searchTerm = '') {
         const grid = document.querySelector('.book-grid');
-        const books = StorageManager.get("books") || [];
+        const books = [
+            ...(StorageManager.get("userBooks") || []), 
+            ...(StorageManager.get("borrowedBooks") || [])
+        ];
 
         if (!grid) return;
 

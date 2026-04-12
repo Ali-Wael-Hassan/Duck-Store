@@ -226,9 +226,7 @@ export class UserProfile {
         const avatarImg = document.getElementById('user-avatar');
 
         if (changeBtn && avatarInput) {
-            changeBtn.addEventListener('click', () => {
-                avatarInput.click();
-            });
+            changeBtn.addEventListener('click', () => avatarInput.click());
         }
 
         if (avatarInput) {
@@ -245,15 +243,22 @@ export class UserProfile {
                     this.user.avatar = base64Image;
                     StorageManager.save("user_session", this.user);
 
-                    const allUsers = StorageManager.get("user");
-                    const userIndex = allUsers.findIndex(u => u.email === this.user.email);
+                    const communityUsers = StorageManager.get("community_users") || [];
+                    const communityIndex = communityUsers.findIndex(u => u.email === this.user.email);
+                    
+                    if (communityIndex !== -1) {
+                        communityUsers[communityIndex].avatar = base64Image;
+                        StorageManager.save("community_users", communityUsers);
+                    }
 
+                    const allUsers = StorageManager.get("user") || [];
+                    const userIndex = allUsers.findIndex(u => u.email === this.user.email);
                     if (userIndex !== -1) {
                         allUsers[userIndex].avatar = base64Image;
                         StorageManager.save("user", allUsers);
                     }
 
-                    console.log("Avatar saved successfully!");
+                    console.log("Profile picture synced across platform!");
                 };
                 reader.readAsDataURL(file);
             });
