@@ -3,9 +3,8 @@
 <head>
     <script>
         if (window.location.hostname.includes('github.io')) {
-            const repoName = window.location.pathname.split('/')[1];
             const base = document.createElement('base');
-            base.href = '/' + repoName + '/';
+            base.href = '/Duck-Store/'; 
             document.head.appendChild(base);
         }
     </script>
@@ -21,7 +20,7 @@
 <body data-page="auth">
     <header class="text-center m-bottom-lg">
         <h1 class="brand-logo">
-            <img src="../assets/logo.png" alt="DUCK STORE Logo">
+            <img src="assets/logo.png" alt="DUCK STORE Logo">
             DUCK <span class="text-accent">STORE</span>
         </h1>
         <p class="text-muted">Step into a world of curated wisdom</p>
