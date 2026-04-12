@@ -166,7 +166,7 @@ export class DashboardController {
                     <h4>${book.title}</h4>
                     <span class="subtext">${book.genre} • ${book.sales || 0} sales</span>
                 </div>
-                <div class="book-price">$${(book.price / 100).toFixed(2)}</div>
+                <div class="book-price">$${(parseFloat(book.price.replace(/[$,]/g, '')) / 100).toFixed(2)}</div>
             </div>
         `).join('');
     }
