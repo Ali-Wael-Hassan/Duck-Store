@@ -12,6 +12,7 @@ import { MyBooksPage } from './pages/my_books.js';
 import { StorePage } from './pages/store-page.js';
 import { UserProfile } from './pages/user-profile-script.js';
 import { AuthManager } from './modules/AuthManager.js';
+import { GamificationAdmin } from './pages/gamification.js';
 
 class App {
     constructor() {
@@ -48,7 +49,7 @@ class App {
                 display: 'block',
                 objectFit: 'cover'
             });
-            
+
             avatarImg.onerror = () => {
                 avatarImg.src = '/assets/dummy/a1.jpg';
             };
@@ -57,7 +58,7 @@ class App {
 
     setupGlobalUI() {
         const logoContainers = document.querySelectorAll('.logo-group');
-        
+
         const logoHTML = `
             <div class="logo-icon">
                 <span class="material-symbols-outlined">menu_book</span>
@@ -85,16 +86,16 @@ class App {
             window.location.href = '../index.html';
             return;
         }
-        
+
         if (pageType === 'about-us' && this.user && this.user.loggedIn) {
-            if(this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
+            if (this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
             else window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
             return;
         }
 
         if (pageType === 'auth') {
             if (this.user && this.user.loggedIn) {
-                if(this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
+                if (this.user.role === 'admin') window.location.href = isInSubfolder ? 'dashboard.html' : 'html/dashboard.html';
                 else window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
                 return;
             }
@@ -109,7 +110,7 @@ class App {
         }
 
         const adminPages = ['dashboard', 'inventory', 'sales-refunds', 'users-roles'];
-    
+
         if (adminPages.includes(pageType) && this.user.role === 'user') {
             console.error("Access Denied: User role cannot access admin pages.");
             window.location.href = isInSubfolder ? 'home.html' : 'html/home.html';
@@ -150,6 +151,9 @@ class App {
                 break;
             case 'user-profile':
                 new UserProfile();
+                break;
+            case 'gamification':
+                new GamificationAdmin();
                 break;
             default:
                 console.log(`No handler for: ${pageType}`);
