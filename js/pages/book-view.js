@@ -1,5 +1,5 @@
-import { StorageManager } from 'core/StorageManager.js';
-import { ReviewLoader } from 'modules/ReviewLoader.js';
+import { StorageManager } from '../core/StorageManager.js';
+import { ReviewLoader } from '../modules/ReviewLoader.js';
 
 export class BookViewPage {
     constructor() {
@@ -64,47 +64,78 @@ export class BookViewPage {
 
     /* Add review and calculate points */
     handleAddReview() {
-        const comment = prompt("Share your thoughts on this book:");
-        if (!comment || comment.trim() === "") return;
+        const modal = document.createElement('div');
+        modal.className = 'custom-modal-overlay';
+        modal.innerHTML = `
+            <div class="custom-modal">
+                <h3>Write a Review</h3>
+                <form id="modal-review-form" class="modal-grid">
+                    <div style="grid-column: span 2">
+                        <label style="display:block; margin-bottom:8px; color: var(--text-muted);">Rating (1 to 5)</label>
+                        <input type="number" name="rating" min="1" max="5" step="1" placeholder="Enter rating 1-5" required style="width:100%">
+                    </div>
+                    
+                    <textarea name="comment" placeholder="Share your thoughts on this book..." required style="grid-column: span 2; min-height: 120px;"></textarea>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="close-modal">Cancel</button>
+                        <button type="submit" class="btn-save">Post Review</button>
+                    </div>
+                </form>
+            </div>
+        `;
 
-        const rate = prompt("Your rate (1-5):");
-        if (!rate || rate.trim() === "") return;
+        document.body.appendChild(modal);
 
-        const newReview = {
-            user: this.currentUser.name || "Guest",
-            rating: parseInt(rate, 10),
-            time: new Date().toLocaleDateString(),
-            comment: comment
+        modal.querySelector('#close-modal').onclick = () => modal.remove();
+        
+        modal.querySelector('#modal-review-form').onsubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const comment = formData.get('comment');
+            const rate = parseInt(formData.get('rating'));
+
+            if (!comment.trim()) return;
+
+            const newReview = {
+                user: this.currentUser?.name || "Guest",
+                rating: rate,
+                time: new Date().toLocaleDateString(),
+                comment: comment
+            };
+
+            if (this.inputMap && comment.length >= (this.inputMap.reviewMinChar || 0)) {
+                const promos = StorageManager.get("featured_promos") || [];
+                const isFeatured = promos.some(elem => elem.type === this.bookData.genre); 
+                
+                const pointsToAdd = isFeatured 
+                    ? (this.inputMap.reviewBonus || 0) 
+                    : (this.inputMap.reviewBase || 0);
+
+                if (this.currentUser) {
+                    this.currentUser.points = (this.currentUser.points || 0) + pointsToAdd;
+                    this._syncUserStorage();
+                }
+                console.log(`Review points added: ${pointsToAdd}`);
+            }
+
+            /* Update reviews array */
+            if (!this.bookData.reviews) this.bookData.reviews = [];
+            this.bookData.reviews.unshift(newReview); 
+
+            /* Save book data updates */
+            const allBooks = StorageManager.get('books') || [];
+            const index = allBooks.findIndex(b => b.id == this.bookId);
+            if (index !== -1) {
+                allBooks[index] = this.bookData;
+                StorageManager.save('books', allBooks);
+            }
+
+            /* Update UI */
+            this.reviews.addTop(newReview);
+            
+            modal.remove();
         };
-
-        if (this.inputMap && comment.length >= (this.inputMap.reviewMinChar || 0)) {
-            const promos = StorageManager.get("featured_promos") || [];
-            const isFeatured = promos.some(elem => elem.type === this.bookData.type);
-            
-            const pointsToAdd = isFeatured 
-                ? (this.inputMap.reviewBonus || 0) 
-                : (this.inputMap.reviewBase || 0);
-
-            this.currentUser.points = (this.currentUser.points || 0) + pointsToAdd;
-            
-            this._syncUserStorage();
-            console.log(`Review points added: ${pointsToAdd}`);
-        }
-
-        /* Update reviews array */
-        if (!this.bookData.reviews) this.bookData.reviews = [];
-        this.bookData.reviews.unshift(newReview); 
-
-        /* Save book data updates */
-        const allBooks = StorageManager.get('books') || [];
-        const index = allBooks.findIndex(b => b.id == this.bookId);
-        if (index !== -1) {
-            allBooks[index] = this.bookData;
-            StorageManager.save('books', allBooks);
-        }
-
-        /* Update UI */
-        this.reviews.addTop(newReview);
     }
 
     /* Handle Buy/Borrow and calculate points */

@@ -1,4 +1,4 @@
-import { StorageManager } from 'core/StorageManager.js';
+import { StorageManager } from '../core/StorageManager.js';
 
 export class StorePage {
     constructor() {

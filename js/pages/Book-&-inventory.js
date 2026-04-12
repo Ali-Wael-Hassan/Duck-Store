@@ -1,4 +1,4 @@
-import { StorageManager } from 'core/StorageManager.js';
+import { StorageManager } from '../core/StorageManager.js';
 
 export class InventoryController {
     constructor() {
@@ -6,21 +6,16 @@ export class InventoryController {
         this.rowsPerPage = 5;
         this.books = [];
 
-        /* Initiate the seed data (safety as it has been made in main.js) */
         StorageManager.initSeedData().then(() => {
             this.init();
         });
     }
 
     init() {
-        /* fetch the data from the storage */
         this.books = StorageManager.get("inventory") || [];
         
-        /* if the current books unloaded */
         if (this.books.length === 0) {
-            /* books array */
             const generalBooks = StorageManager.get("books") || [];
-            /* the current books array with the specific format */
             this.books = generalBooks.map(b => ({
                 id: b.id,
                 title: b.title,
@@ -30,29 +25,20 @@ export class InventoryController {
                 stock: Math.floor(Math.random() * 50),
                 maxStock: 100
             }));
-
-            /* save to the storage */
             StorageManager.save("inventory", this.books);
         }
 
-        /* render the data */
         this.renderInventory();
-        /* initiate the listeners */
         this.initEventListeners();
     }
 
     initEventListeners() {
-        /* get the button */
         const addBtn = document.getElementById('add-book-btn');
-
-        /* make the onclick with the callback addNewBook() method */
         if (addBtn) addBtn.onclick = () => this.addNewBook();
 
-        /* gets the prevBtn and nextBtn */
         const prevBtn = document.querySelector('.page-controls button:first-child');
         const nextBtn = document.querySelector('.page-controls button:last-child');
 
-        /* match the callback for prevBtn when it isn't null */
         if (prevBtn) {
             prevBtn.onclick = () => {
                 if (this.currentPage > 1) {
@@ -62,133 +48,185 @@ export class InventoryController {
             };
         }
 
-        /* match the callback for nextBtn when it isn't null */
         if (nextBtn) {
             nextBtn.onclick = () => {
-                /* ceil(books.length / rows per page) = start value for the next page */
                 const totalPages = Math.ceil(this.books.length / this.rowsPerPage);
                 if (this.currentPage < totalPages) {
-                    /* update page counter */
                     this.currentPage++;
-                    /* render new data */
                     this.renderInventory();
                 }
             };
         }
 
-        /* get the body of the inventory */
         const tbody = document.getElementById('inventory-tbody');
-
-        /* add the callback with addEventListener  */
         if (tbody) {
             tbody.addEventListener('click', (e) => {
-                const deleteBtn = e.target.closest('.delete-action');
-                if (deleteBtn) {
-                    const id = parseInt(deleteBtn.dataset.id);
-                    if (confirm("Delete this book from system?")) this.deleteBook(id);
-                }
-
-                const editBtn = e.target.closest('.edit-action');
-                if (editBtn) {
-                    const id = parseInt(editBtn.dataset.id);
-                    this.editBook(id);
+                const trigger = e.target.closest('.btn-action-trigger');
+                if (trigger) {
+                    const id = parseInt(trigger.dataset.id);
+                    this.showActionMenu(e, id);
                 }
             });
         }
     }
 
+    addNewBook() { this.showBookModal(); }
+    
     editBook(id) {
-        const inv = StorageManager.get("inventory");
-        const general = StorageManager.get("books");
-
-        const invBook = inv.find(b => b.id === id);
-        const genBook = general.find(b => b.id === id);
-
-        if (!invBook) return;
-
-        // Prompts for editing
-        const newTitle = prompt("Update Title:", invBook.title);
-        if (newTitle === null) return; 
-        
-        const newAuthor = prompt("Update Author:", invBook.author);
-        const newStock = prompt("Update Stock Level:", invBook.stock);
-        
-        // Price is stored in the "books" collection
-        const currentPrice = genBook ? genBook.price : 1500;
-        const newPrice = prompt("Update Price (in cents, e.g. 1500 for $15.00):", currentPrice);
-
-        // 1. Update Inventory Storage (Stock/Title/Author)
-        const invIndex = inv.findIndex(b => b.id === id);
-        if (invIndex !== -1) {
-            inv[invIndex].title = newTitle;
-            inv[invIndex].author = newAuthor;
-            inv[invIndex].stock = parseInt(newStock) || 0;
-            StorageManager.save("inventory", inv);
-        }
-
-        // 2. Update General Books Storage (Price/Title/Author)
-        const genIndex = general.findIndex(b => b.id === id);
-        if (genIndex !== -1) {
-            general[genIndex].title = newTitle;
-            general[genIndex].author = newAuthor;
-            general[genIndex].price = parseInt(newPrice) || currentPrice;
-            StorageManager.save("books", general);
-        }
-
-        // Update local state and UI
-        this.books = inv;
-        this.renderInventory();
-        alert("Book and Price updated successfully!");
-    }
-
-    addNewBook() {
-        const title = prompt("Enter Book Title:");
-        if (!title) return;
-        const author = prompt("Enter Author Name:");
-        const price = prompt("Enter Price (in cents):", "1500");
-        const stock = prompt("Initial Stock Level:", "50");
-
-        const newId = Date.now();
-
-        const bookEntry = {
-            id: newId,
-            title: title,
-            author: author,
-            price: parseInt(price),
-            genre: "General",
-            img: "https://via.placeholder.com/400x600?text=New+Book",
-            sales: 0,
-            rating: 5.0
-        };
-
-        const inventoryEntry = {
-            id: newId,
-            title: title,
-            author: author,
-            isbn: "978-" + Math.floor(Math.random() * 1000000000),
-            sku: "LUM-" + Math.floor(Math.random() * 9000 + 1000),
-            stock: parseInt(stock),
-            maxStock: 100
-        };
-
-        StorageManager.pushTo("books", bookEntry);
-        StorageManager.pushTo("inventory", inventoryEntry);
-
-        this.books.unshift(inventoryEntry);
-        this.renderInventory();
+        const book = this.books.find(b => b.id === id);
+        if (book) this.showBookModal(book);
     }
 
     deleteBook(id) {
-        let inv = StorageManager.get("inventory");
-        inv = inv.filter(b => b.id !== id);
+        let inv = StorageManager.get("inventory").filter(b => b.id !== id);
+        let books = StorageManager.get("books").filter(b => b.id !== id);
+        
         StorageManager.save("inventory", inv);
-
-        let books = StorageManager.get("books");
-        books = books.filter(b => b.id !== id);
         StorageManager.save("books", books);
 
         this.books = inv;
         this.renderInventory();
+    }
+
+    updateDataInStorage(id, bookEntry, inventoryEntry, isEdit) {
+        let allBooks = StorageManager.get("books") || [];
+        let allInv = StorageManager.get("inventory") || [];
+
+        if (isEdit) {
+            allBooks = allBooks.map(b => b.id === id ? bookEntry : b);
+            allInv = allInv.map(b => b.id === id ? inventoryEntry : b);
+        } else {
+            allBooks.unshift(bookEntry);
+            allInv.unshift(inventoryEntry);
+        }
+
+        StorageManager.save("books", allBooks);
+        StorageManager.save("inventory", allInv);
+        this.books = allInv;
+    }
+
+    showBookModal(existingInventoryBook = null) {
+        const isEdit = !!existingInventoryBook;
+        const fullBooks = StorageManager.get("books") || [];
+        const fullData = isEdit ? fullBooks.find(b => b.id === existingInventoryBook.id) : null;
+
+        const modal = document.createElement('div');
+        modal.className = 'custom-modal-overlay';
+        modal.innerHTML = `
+            <div class="custom-modal">
+                <h3>${isEdit ? 'Edit Book Details' : 'Add New Book'}</h3>
+                <form id="modal-book-form" class="modal-grid">
+                    <input type="text" name="title" placeholder="Book Title" value="${fullData?.title || existingInventoryBook?.title || ''}" required>
+                    <input type="text" name="author" placeholder="Author Name" value="${fullData?.author || existingInventoryBook?.author || ''}" required>
+                    <input type="text" name="price" placeholder="Price (e.g. $27.00)" value="${fullData?.price || ''}" required>
+                    <input type="text" name="genre" placeholder="Genre" value="${fullData?.genre || ''}" required>
+                    <input type="number" name="pages" placeholder="Page Count" value="${fullData?.pages || ''}" required>
+                    <input type="text" name="published" placeholder="Published Date" value="${fullData?.published || ''}" required>
+                    <input type="number" step="0.1" name="rating" placeholder="Rating (0-5)" value="${fullData?.rating || ''}" required>
+                    
+                    <div class="modal-file-wrapper">
+                        <img id="image-preview" src="${fullData?.img || '/assets/dummy/a1.jpg'}" class="image-preview" alt="Preview">
+                        <input type="file" id="image-input" name="img" accept="image/*" ${isEdit ? '' : 'required'}>
+                    </div>
+
+                    <textarea name="desc" placeholder="Book Description" required style="grid-column: span 2">${fullData?.desc || ''}</textarea>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="close-modal">Cancel</button>
+                        <button type="submit" class="btn-save">${isEdit ? 'Update' : 'Save'}</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        let imageDataUrl = fullData?.img || "/assets/dummy/a1.jpg";
+        const imageInput = modal.querySelector('#image-input');
+        const imagePreview = modal.querySelector('#image-preview');
+
+        imageInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imageDataUrl = event.target.result;
+                imagePreview.src = imageDataUrl;
+            };
+            reader.readAsDataURL(file);
+        };
+
+        modal.querySelector('#close-modal').onclick = () => modal.remove();
+
+        modal.querySelector('#modal-book-form').onsubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const id = isEdit ? existingInventoryBook.id : Date.now();
+
+            const bookEntry = {
+                id,
+                title: formData.get('title'),
+                author: formData.get('author'),
+                price: formData.get('price'),
+                genre: formData.get('genre'),
+                pages: formData.get('pages'),
+                published: formData.get('published'),
+                rating: parseFloat(formData.get('rating')),
+                desc: formData.get('desc'),
+                img: imageDataUrl,
+                reviews: fullData?.reviews || []
+            };
+
+            const inventoryEntry = {
+                id,
+                title: bookEntry.title,
+                author: bookEntry.author,
+                isbn: isEdit ? existingInventoryBook.isbn : "978-" + Math.floor(Math.random() * 1000000000),
+                sku: isEdit ? existingInventoryBook.sku : "DUCK-" + Math.floor(Math.random() * 9000 + 1000),
+                stock: isEdit ? existingInventoryBook.stock : 50,
+                maxStock: 100
+            };
+
+            this.updateDataInStorage(id, bookEntry, inventoryEntry, isEdit);
+            modal.remove();
+            this.renderInventory();
+        };
+    }
+
+    showActionMenu(e, id) {
+        const existingMenu = document.querySelector('.action-context-menu');
+        if (existingMenu) existingMenu.remove();
+
+        const menu = document.createElement('div');
+        menu.className = 'action-context-menu';
+        menu.innerHTML = `
+            <div class="menu-item edit">📝 Edit Details</div>
+            <div class="menu-item delete">🗑️ Delete Book</div>
+        `;
+
+        Object.assign(menu.style, {
+            top: `${e.pageY}px`,
+            left: `${e.pageX - 120}px`
+        });
+
+        document.body.appendChild(menu);
+
+        menu.querySelector('.edit').onclick = () => {
+            this.editBook(id);
+            menu.remove();
+        };
+
+        menu.querySelector('.delete').onclick = () => {
+            if (confirm("Permanently remove this book?")) this.deleteBook(id);
+            menu.remove();
+        };
+
+        setTimeout(() => {
+            window.onclick = () => {
+                menu.remove();
+                window.onclick = null;
+            };
+        }, 0);
     }
 
     getStatusUI(stock) {
@@ -234,10 +272,9 @@ export class InventoryController {
                     </td>
                     <td><span class="${status.class}">${status.text}</span></td>
                     <td>
-                        <div style="display: flex; gap: 15px;">
-                            <i class="fas fa-pen-to-square action-icon edit-action" style="cursor:pointer" data-id="${book.id}"></i>
-                            <i class="fas fa-trash action-icon delete-action" style="color: #ff4d4d; cursor:pointer;" data-id="${book.id}"></i>
-                        </div>
+                        <button class="btn-action-trigger" data-id="${book.id}">
+                            ⋮
+                        </button>
                     </td>
                 </tr>
             `;

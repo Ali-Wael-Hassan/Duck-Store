@@ -14,6 +14,7 @@ p, li, span, button, input {
 
 .left, .right {
     display: flex;
+    max-width: 1000px;
     flex-direction: column;
     gap: 15px;
 }
