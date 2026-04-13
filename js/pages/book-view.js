@@ -47,11 +47,25 @@ export class BookViewPage {
         // 1. Update session
         StorageManager.save("user_session", this.currentUser);
 
-        // 2. Update master list (users)
+        // 2. Update Community Users
+        const community = StorageManager.get('community_users');
+        const currentUser = community.find(u => u.id === this.currentUser.id);
+        if (currentUser) {
+            currentUser.points = this.currentUser.points;
+            currentUser.reviews = this.currentUser.reviews;
+            currentUser.readings = this.currentUser.userBooks.length + this.currentUser.borrowedBooks.length;
+            StorageManager.save('community_users', community);
+        }
+
+        // 3. Update master list (users)
         const allUsers = StorageManager.get("users") || [];
         const i = allUsers.findIndex(u => u.email === this.currentUser.email);
         if (i !== -1) {
-            allUsers[i] = this.currentUser; 
+            const password = allUsers[i].password;
+            allUsers[i] = {
+                password,
+                ...this.currentUser
+            }; 
             StorageManager.save("users", allUsers);
         }
     }
@@ -133,6 +147,10 @@ export class BookViewPage {
 
             /* Update UI */
             this.reviews.addTop(newReview);
+            if(!this.currentUser.reviews) this.currentUser.reviews = 0;
+            this.currentUser.reviews++;
+
+            this._syncUserStorage();
             
             modal.remove();
         };

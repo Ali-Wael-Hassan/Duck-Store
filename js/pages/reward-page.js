@@ -112,7 +112,13 @@ export class RewardPage {
                 currentUser.points = this.user.points;
                 StorageManager.save('community_users', community);
             }
-
+            let allUsers = StorageManager.get('users') || [];
+            let i = allUsers.findIndex(e => e.email === this.user.email)
+            if(i != -1) {
+                allUsers[i].points = this.user.points
+                StorageManager.save('users', allUsers);
+            }
+            
             this.renderPoints();
             this.renderRewards();
         }

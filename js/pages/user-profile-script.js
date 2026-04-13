@@ -251,11 +251,11 @@ export class UserProfile {
                         StorageManager.save("community_users", communityUsers);
                     }
 
-                    const allUsers = StorageManager.get("user") || [];
+                    const allUsers = StorageManager.get("users") || [];
                     const userIndex = allUsers.findIndex(u => u.email === this.user.email);
                     if (userIndex !== -1) {
                         allUsers[userIndex].avatar = base64Image;
-                        StorageManager.save("user", allUsers);
+                        StorageManager.save("users", allUsers);
                     }
 
                     console.log("Profile picture synced across platform!");
