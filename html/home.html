@@ -2,6 +2,18 @@
 <html lang="en">
 
 <head>
+    <script>
+        (function() {
+            const isGitHub = window.location.hostname.includes('github.io');
+            if (isGitHub) {
+            const repoName = window.location.pathname.split('/')[1];
+            const repoPath = '/' + repoName;
+            window.ROOT = repoPath;
+            } else {
+            window.ROOT = '';
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUCK Library | Home Page</title>
