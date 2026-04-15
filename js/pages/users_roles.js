@@ -32,7 +32,9 @@ export class UsersRolesController {
     }
 
     initEventListeners() {
-        // Pagination
+        const addBtn = document.getElementById('open-add-modal');
+        if (addBtn) addBtn.onclick = () => this.showAddUserModal();
+
         document.getElementById('prev-page')?.addEventListener('click', () => {
             if (this.currentPage > 1) {
                 this.currentPage--;
@@ -48,7 +50,6 @@ export class UsersRolesController {
             }
         });
 
-        // Role Filters
         const filterContainer = document.getElementById('role-filters');
         filterContainer?.addEventListener('click', (e) => {
             const btn = e.target.closest('.filter');
@@ -60,7 +61,6 @@ export class UsersRolesController {
             this.applyFilter();
         });
 
-        // BINDING: Edit Role Button (Event Delegation)
         const tbody = document.getElementById('user-tbody');
         tbody?.addEventListener('click', (e) => {
             const editBtn = e.target.closest('.edit');
@@ -71,20 +71,82 @@ export class UsersRolesController {
         });
     }
 
-    // Logic to swap/update the role in Storage
+    showAddUserModal() {
+        const modal = document.createElement('div');
+        modal.className = 'custom-modal-overlay';
+        modal.innerHTML = `
+            <div class="custom-modal">
+                <h3>Add New Community Member</h3>
+                <form id="modal-user-form" class="modal-grid">
+                    <input type="text" name="fullName" placeholder="Full Name" required style="grid-column: span 2">
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    
+                    <div style="grid-column: span 2; display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+                        <input type="checkbox" name="isAdmin" id="isAdmin" style="width: auto; cursor: pointer;">
+                        <label for="isAdmin" style="cursor: pointer;">Grant Admin Privileges</label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" id="close-modal">Cancel</button>
+                        <button type="submit" class="btn-save">Save User</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        modal.querySelector('#close-modal').onclick = () => modal.remove();
+
+        modal.querySelector('#modal-user-form').onsubmit = (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const fullName = formData.get('fullName');
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const isAdmin = formData.get('isAdmin') === 'on';
+
+            const newUser = {
+                id: "user_" + Date.now(),
+                name: fullName,
+                email: email,
+                password: password,
+                role: isAdmin ? "admin" : "user",
+                points: 0,
+                readings: 0,
+                reviews: 0,
+                joinDate: '2026',
+                avatar: '/assets/users/guest.png',
+                userBooks: [],
+                borrowedBooks: []        
+            };
+
+            const communityUsers = StorageManager.get("community_users") || [];
+            communityUsers.unshift(newUser);
+            StorageManager.save("community_users", communityUsers);
+
+            const generalUsers = StorageManager.get("users") || [];
+            generalUsers.push(newUser);
+            StorageManager.save("users", generalUsers);
+
+            modal.remove();
+            this.refreshData();
+        };
+    }
+
     handleEditRole(userId) {
         const rawData = StorageManager.get("community_users") || [];
         const userIndex = rawData.findIndex(u => u.id === userId);
 
         if (userIndex !== -1) {
             const currentRole = rawData[userIndex].role || (rawData[userIndex].id === 'user_1' ? 'Admin' : 'User');
-            // Simple swap logic: If Admin -> User, If User -> Admin
             const newRole = currentRole.toLowerCase() === 'admin' ? 'User' : 'Admin';
             
             if (confirm(`Change ${rawData[userIndex].name}'s role to ${newRole}?`)) {
                 rawData[userIndex].role = newRole;
-                StorageManager.save("community_users", rawData); // Save back to correct key
-                this.refreshData(); // Refresh UI
+                StorageManager.save("community_users", rawData);
+                this.refreshData();
             }
         }
     }
@@ -125,10 +187,12 @@ export class UsersRolesController {
         tbody.innerHTML = currentSlice.map(user => `
             <tr>
                 <td>
-                    <img src="${user.avatar}" class="avatar-img" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-                    <div class="user-info">
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-email">${user.email}</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="${user.avatar}" class="avatar-img" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+                        <div class="user-info">
+                            <div class="user-name" style="font-weight: 600;">${user.name}</div>
+                            <div class="user-email" style="font-size: 0.85rem; color: #666;">${user.email}</div>
+                        </div>
                     </div>
                 </td>
                 <td><span class="role ${user.role.toLowerCase()}">${user.role}</span></td>
@@ -136,7 +200,7 @@ export class UsersRolesController {
                 <td>${user.lastActive}</td>
                 <td class="action-buttons">
                     <button class="edit" type="button" data-id="${user.id}">
-                        Edit Role <span class="material-symbols-outlined">edit</span>
+                        Edit Role <span class="material-symbols-outlined" style="font-size: 16px; vertical-align: middle;">edit</span>
                     </button>
                 </td>
             </tr>

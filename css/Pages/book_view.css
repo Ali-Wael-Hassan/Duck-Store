@@ -1,9 +1,6 @@
-/* ===== BOOK DETAILS & REVIEWS STYLES (fully responsive) ===== */
-
-/* Target the main container specifically on the book view page */
 body[data-page="book-view"] main {
     display: grid;
-    grid-template-columns: 280px 1fr; /* 280px for the cover (left), 1fr for details (right) */
+    grid-template-columns: 280px 1fr;
     gap: 40px;
     align-items: start;
     padding: 40px 20px;
@@ -11,14 +8,13 @@ body[data-page="book-view"] main {
     margin: 0 auto;
 }
 
-/* Typography Scale Down */
 p, li, span, button, input {
     font-size: var(--font-size-small);
 }
 
-/* Left Column Styling */
-.left {
+.left, .right {
     display: flex;
+    max-width: 1000px;
     flex-direction: column;
     gap: 15px;
 }
@@ -34,7 +30,6 @@ p, li, span, button, input {
     overflow: hidden;
 }
 
-/* Actions block for Buy/Borrow buttons */
 .actions {
     display: flex;
     flex-direction: column;
@@ -46,7 +41,6 @@ p, li, span, button, input {
     padding: 12px;
 }
 
-/* Meta Data Box Styling */
 .meta-container {
     display: flex;
     background: var(--nav-color);
@@ -66,7 +60,6 @@ p, li, span, button, input {
     margin-bottom: 2px;
 }
 
-/* Buttons */
 .btn-secondary {
     background: var(--input-bg);
     color: var(--brand-primary);
@@ -78,12 +71,12 @@ p, li, span, button, input {
     color: var(--background-color);
 }
 
-/* Review Cards */
 .card {
     background: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-main);
     padding: 15px;
+    margin: 10px;
 }
 
 .card-head {
@@ -91,6 +84,21 @@ p, li, span, button, input {
     align-items: center;
     gap: 12px;
     margin-bottom: 10px;
+}
+
+.card-content {
+    width: 70%;
+    
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    
+    white-space: pre-wrap;
+    
+    overflow: hidden;
+}
+
+.right {
+    width: 85%;;
 }
 
 .avatar {
@@ -106,7 +114,6 @@ p, li, span, button, input {
     flex-shrink: 0;
 }
 
-/* Grid for Suggestions */
 .suggest-grid {
     display: flex;
     gap: 15px;
@@ -130,7 +137,6 @@ p, li, span, button, input {
     border-radius: 4px;
 }
 
-/* Logic Helpers */
 .hidden { display: none; }
 .read-more-link {
     background: none;
@@ -140,7 +146,6 @@ p, li, span, button, input {
     padding: 0;
 }
 
-/* Ensure JS-injected images fit the frame */
 .responsive-cover {
     width: 100%;
     height: 100%;
@@ -148,7 +153,6 @@ p, li, span, button, input {
     border-radius: var(--radius-main);
 }
 
-/* Align Review Title and Button */
 .reviews-header {
     display: flex;
     justify-content: space-between;
@@ -163,14 +167,12 @@ p, li, span, button, input {
     padding: 8px 16px;
 }
 
-/* Purchased/Disabled State */
 .btn-disabled {
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-/* Horizontal Rule Styling */
 .section-divider {
     border: none;
     border-top: 1px solid var(--border-color);
@@ -182,19 +184,16 @@ img {
     height: auto;
 }
 
-/* ===== RESPONSIVE BREAKPOINTS ===== */
-
-/* Tablet (768px and below) */
 @media (max-width: 768px) {
     body[data-page="book-view"] main {
-        grid-template-columns: 1fr; /* Stack cover and details */
+        grid-template-columns: 1fr;
         gap: 30px;
         padding: 30px 20px;
     }
 
-    .left {
+    .left, .right {
         max-width: 320px;
-        margin: 0 auto; /* Center cover on smaller screens */
+        margin: 0 auto;
         width: 100%;
     }
 
@@ -221,14 +220,13 @@ img {
     }
 }
 
-/* Mobile (480px and below) */
 @media (max-width: 480px) {
     body[data-page="book-view"] main {
         padding: 20px 15px;
         gap: 20px;
     }
 
-    .left {
+    .left, .right {
         max-width: 260px;
     }
 
@@ -280,13 +278,12 @@ img {
     }
 }
 
-/* Extra small devices (under 360px) */
 @media (max-width: 360px) {
     body[data-page="book-view"] main {
         padding: 15px 10px;
     }
 
-    .left {
+    .left, .right {
         max-width: 220px;
     }
 

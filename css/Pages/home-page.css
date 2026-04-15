@@ -1,10 +1,3 @@
-/* ===== GLOBAL RESET & BODY ===== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
     font-family: var(--font-main, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
     margin: 0;
@@ -13,7 +6,6 @@ body {
     background-color: var(--background-color);
     color: var(--text-main);
     
-    /* CRITICAL FIX: Prevents the entire page from scrolling horizontally */
     overflow-x: hidden;
     width: 100%;
 }
@@ -22,7 +14,7 @@ main.dashboard-container {
     padding: 20px 24px 60px 24px;
     max-width: 1400px;
     margin: 0 auto;
-    width: 100%; /* Ensures padding doesn't push it off-screen */
+    width: 100%;
 }
 
 section {
@@ -30,13 +22,12 @@ section {
     max-width: 100%;
 }
 
-/* --- SECTION HEADERS --- */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    flex-wrap: wrap; /* Allows wrap if title and buttons clash */
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -62,7 +53,6 @@ section {
     color: var(--brand-primary);
 }
 
-/* --- FEATURED CAROUSEL GRID --- */
 .featured-grid {
     display: flex;
     overflow-x: auto;
@@ -72,7 +62,6 @@ section {
     padding-bottom: 15px; 
     scroll-snap-type: x mandatory;
     
-    /* CRITICAL FIX: Stops the slider from breaking the page width */
     width: 100%;
     max-width: 100vw;
 }
@@ -111,7 +100,6 @@ section {
     text-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 
-/* --- BUTTONS & BADGES --- */
 .badge {
     background: var(--brand-primary);
     color: var(--background-color);
@@ -158,10 +146,8 @@ section {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* --- TRENDING BOOKS GRID --- */
 .books-grid {
     display: grid;
-    /* CRITICAL FIX: min(100%, 160px) guarantees it drops to 1 column if screen is super tiny */
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
     gap: 18px;
 }
@@ -249,10 +235,8 @@ section {
     font-size: 0.9rem;
 }
 
-/* --- CURATED GRID --- */
 .curated-grid {
     display: grid;
-    /* CRITICAL FIX: Safe minimum ensures 1 column on mobile, multiple on desktop */
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 20px;
 }
@@ -308,7 +292,6 @@ section {
     color: var(--text-muted);
 }
 
-/* --- CAROUSEL CONTROLS --- */
 .carousel-controls {
     display: flex;
     gap: 8px;
@@ -332,12 +315,6 @@ section {
     color: var(--brand-primary);
 }
 
-
-/* =========================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================= */
-
-/* Tablets & Small Laptops */
 @media (max-width: 1024px) {
     .featured-card {
         flex: 0 0 400px;
@@ -348,7 +325,6 @@ section {
     }
 }
 
-/* Mobile Devices */
 @media (max-width: 768px) {
     main.dashboard-container {
         padding: 15px 16px 40px 16px;
@@ -359,7 +335,6 @@ section {
     }
 
     .featured-card {
-        /* CRITICAL FIX: Keeps the card contained in the viewport */
         flex: 0 0 85vw; 
         max-width: 85vw;
         aspect-ratio: auto; 
@@ -385,10 +360,9 @@ section {
     }
 }
 
-/* Small Mobile Devices */
 @media (max-width: 480px) {
     .featured-card {
-        flex: 0 0 90vw; /* Takes up slightly more room on tiny phones */
+        flex: 0 0 90vw;
         max-width: 90vw;
         min-height: 220px;
     }
@@ -398,7 +372,6 @@ section {
     }
 
     .books-grid {
-        /* Forces 2 columns minimum, dropping to 1 only if the screen is under 200px */
         grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr));
         gap: 10px;
     }

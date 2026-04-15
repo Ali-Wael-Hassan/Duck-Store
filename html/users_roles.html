@@ -3,50 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumina Books | Users & Roles</title>
+    <title>Duck Library | Users & Roles</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="../css/component.css">
     <link rel="stylesheet" href="../css/classes.css">
     <link rel="stylesheet" href="../css/Pages/user-roles.css">
 </head>
 <body data-page="users-roles">
 
-    <nav class="header">
+    <nav class="header" id="main-nav">
         <div class="container header__inner">
             <div class="logo-group">
-                <div class="logo-icon">
-                    <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
-                </div>
-                <div class="logo-text">LUMINA</div>
-            </div>
-            <div class="nav" aria-label="Main navigation">
-                <a href="home.html">Home</a>
-                <a href="store.html">Store</a>
-                <a href="my-books.html">My Books</a>
-                <a href="community.html">Community</a>
-                <a href="reward.html">Rewards</a>
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
             </div>
             <div class="header__actions">
-                <a href="cart.html" class="action-link" aria-label="Shopping Cart">
-                    <span class="material-symbols-outlined">shopping_cart</span>
-                </a>
-                <a href="profile.html" class="avatar-link" aria-label="User Profile">
-                    <img src="https://via.placeholder.com/32" alt="User avatar" class="avatar-img">
-                </a>
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
             </div>
         </div>
     </nav>
 
     <div class="layout-wrapper">
         <aside>
-            <a href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            <a href="Book-&-inventory.html"><i class="fa-solid fa-book"></i> Books & Inventory</a>
-            <a href="users_roles.html"><i class="fa-solid fa-users"></i> Users & Roles</a>
-            <a href="sales_refunds.html" class="active"><i class="fa-solid fa-money-bill"></i> Sales & Refunds</a>
-            <a href="Gamification_Admen.html"><i class="fa-solid fa-trophy"></i> Gamification</a>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html" class="active"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
         </aside>
 
         <main class="users-main">
@@ -139,7 +125,7 @@
                 <input type="text" id="add-user-name" placeholder="Full Name" required>
                 
                 <label>Email</label>
-                <input type="email" id="add-user-email" placeholder="email@lumina.com" required>
+                <input type="email" id="add-user-email" placeholder="email@gmail.com" required>
                 
                 <label>Role</label>
                 <select id="add-user-role">

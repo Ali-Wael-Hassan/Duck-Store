@@ -1,4 +1,6 @@
-/* ===== GLOBAL VARIABLES & RESET ===== */
+/* NOTE INITIAL DESIGN IS DESKTOP */
+
+/* Global Variables */
 :root {
     /* Brand Colors */
     --brand-primary: #FFD700;
@@ -8,6 +10,7 @@
     --background-color: #0B0E11;
     --card-bg: #161B22;
     --input-bg: #1C2128;
+    --progress-bg: #1e293b;
 
     /* Text Colors */
     --text-main: #FFFFFF;
@@ -41,6 +44,11 @@
     box-sizing: border-box;
 }
 
+textarea {
+  resize: none;
+}
+
+/* Unified Body */
 body {
     background-color: var(--background-color);
     color: var(--text-main);
@@ -50,35 +58,39 @@ body {
     min-height: 100vh;
 }
 
-/* ===== TOP NAVIGATION (sticky) ===== */
+/* Top Navigation */
 .header {
     border-bottom: 1px solid rgba(192, 168, 106, 0.2);
     background: rgba(10, 12, 16, 0.95);
-    backdrop-filter: blur(4px);
-    position: sticky;
+    backdrop-filter: blur(4px); /* Stylize the background to it to be slightly blured */
+    position: sticky; /* Show it when scrolling */
     top: 0;
-    z-index: 100;
+    z-index: 100; /* Make it on top of every thing */
 }
 
+/* Width of the Nav Bar */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 32px;
 }
 
+/* Layout for elements inside */
 .header__inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Left(1) + Center + Right(1) */
     align-items: center;
     padding: 18px 0;
 }
 
+/* Logo Container */
 .logo-group {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
+/* Icon Placeholder */
 .logo-icon {
     background: linear-gradient(135deg, #C0A86A, #A8894F);
     width: 42px;
@@ -89,26 +101,30 @@ body {
     border-radius: 14px;
 }
 
+/* Name exposed to the API */
 .logo-icon span {
     font-size: 28px;
     color: #0A0C10;
 }
 
+/* Name of the brand */
 .logo-text {
     font-size: 1.6rem;
     font-weight: 800;
     letter-spacing: -0.5px;
     background: linear-gradient(130deg, #FFF8E7, #C0A86A);
     background-clip: text;
-    -webkit-background-clip: text;
+    -webkit-background-clip: text; /* make painting area to text */
     color: transparent;
 }
 
+/* make nav flex for layout (FlowLayout in Java) */
 .nav {
     display: flex;
     gap: 32px;
 }
 
+/* Adjust all anchors inside nav (middle elements) */
 .nav a {
     color: #8D94A5;
     text-decoration: none;
@@ -118,31 +134,37 @@ body {
     transition: color 0.2s ease;
 }
 
+/* Hover Effect using Psuedoclass */
 .nav a.active,
+aside a.active,
+aside a:hover,
 .nav a:hover {
     color: #C0A86A;
 }
 
-/* ===== HEADER ACTIONS (CART + AVATAR) ===== */
+/* Avatar + Cart (right elements) */
 .header__actions {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+/* Special Class for right elements */
 .action-link,
 .avatar-link {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: var(--text-muted);
-    transition: all var(--transition-speed) ease;
+    transition: all var(--transition-speed) ease; /* Basic Animation */
 }
 
+/* Hover Effect using Psuedoclass */
 .action-link:hover {
     color: var(--brand-primary);
 }
 
+/* Circular avatar image */
 .avatar-img {
     width: 36px;
     height: 36px;
@@ -152,12 +174,13 @@ body {
     transition: border-color var(--transition-speed), transform var(--transition-speed);
 }
 
+/* Hover Effect using Psuedoclass */
 .avatar-img:hover {
     border-color: var(--brand-primary);
     transform: scale(1.05);
 }
 
-/* ===== LAYOUT: ASIDE (LEFT) + MAIN ===== */
+/* Layout for the page content, aka asize(left) + main(right) */
 .layout-wrapper {
     display: flex;
     flex: 1;
@@ -168,16 +191,16 @@ body {
     gap: 32px;
 }
 
-/* Sidebar (aside) - full height, flush left */
+/* Sidebar (aside) */
 aside {
     width: 260px;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Don't shrink elemnts */
     background-color: var(--nav-color);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-main);
     padding: 20px 0;
-    margin: 32px 0;         /* keeps top/bottom margin */
-    margin-left: 0;         /* forces left alignment, removes any unexpected shift */
+    margin: 32px 0;
+    margin-left: 0;
     align-self: stretch;
     position: sticky;
     top: 90px;
@@ -185,13 +208,16 @@ aside {
 }
 
 /* Sidebar links - full width of aside (with small inner spacing) */
-aside a, aside a:visited {
+aside a,
+aside a:visited {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
-    width: calc(100% - 20px);  /* takes full width minus 10px on each side */
-    margin: 10px auto;         /* centers horizontally within aside, but with left-aligned content */
+    width: calc(100% - 20px);
+    /* takes full width minus 10px on each side */
+    margin: 10px auto;
+    /* centers horizontally within aside, but with left-aligned content */
     padding: var(--btn-padding-y) var(--btn-padding-x);
     color: var(--text-muted);
     background-color: var(--card-bg);
@@ -204,6 +230,7 @@ aside a, aside a:visited {
     cursor: pointer;
 }
 
+/* Hover Effect using Psuedoclass */
 aside a:hover {
     color: var(--brand-primary);
     border-color: var(--brand-primary-hover);
@@ -222,7 +249,7 @@ main {
     transition: all var(--transition-speed) ease;
 }
 
-/* ===== FORM ELEMENTS ===== */
+/* Form Elements */
 label {
     display: block;
     margin-bottom: 8px;
@@ -230,6 +257,7 @@ label {
     font-weight: 500;
 }
 
+/* Stylize input(General) */
 input {
     width: 100%;
     background-color: var(--input-bg);
@@ -242,11 +270,13 @@ input {
     transition: border-color var(--transition-speed);
 }
 
+/* Focus using Psuedoclass */
 input:focus {
-    outline: none;
+    outline: none; /* Outline none to not conflict with border colors */
     border-color: var(--brand-primary);
 }
 
+/* General Styling for Buttons */
 button {
     width: 100%;
     background: var(--card-bg);
@@ -261,13 +291,14 @@ button {
     transition: all var(--transition-speed) ease;
 }
 
+/* Hover Effect using Psuedoclass */
 button:hover {
     color: var(--brand-primary);
     border-color: var(--brand-primary-hover);
-    transform: translateY(-3px);
+    transform: translateY(-3px); /* Move it up slightly */
 }
 
-/* ===== FOOTER ===== */
+/* Footer(rarely used but for safety) */
 footer {
     text-align: center;
     margin-top: 24px;
@@ -277,7 +308,189 @@ footer {
     background-color: var(--nav-color);
 }
 
-/* ===== RESPONSIVENESS ===== */
+.action-context-menu {
+    position: absolute;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 3000;
+    min-width: 140px;
+    overflow: hidden;
+}
+
+.menu-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: var(--font-size-small);
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: var(--input-bg);
+}
+
+.menu-item.edit:hover { color: var(--brand-primary); }
+.menu-item.delete:hover { color: #ff4d4d; }
+
+.btn-action-trigger {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-action-trigger:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.custom-modal {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    padding: var(--spacing-card);
+    border-radius: var(--radius-main);
+    width: 600px;
+    max-width: 90%;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    font-family: var(--font-main);
+}
+
+.custom-modal h3 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: var(--brand-primary);
+    font-weight: 700;
+}
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.modal-grid input, 
+.modal-grid textarea {
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 12px;
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-speed);
+}
+
+.modal-grid input:focus, 
+.modal-grid textarea:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+}
+
+.modal-grid textarea::placeholder,
+.modal-grid input::placeholder {
+    color: var(--text-muted);
+}
+
+.modal-file-wrapper {
+    grid-column: span 2;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: var(--radius-input);
+}
+
+.modal-grid input[type="file"] {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.modal-grid input[type="file"]::-webkit-file-upload-button {
+    background: var(--progress-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.image-preview {
+    width: 60px;
+    height: 80px;
+    border-radius: var(--radius-input);
+    object-fit: cover;
+    background-color: var(--progress-bg);
+    border: 1px solid var(--border-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    grid-column: span 2;
+}
+
+.btn-save {
+    background-color: var(--brand-primary);
+    color: #000;
+    border: none;
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    font-weight: var(--btn-font-weight);
+    transition: background-color var(--transition-speed);
+}
+
+.btn-save:hover {
+    background-color: var(--brand-primary-hover);
+}
+
+.btn-cancel {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
+    border-radius: var(--radius-input);
+    cursor: pointer;
+    font-weight: var(--btn-font-weight);
+    transition: all var(--transition-speed);
+}
+
+.btn-cancel:hover {
+    background-color: var(--progress-bg);
+    color: var(--text-main);
+}
+
+/* Tablets */
 @media (max-width: 768px) {
     .layout-wrapper {
         flex-direction: column;
@@ -296,7 +509,8 @@ footer {
         gap: 8px;
     }
 
-    aside a, aside a:visited {
+    aside a,
+    aside a:visited {
         width: auto;
         margin: 5px;
         white-space: nowrap;
@@ -318,7 +532,6 @@ footer {
         justify-content: center;
     }
 
-    /* Header actions responsive */
     .header__actions {
         gap: 16px;
     }
@@ -333,12 +546,14 @@ footer {
     }
 }
 
+/* Mobile */
 @media (max-width: 480px) {
     .logo-text {
         font-size: 1.2rem;
     }
 
-    aside a, aside a:visited {
+    aside a,
+    aside a:visited {
         font-size: 0.75rem;
         padding: 6px 12px;
     }
@@ -361,7 +576,7 @@ footer {
     }
 }
 
-/* ===== UTILITIES ===== */
+/* Basic Utilities */
 ul {
     list-style-type: none;
 }

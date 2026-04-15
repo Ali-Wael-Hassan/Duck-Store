@@ -4,7 +4,7 @@ export class SalesRefundsController {
     constructor() {
         this.orders = [];
         this.currentPage = 1;
-        this.rowsPerPage = 5; // Change this number to show more/less rows
+        this.rowsPerPage = 5;
         this.init();
     }
 
@@ -46,7 +46,9 @@ export class SalesRefundsController {
         let totalRefunds = 0;
 
         this.orders.forEach(order => {
-            const amount = parseFloat(order.total || 0);
+            const totalStr = String(order.total || "0");
+            const amount = parseFloat(totalStr.replace(/[$,]/g, '')) || 0;
+
             if (order.status === 'Refunded' || order.status === 'Refund') {
                 totalRefunds += amount;
             } else {
@@ -64,20 +66,17 @@ export class SalesRefundsController {
         const paginationLabel = document.querySelector('#sales-pagination .subtext');
         if (!tbody) return;
 
-        // --- Pagination Logic ---
         const total = this.orders.length;
         const start = (this.currentPage - 1) * this.rowsPerPage;
         const end = Math.min(start + this.rowsPerPage, total);
         const currentSlice = this.orders.slice(start, end);
 
-        // Update Text: "Showing 1-5 of 12 transactions"
         if (paginationLabel) {
             paginationLabel.innerText = total > 0 
                 ? `Showing ${start + 1}-${end} of ${total} transactions`
                 : `Showing 0 of 0 transactions`;
         }
 
-        // Update Button States (Disable if at start/end)
         document.getElementById('prev-page').disabled = (this.currentPage === 1);
         document.getElementById('next-page').disabled = (end >= total);
 
@@ -88,13 +87,19 @@ export class SalesRefundsController {
 
         tbody.innerHTML = currentSlice.map(order => {
             const isRefund = order.status === 'Refunded' || order.status === 'Refund';
+            
+            const totalStr = String(order.total || "0");
+            const numericAmount = parseFloat(totalStr.replace(/[$,]/g, '')) || 0;
+
             return `
                 <tr>
                     <td data-label="BOOK">${order.bookTitle || 'Unknown Book'}</td>
                     <td data-label="CUSTOMER">${order.customerName || 'Guest'}</td>
                     <td data-label="STATUS"><span class="${isRefund ? 'refund' : 'paid'}">${order.status}</span></td>
                     <td data-label="DATE">${order.date}</td>
-                    <td data-label="AMOUNT" class="${isRefund ? 'red' : 'yellow'}">${isRefund ? '-$' : '$'}${parseFloat(order.total).toFixed(2)}</td>
+                    <td data-label="AMOUNT" class="${isRefund ? 'red' : 'yellow'}">
+                        ${isRefund ? '-$' : '$'}${numericAmount.toFixed(2)}
+                    </td>
                 </tr>
             `;
         }).join('');

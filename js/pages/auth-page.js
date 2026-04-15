@@ -1,3 +1,5 @@
+/* Wrapper Class for AuthManager */
+
 import { AuthManager } from '../modules/AuthManager.js';
 
 export class AuthPage {
@@ -18,7 +20,6 @@ export class AuthPage {
     }
 
     bindEvents() {
-        alert("verify");
         if (this.form) {
             this.form.addEventListener("submit", (e) => this.handleSubmit(e));
         }
@@ -35,7 +36,6 @@ export class AuthPage {
     handleSubmit(e) {
         e.preventDefault();
 
-        // Validation for Sign-up only
         if (this.form.id === "signup-form" && this.terms && !this.terms.checked) {
             return alert("Agree to terms!");
         }
@@ -47,7 +47,6 @@ export class AuthPage {
             fullName: document.getElementById("full-name")?.value || "Manual User"
         };
 
-        // Logic to handle either login or signup
         if (this.form.id === "login-form") {
             this.auth.manualLogin(formData); 
         } else {

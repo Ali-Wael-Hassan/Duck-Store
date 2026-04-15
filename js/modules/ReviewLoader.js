@@ -1,24 +1,25 @@
 export class ReviewLoader {
     constructor(containerId, initialReviews = []) {
         this.container = document.getElementById(containerId);
-        // Reverse array so latest reviews (end of array) appear first
+        // Reverse array so latest reviews appear first
         this.reviews = [...initialReviews].reverse();
         this.loadedCount = 0;
         
         // Find the load more button to check state immediately
         const loadMoreBtn = document.querySelector('.load-more');
 
-        // IF NO REVIEWS EXIST: Update button immediately
+        // Update button immediately when no reviews exists
         if (this.reviews.length === 0) {
             if (loadMoreBtn) this._finalizeButton(loadMoreBtn);
             return; 
         }
 
-        // Otherwise, auto-load first 2 reviews
+        // auto-load first 2 reviews
         this.loadNext(loadMoreBtn); 
         this.loadNext(loadMoreBtn);
     }
 
+    /* Safety Process against XSS */
     escape(str) {
         if (!str) return "";
         const div = document.createElement('div');
@@ -51,7 +52,6 @@ export class ReviewLoader {
     renderCard(rev, method = 'append') {
         if (!this.container) return;
 
-        // Helper to build review stars string
         let starHtml = '';
         const revScore = Math.round(rev.rating || 0);
         for (let i = 1; i <= 5; i++) {

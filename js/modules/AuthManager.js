@@ -4,6 +4,31 @@ export class AuthManager {
     constructor(clientId) {
         this.clientId = clientId;
         this.tokenClient = null;
+        this.inputMap = StorageManager.get('gamification-config');
+    }
+
+    _showAuthError(message) {
+        let errorEl = document.getElementById('auth-error-msg');
+        
+        if (!errorEl) {
+            errorEl = document.createElement('div');
+            errorEl.id = 'auth-error-msg';
+            Object.assign(errorEl.style, {
+                color: '#e74c3c',
+                fontSize: '14px',
+                marginTop: '12px',
+                textAlign: 'center',
+                fontWeight: '500',
+                padding: '8px',
+                borderRadius: '4px',
+                backgroundColor: 'rgba(231, 76, 60, 0.1)'
+            });
+            
+            const activeForm = document.querySelector('form');
+            if (activeForm) activeForm.appendChild(errorEl);
+        }
+        
+        errorEl.textContent = message;
     }
 
     initGoogleService() {
@@ -19,63 +44,113 @@ export class AuthManager {
         });
     }
 
-    // NEW: Helper to sync with Community and Profile requirements
     _saveSession(userData) {
+        const { password, ...safeUserData } = userData;
+
         const sessionUser = {
-            id: userData.id || "user_" + Date.now(),
-            name: userData.name,
-            email: userData.email,
-            avatar: userData.picture || `https://i.pravatar.cc/150?u=${userData.name}`,
-            role: userData.role,
-            loggedIn: true,
-            // Community/Profile expectations
-            points: 0, 
-            readings: 0,
-            reviews: 0,
-            joinDate: new Date().getFullYear().toString()
+            id: safeUserData.id || "user_" + Date.now(),
+            avatar: safeUserData.avatar || safeUserData.picture || "/assets/users/guest.png",
+            points: safeUserData.points || 0,
+            readings: safeUserData.readings || 0,
+            reviews: safeUserData.reviews || 0,
+            joinDate: safeUserData.joinDate || '2026',
+            role: safeUserData.role || "user",
+            userBooks: safeUserData.userBooks || [],
+            borrowedBooks: safeUserData.borrowedBooks || [],
+            ...safeUserData,
+            loggedIn: true 
         };
 
-        // 1. Save for the current session (Object)
-        localStorage.setItem("user_session", JSON.stringify(sessionUser));
+        StorageManager.save("user_session", sessionUser);
 
-        // 2. Save for the Auth legacy check (Array)
-        StorageManager.save("user", [sessionUser]);
-
-        // 3. Add to community leaderboard if not already there
-        const community = StorageManager.get("community_users") || [];
-        if (!community.find(u => u.email === sessionUser.email)) {
-            community.push(sessionUser);
-            StorageManager.save("community_users", community);
+        const allUsers = StorageManager.get("users") || [];
+        const userIndex = allUsers.findIndex(u => u.email === sessionUser.email);
+        if (userIndex !== -1) {
+            allUsers[userIndex] = { ...allUsers[userIndex], ...sessionUser };
+            StorageManager.save("users", allUsers);
         }
+
+        const community = StorageManager.get("community_users") || [];
+        const commIndex = community.findIndex(u => u.email === sessionUser.email);
+        if (commIndex === -1) {
+            community.push(sessionUser);
+        } else {
+            community[commIndex] = { ...community[commIndex], ...sessionUser };
+        }
+        StorageManager.save("community_users", community);
     }
 
     manualLogin(formData) {
-        const { email, isAdmin } = formData;
-        const user = {
-            id: 1,
-            name: email.split('@')[0],
-            email: email,
-            role: isAdmin ? "admin" : "user",
-            picture: null,
-            loggedIn: true,
-            points: 1250
-        };
+        const { email, password } = formData;
+        const allUsers = StorageManager.get("users") || [];
 
-        this._saveSession(user);
-        this.redirect(user.role);
+        const existingUser = allUsers.find(u => u.email === email && u.password);
+
+        if (!existingUser) {
+            this._showAuthError("No account found with this email.");
+            return;
+        }
+
+        if (existingUser.password !== password) {
+            this._showAuthError("Incorrect password. Please try again.");
+            return;
+        }
+
+        const today = new Date().toDateString();
+        if (!existingUser.lastLogin) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            existingUser.lastLogin = yesterday.toDateString();
+        }
+        if (existingUser.lastLogin && new Date(existingUser.lastLogin).toDateString() !== today) {
+            existingUser.points += this.inputMap.loginPoints;
+        }
+
+        existingUser.lastLogin = today;
+
+        this._saveSession(existingUser);
+        this.redirect(existingUser.role);
     }
 
     manualSignUp(formData) {
-        const { fullName, email, isAdmin } = formData;
+        const { fullName, email, password, isAdmin } = formData;
+        const allUsers = StorageManager.get("users") || [];
+
+        if (!password || password.length < 4) {
+            this._showAuthError("Password must be at least 4 characters long.");
+            return;
+        }
+
+        if (allUsers.find(u => u.email === email)) {
+            this._showAuthError("This email is already registered.");
+            return;
+        }
+
         const newUser = {
+            id: "user_" + Date.now(),
             name: fullName,
             email: email,
-            picture: null,
-            role: isAdmin ? "admin" : "user"
+            password: password,
+            role: isAdmin ? "admin" : "user",
+            points: 0,
+            readings: 0,
+            reviews: 0,
+            joinDate: '2026',
+            avatar: '/assets/users/guest.png',
+            userBooks: [],
+            borrowedBooks: []        
         };
 
-        this._saveSession(newUser);
-        this.redirect(newUser.role);
+        const today = new Date().toDateString();
+
+        if (newUser.lastLogin && new Date(newUser.lastLogin).toDateString() !== today) {
+            newUser.points += this.inputMap.loginPoints;
+        }
+
+        allUsers.push(newUser);
+        StorageManager.save("users", allUsers);
+
+        window.location.href = "sign-in.html";
     }
 
     loginWithGoogle() {
@@ -84,12 +159,17 @@ export class AuthManager {
     }
 
     logout() {
-        // Clear both session keys
+        const session = JSON.parse(localStorage.getItem("user_session"));
+        if (session?.access_token) {
+            try {
+                google.accounts.oauth2.revoke(session.access_token);
+            } catch (err) {
+                console.error("Token revocation failed", err);
+            }
+        }
         localStorage.removeItem("user_session");
-        StorageManager.save("user", []);
-        
         const isInHtmlFolder = window.location.pathname.includes('/html/');
-        window.location.href = isInHtmlFolder ? "../auth.html" : "auth.html";
+        window.location.href = isInHtmlFolder ? "sign-in.html" : "html/sign-in.html";
     }
 
     async _handleTokenResponse(tokenResponse) {
@@ -100,15 +180,28 @@ export class AuthManager {
             });
             const data = await res.json();
 
-            const user = {
-                name: data.name,
-                email: data.email,
-                picture: data.picture,
-                role: "user"
-            };
+            const allUsers = StorageManager.get("users") || [];
+            let localUser = allUsers.find(u => u.email === data.email);
 
-            this._saveSession(user);
-            this.redirect(user.role);
+            if (!localUser) {
+                localUser = {
+                    id: "user_" + Date.now(),
+                    name: data.name,
+                    email: data.email,
+                    password: null,
+                    avatar: data.picture,
+                    role: "user",
+                    points: 0,
+                    readings: 0,
+                    reviews: 0,
+                    joinDate: '2026'
+                };
+                allUsers.push(localUser);
+                StorageManager.save("users", allUsers);
+            }
+
+            this._saveSession({ ...localUser, access_token: tokenResponse.access_token });
+            this.redirect(localUser.role);
         } catch (err) {
             console.error("AuthManager: Google Fetch Failed", err);
         }
@@ -117,14 +210,16 @@ export class AuthManager {
     redirect(role) {
         const isInHtmlFolder = window.location.pathname.includes('/html/');
         const pathPrefix = isInHtmlFolder ? "" : "html/";
-        const target = (role === "admin") ? `${pathPrefix}dashboard.html` : `${pathPrefix}home.html`;
-        alert(`redirection: ${target}`);
+        const target = (role === "admin" || role === "manager") 
+            ? `${pathPrefix}dashboard.html` 
+            : `${pathPrefix}home.html`;
+        
         window.location.href = target;
     }
 
     checkExistingSession() {
         const session = JSON.parse(localStorage.getItem("user_session"));
-        if (session && session.loggedIn && !window.location.pathname.includes('home.html')) {
+        if (session && session.loggedIn) {
             this.redirect(session.role);
         }
     }

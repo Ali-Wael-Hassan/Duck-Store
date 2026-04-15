@@ -1,3 +1,5 @@
+/* Currently Not Used for (version 1.0) */
+
 export class VisualEffects {
     constructor(sensitivity = 15) {
         this.sensitivity = sensitivity;

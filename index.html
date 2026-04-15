@@ -1,80 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUCK Store | Sign In</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <title>About Us | Duck Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/component.css">
-    <link rel="stylesheet" href="css/classes.css">
-    <link rel="stylesheet" href="css/Pages/sign-in.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="css/Pages/about-us.css">
 </head>
-<body data-page="auth"> 
-    <header class="text-center m-bottom-lg">
-        <h1 class="brand-logo">
-            <img src="assets/logo.png" alt="DUCK STORE Logo">
-            DUCK <span class="text-accent">STORE</span>
-        </h1>
-        <p class="text-muted">Step into a world of curated wisdom</p>
-    </header>
 
-    <main class="page-center">
-        <section class="card">
-            <header class="card__header card__header--accent m-bottom-lg">
-                <h2>Welcome Back</h2>
-                <p class="text-accent">Access your premium digital library</p>
-            </header>
+<body data-page="about-us">
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="html/sign-in.html">sign-in</a>
+                <a href="html/sign-up.html">sign-up</a>
+            </div>
+        </div>
+    </nav>
 
-            <form id="login-form" class="form-auth">
-                <div class="form-auth__field">
-                    <label class="form-auth__label" for="email-input">Email Address</label>
-                    <div class="form-auth__input-group">
-                        <i class="bi bi-envelope form-auth__icon" aria-hidden="true"></i>
-                        <input id="email-input" class="form-auth__input" type="email" placeholder="name@example.com" required>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <p class="est-date">EST. 1892</p>
+                <h1>Illuminating Minds</h1>
+                <p class="hero-sub">At Duck Store, our mission is to curate a collection of literature that transcends
+                    time. We believe in the transformative power of storytelling.</p>
+            </div>
+        </section>
+
+        <section class="philosophy">
+            <div class="container">
+                <p class="label">OUR PHILOSOPHY</p>
+                <blockquote>"A book is more than paper and ink; it is a spark that ignites the human spirit."
+                </blockquote>
+                <p class="description">
+                    Founded on the belief that profound ideas should be accessible and beautifully presented,
+                    Duck Store has spent decades cultivating a legacy of intellectual curiosity.
+                    We don't just polish books; we preserve voices that challenge the status quo and
+                    celebrate the human experience in all its complexity.
+                </p>
+
+                <div class="features-grid">
+                    <div class="card">
+                        <span class="icon" aria-hidden="true">🖋️</span>
+                        <h3>Curated Quality</h3>
+                        <p>Every title in our catalog undergoes a rigorous selection process, ensuring only the most
+                            impactful works reach your hands.</p>
+                    </div>
+                    <div class="card">
+                        <span class="icon" aria-hidden="true">💎</span>
+                        <h3>Timeless Design</h3>
+                        <p>We prioritize the tactile experience of reading, using high-grade materials and elegant
+                            typography for every edition.</p>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="form-auth__field">
-                    <div class="form-auth__row-space">
-                        <label class="form-auth__label" for="password-input">Password</label>
-                        <a href="html/reset-password.html" class="link-accent">Forgot password?</a>
-                    </div>
-                    <div class="form-auth__input-group">
-                        <i class="bi bi-lock form-auth__icon" aria-hidden="true"></i>
-                        <input id="password-input" class="form-auth__input" type="password" placeholder="••••••••" required>
-                    </div>
+        <section class="gallery">
+            <div class="container gallery-flex">
+                <img src="/assets/background/take-book.jpg" alt="Library interior">
+                <img src="/assets/background/books.jpg" alt="Book in nature">
+            </div>
+        </section>
+
+        <section class="history">
+            <div class="container narrow">
+                <h2>From a Small Studio to Global Reach</h2>
+                <div class="history-content">
+                    <p>Our journey began in the back corner of the faculty library at <strong>FCAI</strong>, where three students shared a single dream: to digitize the knowledge that was trapped in decaying bindings and outdated catalogs. What started as a script to automate book tracking has grown into a sophisticated ecosystem for global information retrieval.</p>
+
+                    <p>In 2024, we launched the <strong>Deep-Archive Series</strong>, a project dedicated to migrating ancient manuscripts into cloud-native databases with modern OCR commentary and bespoke metadata structures. This initiative redefined our mission, marrying the timeless wisdom of the library stacks with the high-speed data structures of the future.</p>
+
+                    <p>Today, we are proud to connect readers and researchers from over 40 countries, bridging the gap between physical archives and digital accessibility, fostering a more informed world through the shared language of <strong>Data and Literature</strong>.</p>
                 </div>
 
-                <div class="banner-security">
-                    <i class="bi bi-shield-check" aria-hidden="true"></i>
-                    <div class="banner-security__content">
-                        <p class="banner-security__title">2FA Security Active</p>
-                        <p class="banner-security__text">Verification required upon login.</p>
+                <div class="collective-badge">
+                    <div class="avatar-group">
+                        <div class="avatar-circle"></div>
+                        <div class="avatar-circle"></div>
+                        <div class="avatar-circle"></div>
+                    </div>
+                    <div class="badge-text">
+                        <p><strong>The Duck Collective</strong></p>
+                        <p>A community of 150+ editors, artists, and dreamers.</p>
                     </div>
                 </div>
-
-                <div class="form-auth__field-checkbox">
-                    <input type="checkbox" id="admin-toggle">
-                    <label for="admin-toggle" class="form-auth__label">Login as Administrator</label>
-                </div>
-
-                <button type="submit" class="btn btn--primary">Sign Into Library</button>
-
-                <div class="divider">OR CONTINUE WITH</div>
-
-                <button type="button" id="google-signin-btn" class="btn btn--outline">
-                    <i class="bi bi-google" aria-hidden="true"></i> 
-                    <span>Continue with Google</span>
-                </button>
-            </form>
-
-            <footer class="card__footer">
-                <p class="text-muted">Don't have an account? <a href="html/sign-up.html" class="link-accent">Request Invitation</a></p>
-            </footer>
+            </div>
         </section>
     </main>
 
-    <script type="module" src="js/main.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <h3>Be Part of the Story</h3>
+            <p>Join our monthly newsletter for exclusive author interviews and literary insights.</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Your email address" aria-label="Email address for newsletter">
+                <button class="btn-gold">Join the Collective</button>
+            </div>
+        </div>
+
+    </footer>
+    <script src="../js/main.js"></script>
 </body>
+
 </html>
