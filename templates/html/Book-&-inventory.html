@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Books & Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/Book-&-inventory.css' %}">
+</head>
+<body data-page="inventory">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html" class="active"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main class="inventory-main">
+            <div class="inventory-header">
+                <div>
+                    <h1>Books & Inventory</h1>
+                    <p>Manage your global catalog and real-time stock levels.</p>
+                </div>
+                <div>
+                    <button class="btn-primary" id="add-book-btn">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Book Title & Author</th>
+                            <th>ISBN-13</th>
+                            <th>SKU</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        {% for item in inventory %}
+                        <tr>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    {% if item.book.cover_img %}
+                                    <img src="{{ item.book.cover_img.url }}" alt="{{ item.book.title }}" style="width:40px;height:55px;object-fit:cover;border-radius:3px;">
+                                    {% else %}
+                                    <div style="width:40px;height:55px;background:#e9ecef;border-radius:3px;"></div>
+                                    {% endif %}
+                                    <div>
+                                        <div style="font-weight:600;">{{ item.book.title }}</div>
+                                        <div style="font-size:0.85rem;color:#888;">{{ item.book.author }}</div>
+                                        <div style="font-size:0.8rem;color:#aaa;">{{ item.book.genre.name }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="font-family:monospace;">{{ item.isbn }}</td>
+                            <td style="font-family:monospace;">{{ item.sku }}</td>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <div style="flex:1;height:6px;background:#e9ecef;border-radius:3px;">
+                                        <div style="width:{{ item.stock_percent }}%;height:100%;background:{% if item.stock == 0 %}#ef4444{% elif item.stock_percent < 20 %}#f59e0b{% else %}#10b981{% endif %};border-radius:3px;"></div>
+                                    </div>
+                                    <span style="font-weight:600;">{{ item.stock }}/{{ item.max_stock }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="padding:3px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;
+                                    background:{% if item.get_status == 'In Stock' %}#d1fae5;color:#065f46{% elif item.get_status == 'Low Stock' %}#fef3c7;color:#92400e{% else %}#fee2e2;color:#991b1b{% endif %};">
+                                    {{ item.get_status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-outline edit-btn" data-book-id="{{ item.book.id }}" style="padding:5px 10px;font-size:0.8rem;">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" style="text-align:center;padding:30px;color:#888;">No inventory found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination flex-between" id="inventory-pagination">
+                <span class="subtext">Showing {{ inventory.start_index }}-{{ inventory.end_index }} of {{ inventory.paginator.count }} books</span>
+                <div class="page-controls">
+                    {% if inventory.has_previous %}
+                    <a href="?page={{ inventory.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
+                    {% else %}
+                    <button class="btn-outline" disabled>Previous</button>
+                    {% endif %}
+                    {% if inventory.has_next %}
+                    <a href="?page={{ inventory.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
+                    {% else %}
+                    <button class="btn-outline" disabled>Next</button>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
+</body>
+</html>

@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | Book Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/store.css' %}">
+</head>
+<body data-page="store">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="home.html">Home</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="my-Books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside class="store-filters" id="filters-container">
+            <form method="GET" action="{% url 'catalog' %}">
+                <h3>Filters</h3>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4>Search</h4>
+                    <input type="text" name="search" placeholder="Search..." value="{{ request.GET.search }}" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4>Genres</h4>
+                    {% for genre in genres %}
+                    <label style="display: block; margin-bottom: 8px; cursor: pointer;">
+                        <input type="checkbox" name="genres" value="{{ genre.slug }}" {% if genre.slug in request.GET.genres %}checked{% endif %}>
+                        {{ genre.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" style="width: 100%; padding: 10px; background-color: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer;">Apply Filters</button>
+                <a href="{% url 'catalog' %}" style="display: block; text-align: center; margin-top: 10px; color: #666; text-decoration: none; font-size: 0.9em;">Clear Filters</a>
+            </form>
+        </aside>
+
+        <main class="store-main">
+            <div class="catalog__header">
+                <div class="catalog__controls" id="catalog-meta">
+                    <h2 style="font-size: 1.5rem;">Store Catalog <span style="color: #666; font-size: 1rem; font-weight: normal;">({{ books.paginator.count }} items)</span></h2>
+                </div>
+            </div>
+
+            <div class="book-grid" id="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                {% for book in books %}
+                <div class="book-card" style="border: 1px solid #eee; border-radius: 8px; overflow: hidden; background: white; transition: transform 0.2s;">
+                    <a href="{% url 'book_detail' book.id %}" style="text-decoration: none; color: inherit; display: block; padding: 15px;">
+                        <figure class="book-cover" style="margin: 0 0 15px 0; height: 250px; display: flex; justify-content: center; background: #f8f9fa;">
+                            {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            {% else %}
+                            <img src="{% static 'assets/placeholder.png' %}" alt="No cover available" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            {% endif %}
+                        </figure>
+                        <div class="book-info">
+                            <span class="genre" style="font-size: 0.8rem; color: #888; text-transform: uppercase;">{{ book.genre.name }}</span>
+                            <h3 class="title" style="margin: 5px 0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ book.title }}</h3>
+                            <p class="author" style="margin: 0 0 10px 0; color: #555; font-size: 0.9rem;">{{ book.author }}</p>
+                            <div class="stats" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="rating" style="color: #f59e0b; font-weight: bold;">★ {{ book.rating }}</span>
+                                <span class="price" style="font-weight: bold; font-size: 1.2rem; color: var(--primary);">${{ book.price }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <p>No books found matching your criteria.</p>
+                {% endfor %}
+            </div>
+
+            <div class="pagination" id="pagination-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 40px;">
+                {% if books.has_previous %}
+                <a href="?page={{ books.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">← Prev</a>
+                {% else %}
+                <button class="pagination__btn" disabled style="padding: 8px 16px; border: 1px solid #eee; border-radius: 4px; color: #aaa; background: #f9f9f9; cursor: not-allowed;">← Prev</button>
+                {% endif %}
+                
+                <div class="pagination__numbers" style="font-weight: 500;">
+                    Page {{ books.number }} of {{ books.paginator.num_pages }}
+                </div>
+                
+                {% if books.has_next %}
+                <a href="?page={{ books.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Next →</a>
+                {% else %}
+                <button class="pagination__btn" disabled style="padding: 8px 16px; border: 1px solid #eee; border-radius: 4px; color: #aaa; background: #f9f9f9; cursor: not-allowed;">Next →</button>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
+</body>
+</html>

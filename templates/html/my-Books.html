@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | My Books</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/my_books.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+</head>
+
+<body data-page="my-books">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="home.html">Home</a>
+                <a href="store.html">Store</a>
+                <a href="my-Books.html" class="active">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+
+        <main class="content-area">
+            <div class="content-header">
+                <div>
+                    <h1>My Books</h1>
+                    <p class="subtitle">Manage your active rentals and personal digital collection</p>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <a href="?tab=all" class="tab-link {% if tab == 'all' %}active{% endif %}" style="text-decoration: none;">All Collection</a>
+                <a href="?tab=borrowed" class="tab-link {% if tab == 'borrowed' %}active{% endif %}" style="text-decoration: none;">Active Rentals</a>
+                <a href="?tab=owned" class="tab-link {% if tab == 'owned' %}active{% endif %}" style="text-decoration: none;">Owned</a>
+            </div>
+
+            <section class="book-grid">
+                {% for user_book in library %}
+                <article class="book-card">
+                    <div class="image-container">
+                        {% if user_book.book.cover_img %}
+                        <img src="{{ user_book.book.cover_img.url }}" alt="{{ user_book.book.title }}">
+                        {% else %}
+                        <img src="{% static 'assets/placeholder.png' %}" alt="No cover">
+                        {% endif %}
+                        <div class="book-overlay">
+                            <button class="btn-read" onclick="window.location.href='{% url 'book_detail' user_book.book.id %}'">
+                                <i class="fas fa-play"></i> {% if user_book.progress == 100 %}Read Again{% else %}Continue{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="book-details">
+                        <h3>{{ user_book.book.title }}</h3>
+                        <p>{{ user_book.book.author }}</p>
+                        <div class="progress-container">
+                            <div class="progress-fill" style="width: {{ user_book.progress }}%; background: #00d4ff; height: 100%; border-radius: 3px;"></div>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 5px;">{{ user_book.progress }}% Complete</p>
+                    </div>
+                </article>
+                {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 3rem; color: #ccc;">library_books</span>
+                    <h3 style="margin-top: 10px; color: #555;">No books found</h3>
+                    <p style="color: #777;">You don't have any books in this category.</p>
+                    <a href="{% url 'catalog' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 4px;">Browse Store</a>
+                </div>
+                {% endfor %}
+            </section>
+
+            <div class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 40px;">
+                {% if library.has_previous %}
+                <a href="?tab={{ tab }}&page={{ library.previous_page_number }}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">← Prev</a>
+                {% endif %}
+                
+                <div class="pagination__numbers" style="font-weight: 500;">
+                    Page {{ library.number }} of {{ library.paginator.num_pages }}
+                </div>
+                
+                {% if library.has_next %}
+                <a href="?tab={{ tab }}&page={{ library.next_page_number }}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Next →</a>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
+</body>
+
+</html>

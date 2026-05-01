@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | Home Page</title>
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/home-page.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+</head>
+
+<body data-page="browse">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="home.html" class="active">Home</a>
+                <a href="store.html">Store</a>
+                <a href="my-Books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <section class="featured-section">
+            <header class="section-header">
+                <h2>Featured Subscriptions</h2>
+                <div class="carousel-controls">
+                    <button class="prev-btn">❮</button>
+                    <button class="next-btn">❯</button>
+                </div>
+            </header>
+            <div class="featured-grid">
+                {% for item in featured_promos %}
+                <article class="featured-card {{ item.promo_type }}" {% if item.image %}style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ item.image.url }}'); background-size: cover; background-position: center;"{% endif %}>
+                    {% if item.badge_label %}
+                    <span class="badge">{{ item.badge_label }}</span>
+                    {% endif %}
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                    <button class="{% if item.promo_type == 'scifi' %}btn-primary{% else %}btn-secondary{% endif %}" 
+                            onclick="window.location.href='{% url 'catalog' %}?category={{ item.promo_type }}'">
+                        {{ item.btn_text }}
+                    </button>
+                </article>
+                {% empty %}
+                <p>No featured subscriptions available at the moment.</p>
+                {% endfor %}
+            </div> 
+        </section>
+
+        <section class="trending-section">
+            <header class="section-header">
+                <h2>Trending Books</h2>
+                <a href="{% url 'catalog' %}" class="view-all">View All</a>
+            </header>
+            <div class="books-grid">
+                {% for book in trending_books %}
+                <div class="book-item">
+                    <a href="{% url 'book_detail' book.id %}" class="book-main-link">
+                        <figure class="book-cover">
+                            {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                            {% else %}
+                            <img src="{% static 'assets/placeholder.png' %}" alt="No cover available">
+                            {% endif %}
+                        </figure>
+                        <div class="book-info">
+                            <h3>{{ book.title }}</h3>
+                            <p class="author">{{ book.author }}</p>
+                        </div>
+                        <span class="price">${{ book.price }}</span>
+                    </a>
+                </div>
+                {% empty %}
+                <p>No trending books right now.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="curated-section">
+            <header class="section-header">
+                <h2>Curated For You</h2>
+                <a href="{% url 'catalog' %}" class="view-all">See recommendations</a>
+            </header>
+            <div class="curated-grid">
+                {% for book in curated_books %}
+                <a href="{% url 'book_detail' book.id %}" class="curated-card" style="text-decoration: none; color: inherit;">
+                    <div class="curated-thumb">
+                        {% if book.cover_img %}
+                        <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                        {% else %}
+                        <img src="{% static 'assets/placeholder.png' %}" alt="No cover available">
+                        {% endif %}
+                    </div>
+                    <div class="curated-details">
+                        <span class="reason-tag">BASED ON {{ book.genre.name|upper }}</span>
+                        <h4>{{ book.title }}</h4>
+                        <span class="status">Recommended</span>
+                    </div>
+                </a>
+                {% empty %}
+                <p>Add books to your library to get recommendations!</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
+</body>
+
+</html>

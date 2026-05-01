@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/dashboard.css' %}">
+</head>
+<body data-page="dashboard">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html" class="active"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <section class="stats-row" id="stats-container">
+                {% for stat in stats %}
+                <div class="stat-card shadow-sm" style="--card-color: {{ stat.color }};">
+                    <div class="card-header">
+                        <div class="icon-wrapper" style="background: {{ stat.color }};"><span class="material-symbols-outlined">bar_chart</span></div>
+                        {% if stat.trend %}<span class="trend">{{ stat.trend }}</span>{% endif %}
+                    </div>
+                    <div class="card-body">
+                        <span class="stat-label">{{ stat.label }}</span>
+                        <h3 class="stat-value">{{ stat.value }}</h3>
+                        {% if stat.subtext %}<span class="stat-subtext">{{ stat.subtext }}</span>{% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p>No stats available.</p>
+                {% endfor %}
+            </section>
+
+            <div class="content-grid-wrapper">
+                <div class="panel-card">
+                    <div class="panel-header flex-between">
+                        <div>
+                            <h3>Sales Performance</h3>
+                            <span class="subtext">Daily revenue overview</span>
+                        </div>
+                        <div class="toggle-group">
+                            <button class="toggle-btn active">Week</button>
+                            <button class="toggle-btn">Month</button>
+                        </div>
+                    </div>
+                    <div class="chart-area">
+                        <div class="chart-grid" id="chart-grid">
+                            {% for bar in chart_data %}
+                            <div class="chart-bar" style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                                <div style="width:30px;height:{{ bar.total_height }}px;background:#e9ecef;border-radius:4px;display:flex;flex-direction:column;justify-content:flex-end;">
+                                    <div style="width:100%;height:{{ bar.fill_height }}px;background:var(--primary);border-radius:4px;"></div>
+                                </div>
+                                <span style="font-size:0.75rem;color:#888;">{{ bar.label }}</span>
+                            </div>
+                            {% empty %}
+                            <p style="color:#888;text-align:center;">No chart data available.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-card" id="trending-books-container">
+                    <div class="panel-header">
+                        <h3>Trending Books</h3>
+                    </div>
+                    <div class="book-list" id="trending-books-list">
+                        {% for book in trending_books %}
+                        <div class="book-list-item" style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0;">
+                            {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}" style="width:35px;height:50px;object-fit:cover;border-radius:3px;">
+                            {% else %}
+                            <div style="width:35px;height:50px;background:#e9ecef;border-radius:3px;"></div>
+                            {% endif %}
+                            <div style="flex:1;">
+                                <div style="font-weight:600;font-size:0.9rem;">{{ book.title }}</div>
+                                <div style="font-size:0.8rem;color:#888;">{{ book.sales }} sales</div>
+                            </div>
+                            <span style="font-weight:600;color:var(--primary);">${{ book.price }}</span>
+                        </div>
+                        {% empty %}
+                        <p style="color:#888;">No trending books.</p>
+                        {% endfor %}
+                    </div>
+                    <button class="btn-block-subtle mt-15" onclick="location.href='Book-&-inventory.html'">VIEW FULL CATALOG</button>
+                </div>
+
+                <div class="panel-card lg-col-span-2">
+                    <div class="panel-header flex-between">
+                        <h3>Recent Transactions</h3>
+                        <button class="btn-outline" id="download-csv-btn"><i class="fas fa-download"></i> Download CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ORDER ID</th>
+                                    <th>CUSTOMER</th>
+                                    <th>DATE</th>
+                                    <th>AMOUNT</th>
+                                    <th>STATUS</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-tbody">
+                                {% for order in transactions %}
+                                <tr>
+                                    <td style="font-family:monospace;font-weight:600;">{{ order.id }}</td>
+                                    <td>{{ order.customer_name }}</td>
+                                    <td>{{ order.date }}</td>
+                                    <td style="font-weight:600;">${{ order.total }}</td>
+                                    <td>
+                                        <span style="padding:3px 10px;border-radius:20px;font-size:0.8rem;
+                                            background:{% if order.status == 'completed' %}#d1fae5;color:#065f46{% elif order.status == 'pending' %}#fef3c7;color:#92400e{% elif order.status == 'refunded' %}#fee2e2;color:#991b1b{% else %}#e5e7eb;color:#374151{% endif %};">
+                                            {{ order.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button style="padding:4px 8px;font-size:0.8rem;background:none;border:1px solid #ef4444;color:#ef4444;border-radius:4px;cursor:pointer;"
+                                                onclick="if(confirm('Delete order {{ order.id }}?')) fetch('/api/dashboard/orders/{{ order.id }}/delete/', {method:'POST',headers:{'X-CSRFToken':'{{ csrf_token }}'}}).then(()=>location.reload())">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6" style="text-align:center;padding:20px;color:#888;">No transactions found.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination flex-between" id="transactions-pagination">
+                        <span class="subtext">Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}</span>
+                        <div class="page-controls">
+                            {% if transactions.has_previous %}
+                            <a href="?page={{ transactions.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
+                            {% else %}
+                            <button class="btn-outline" disabled>Previous</button>
+                            {% endif %}
+                            {% if transactions.has_next %}
+                            <a href="?page={{ transactions.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
+                            {% else %}
+                            <button class="btn-outline" disabled>Next</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
+</body>
+</html>
