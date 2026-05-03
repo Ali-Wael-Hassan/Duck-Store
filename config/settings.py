@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom Local Apps
-    'Authentication'
+    'Authentication',
     'Storefront',
     'Community',
     'AdminPanel',
