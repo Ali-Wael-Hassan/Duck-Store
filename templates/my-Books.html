@@ -23,14 +23,14 @@
                 <div class="logo-text">DUCK</div>
             </div>
             <div class="nav">
-                <a href="home.html">Home</a>
-                <a href="store.html">Store</a>
-                <a href="my-Books.html" class="active">My Books</a>
-                <a href="community.html">Community</a>
-                <a href="reward.html">Rewards</a>
+                <a href="{% url 'home_html' %}">Home</a>
+                <a href="{% url 'catalog' %}">Store</a>
+                <a href="{% url 'my_books' %}" class="active">My Books</a>
+                <a href="{% url 'community_leaderboard' %}">Community</a>
+                <a href="{% url 'rewards' %}">Rewards</a>
             </div>
             <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+                <a href="{% url 'user_profile' %}" class="avatar-link"><img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/default-avatar.png' %}{% endif %}" class="avatar-img"></a>
             </div>
         </div>
     </nav>
@@ -46,9 +46,9 @@
             </div>
 
             <div class="tabs">
-                <a href="?tab=all" class="tab-link {% if tab == 'all' %}active{% endif %}" style="text-decoration: none;">All Collection</a>
-                <a href="?tab=borrowed" class="tab-link {% if tab == 'borrowed' %}active{% endif %}" style="text-decoration: none;">Active Rentals</a>
-                <a href="?tab=owned" class="tab-link {% if tab == 'owned' %}active{% endif %}" style="text-decoration: none;">Owned</a>
+                <a href="?tab=all" class="tab-link {% if tab == 'all' %}active{% endif %}">All Collection</a>
+                <a href="?tab=borrowed" class="tab-link {% if tab == 'borrowed' %}active{% endif %}">Active Rentals</a>
+                <a href="?tab=owned" class="tab-link {% if tab == 'owned' %}active{% endif %}">Owned</a>
             </div>
 
             <section class="book-grid">
@@ -69,33 +69,36 @@
                     <div class="book-details">
                         <h3>{{ user_book.book.title }}</h3>
                         <p>{{ user_book.book.author }}</p>
-                        <div class="progress-container">
-                            <div class="progress-fill" style="width: {{ user_book.progress }}%; background: #00d4ff; height: 100%; border-radius: 3px;"></div>
+                        <div class="progress-meta">
+                            <span>Reading Progress</span>
+                            <span>{{ user_book.progress }}%</span>
                         </div>
-                        <p style="font-size: 0.8rem; margin-top: 5px;">{{ user_book.progress }}% Complete</p>
+                        <div class="progress-bar-bg">
+                            <div class="progress-fill" style="width: {{ user_book.progress }}%;"></div>
+                        </div>
                     </div>
                 </article>
                 {% empty %}
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: #f8f9fa; border-radius: 8px;">
-                    <span class="material-symbols-outlined" style="font-size: 3rem; color: #ccc;">library_books</span>
-                    <h3 style="margin-top: 10px; color: #555;">No books found</h3>
-                    <p style="color: #777;">You don't have any books in this category.</p>
-                    <a href="{% url 'catalog' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: var(--primary); color: white; text-decoration: none; border-radius: 4px;">Browse Store</a>
+                <div class="empty-state">
+                    <span class="material-symbols-outlined">library_books</span>
+                    <h3>No books found</h3>
+                    <p>You don't have any books in this category.</p>
+                    <a href="{% url 'catalog' %}" class="empty-state-btn">Browse Store</a>
                 </div>
                 {% endfor %}
             </section>
 
-            <div class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 40px;">
+            <div class="pagination">
                 {% if library.has_previous %}
-                <a href="?tab={{ tab }}&page={{ library.previous_page_number }}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">← Prev</a>
+                <a href="?tab={{ tab }}&page={{ library.previous_page_number }}" class="pagination__btn">← Prev</a>
                 {% endif %}
                 
-                <div class="pagination__numbers" style="font-weight: 500;">
+                <div class="pagination__numbers">
                     Page {{ library.number }} of {{ library.paginator.num_pages }}
                 </div>
                 
                 {% if library.has_next %}
-                <a href="?tab={{ tab }}&page={{ library.next_page_number }}" class="pagination__btn" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; color: #333;">Next →</a>
+                <a href="?tab={{ tab }}&page={{ library.next_page_number }}" class="pagination__btn">Next →</a>
                 {% endif %}
             </div>
         </main>
