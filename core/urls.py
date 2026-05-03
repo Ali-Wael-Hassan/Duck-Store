@@ -40,18 +40,27 @@ urlpatterns = [
     # 4. COMMUNITY
     # ============================================================
     path("community.html", views.leaderboard, name="community_leaderboard"),
+    path("api/community/search/", views.community_search, name="community_search"),
 
     # ============================================================
     # 5. ADMIN / STAFF DASHBOARD
     # ============================================================
     path("dashboard.html", views.dashboard, name="dashboard_home"),
+    path("api/dashboard/orders/export/", views.download_csv, name="download_csv"),
+    path("api/dashboard/orders/<str:order_id>/delete/", views.delete_order, name="delete_order"),
     
     path("Book-&-inventory.html", views.inventory_index, name="inventory_list"),
+    path("api/dashboard/book/add/", views.add_book, name="add_book"),
     path("api/dashboard/book/<int:book_id>/edit/", views.edit_book, name="edit_book"),
+    path("api/dashboard/book/<int:book_id>/delete/", views.delete_book, name="delete_book"),
     
     path("Gamification_Admen.html", views.gamification_index, name="gamification_settings"),
+    path("api/dashboard/gamification/update/", views.gamification_update, name="gamification_update"),
+    path("api/dashboard/gamification/reset/", views.gamification_reset, name="gamification_reset"),
     
     path("users_roles.html", views.users_roles, name="users_and_roles"),
+    path("api/dashboard/users/add/", views.admin_add_user, name="admin_add_user"),
+    path("api/dashboard/users/<int:user_id>/role/", views.toggle_role, name="toggle_role"),
+    
     path("sales_refunds.html", views.sales_refunds, name="sales_refunds"),
-    path("api/dashboard/users/<int:user_id>/role/", views.toggle_role, name="toggle_role")
 ]

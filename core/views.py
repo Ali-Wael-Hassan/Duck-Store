@@ -113,14 +113,14 @@ def login(request) -> HttpResponse:
     POST → authenticate; redirect to home on success.
     """
     if request.method == "GET":
-        return render(request, "html/sign-in.html")
+        return render(request, "sign-in.html")
 
     email = request.POST.get("email", "").strip().lower()
     password = request.POST.get("password", "")
 
     user = _validate_credentials(email, password)
     if not user:
-        return render(request, "html/sign-in.html", {"error": "Invalid email or password."})
+        return render(request, "sign-in.html", {"error": "Invalid email or password."})
 
     _save_session(request, user)
     _award_login_points(user)
@@ -134,7 +134,7 @@ def signup(request) -> HttpResponse:
     POST → create account; redirect to sign-in on success.
     """
     if request.method == "GET":
-        return render(request, "html/sign-up.html")
+        return render(request, "sign-up.html")
 
     name = request.POST.get("name", "").strip()
     uname = request.POST.get("uname", "").strip()
@@ -142,7 +142,7 @@ def signup(request) -> HttpResponse:
     password = request.POST.get("password", "")
 
     if User.objects.filter(email=email).exists():
-        return render(request, "html/sign-up.html", {"error": "Email already registered."})
+        return render(request, "sign-up.html", {"error": "Email already registered."})
 
     default_rank = Rank.objects.order_by("min_points").first()
     config = GamificationConfig.load()
@@ -213,7 +213,7 @@ def home(request) -> HttpResponse:
         "curated_books": _get_curated_books(),
         "user": _login_required(request),
     }
-    return render(request, "html/home.html", context)
+    return render(request, "home.html", context)
 
 
 # ── StoreView ───────────────────────────────────────────────────────────────
@@ -248,7 +248,7 @@ def catalog(request) -> HttpResponse:
     genres = Genre.objects.all()
     books = _apply_sorting(Book.objects.select_related("genre").all(), "bestseller")
     page = _paginate(books, request.GET.get("page", 1))
-    return render(request, "html/store.html", {"books": page, "genres": genres})
+    return render(request, "store.html", {"books": page, "genres": genres})
 
 
 @require_GET
@@ -337,7 +337,7 @@ class BookView:
         featured = _get_featured_promos().first()
         return render(
             request,
-            "html/book-view.html",
+            "book-view.html",
             {
                 "book": book,
                 "reviews": reviews,
@@ -468,7 +468,7 @@ def my_books(request) -> HttpResponse:
         library = UserBook.objects.filter(user=user).select_related("book")
 
     page = _paginate(library, request.GET.get("page", 1))
-    return render(request, "html/my-Books.html", {"library": page, "tab": tab, "user": user})
+    return render(request, "my-Books.html", {"library": page, "tab": tab, "user": user})
 
 
 @require_GET
@@ -551,7 +551,7 @@ def user_profile(request) -> HttpResponse:
         "genre_progress": _get_genre_progress(user),
         "achievements": _get_achievements(user),
     }
-    return render(request, "html/user_profile.html", context)
+    return render(request, "user_profile.html", context)
 
 
 @require_POST
@@ -600,7 +600,7 @@ def rewards(request) -> HttpResponse:
     badges = _get_badge_config(user)
     return render(
         request,
-        "html/reward.html",
+        "reward.html",
         {"rewards": all_rewards, "badges": badges, "user": user},
     )
 
@@ -657,7 +657,7 @@ def leaderboard(request) -> HttpResponse:
     stats = _get_global_stats()
     return render(
         request,
-        "html/community.html",
+        "community.html",
         {"users": page, "top_three": top_three, "stats": stats, "user": user},
     )
 
@@ -726,7 +726,7 @@ def dashboard(request) -> HttpResponse:
         "period": period,
         "user": admin,
     }
-    return render(request, "html/dashboard.html", context)
+    return render(request, "dashboard.html", context)
 
 
 @require_POST
@@ -779,7 +779,7 @@ def inventory_index(request) -> HttpResponse:
     )
     page = _paginate(qs, request.GET.get("page", 1))
     genres = Genre.objects.all()
-    return render(request, "html/Book-&-inventory.html", {"inventory": page, "genres": genres, "user": admin})
+    return render(request, "Book-&-inventory.html", {"inventory": page, "genres": genres, "user": admin})
 
 
 @require_POST
@@ -885,7 +885,7 @@ def gamification_index(request) -> HttpResponse:
         return redirect("login")
 
     config = _load_config()
-    return render(request, "html/Gamification_Admen.html", {"config": config, "user": admin})
+    return render(request, "Gamification_Admen.html", {"config": config, "user": admin})
 
 
 @require_POST
@@ -936,7 +936,7 @@ def sales_refunds(request) -> HttpResponse:
     page = _paginate(all_orders.order_by("-date"), request.GET.get("page", 1))
     return render(
         request,
-        "html/sales_refunds.html",
+        "sales_refunds.html",
         {
             "orders": page,
             "gross": gross,
@@ -966,7 +966,7 @@ def users_roles(request) -> HttpResponse:
     page = _paginate(qs, request.GET.get("page", 1))
     return render(
         request,
-        "html/users_roles.html",
+        "users_roles.html",
         {"users": page, "current_role": role, "user": admin},
     )
 
