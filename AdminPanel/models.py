@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from Storefront.models import Genre
+from Storefront.models import FeaturedPromo, CuratedConfig
 
 # GAMIFICATION & REWARDS
 
@@ -53,7 +54,7 @@ class SaleEvent(models.Model):
 
 class SaleDiscount(models.Model):
     sale_event = models.ForeignKey(SaleEvent, on_delete=models.CASCADE, related_name='discounts')
-    genre = models.ForeignKey('storefront.Genre', on_delete=models.CASCADE) 
+    genre = models.ForeignKey('Storefront.Genre', on_delete=models.CASCADE) 
 
 # ANALYTICS & CONFIGURATION
 
@@ -84,15 +85,3 @@ class GamificationConfig(models.Model):
     class Meta:
         verbose_name = "Gamification Configuration"
 
-class FeaturedPromo(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    promo_type = models.CharField(max_length=50)
-    badge_label = models.CharField(max_length=50)
-    btn_text = models.CharField(max_length=100)
-    image = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-
-class CuratedConfig(models.Model):
-    display_genre = models.ForeignKey('storefront.Genre', on_delete=models.CASCADE)
-    limit = models.IntegerField(default=4)

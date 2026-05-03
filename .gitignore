@@ -1,1 +1,29 @@
 Ali-Virtual/
+.venv/
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Django migrations (keep __init__.py, ignore generated migrations)
+*/migrations/0*.py
+
+# Environment
+.venv/
+venv/
+env/
+
+# Database
+db.sqlite3
+
+# Environment variables
+.env
+*.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

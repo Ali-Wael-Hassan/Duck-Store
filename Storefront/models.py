@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 # CORE STOREFRONT MODELS (Book View & Store)
-class Genre(models.Mode):
+class Genre(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     
@@ -51,8 +51,8 @@ class UserBook(models.Model):
         return f"{self.user.username} - {self.book.title}"
 
 class Review(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_reviews')
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book_reviews')
     user_name = models.CharField(max_length=150)
     rating = models.IntegerField()
     comment = models.TextField()
