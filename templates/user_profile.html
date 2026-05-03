@@ -30,12 +30,14 @@
                 <a href="reward.html">Rewards</a>
             </div>
             <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
-                <button class="btn-primary" onclick="window.AuthEngine.logout()" style="background-color: red;">Log-out</button>
+                <a href="user_profile.html" class="avatar-link"><img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/default-avatar.png' %}{% endif %}" class="avatar-img"></a>
+                
+                <button class="btn-primary" onclick="window.AuthEngine.logout()">Log-out</button>
             </div>
         </div>
     </nav>
     <main class="dashboard-content">
+        {% csrf_token %}
 
         <section class="profile-card-container">
             <header class="profile-card-header">
@@ -48,7 +50,7 @@
             <div class="profile-card-body">
                 <div class="profile-avatar-column">
                     <div class="avatar-relative">
-                        <img src="" alt="Profile Picture" id="user-avatar" class="user-avatar-img">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/default-avatar.png' %}{% endif %}" alt="Profile Picture" id="user-avatar" class="user-avatar-img">
                         <label for="avatar-upload" class="avatar-upload-label">
                             <span class="camera-icon">📷</span>
                             <input type="file" id="avatar-upload" hidden accept="image/*">
@@ -59,19 +61,19 @@
                 <div class="profile-details-grid">
                     <div class="detail-item">
                         <span class="detail-label" >FULL NAME</span>
-                        <p class="detail-value" id="profile-full-name">--</p>
+                        <p class="detail-value" id="profile-full-name">{{ user.name }}</p>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">EMAIL ADDRESS</span>
-                        <p class="detail-value" id="profile-email">--</p>
+                        <p class="detail-value" id="profile-email">{{ user.email }}</p>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">USERNAME</span>
-                        <p class="detail-value" id="user-name">--</p>
+                        <p class="detail-value" id="user-name">@{{ user.uname }}</p>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">MEMBER SINCE</span>
-                        <p class="detail-value" id="profile-member-since">--</p>
+                        <p class="detail-value" id="profile-member-since">{{ user.join_date|date:"M d, Y" }}</p>
                     </div>
                 </div>
             </div>
@@ -88,24 +90,21 @@
 
         <section class="stats-overview" aria-label="Quick Stats">
             <article class="stat-card">
-                <h2 class="stat-label">Total Unlocked</h2>
+                <h2 class="stat-label">Total Points</h2>
                 <p class="stat-value">
-                    <span id="stat-unlocked-count">0</span>
-                    <span class="stat-total">/ <span id="stat-total-count">0</span></span>
+                    <span id="stat-unlocked-count">{{ user.points }}</span>
                 </p>
-                <progress id="stat-progress-bar" value="0" max="100" class="progress-bar"></progress>
             </article>
 
             <article class="stat-card">
                 <h2 class="stat-label">Global Rank</h2>
-                <p class="stat-value" id="stat-global-rank">--</p>
-                <p class="stat-trend" id="stat-rank-trend">--</p>
+                <p class="stat-value" id="stat-global-rank">#{{ global_rank }}</p>
+                <p class="stat-trend" id="stat-rank-trend">{{ tier }} Tier</p>
             </article>
 
             <article class="stat-card">
-                <h2 class="stat-label">Next Milestone</h2>
-                <p class="milestone-title" id="stat-next-milestone-name">--</p>
-                <p class="milestone-requirement" id="stat-next-milestone-desc">--</p>
+                <h2 class="stat-label">Total Books Read</h2>
+                <p class="stat-value">{{ user.readings }}</p>
             </article>
         </section>
 
@@ -114,6 +113,18 @@
                 <h2 class="section-title">Reading Streaks</h2>
             </header>
             <div class="badge-grid" id="dynamic-badge-grid">
+                {% for badge in badges %}
+                <article class="badge-item">
+                    <div class="badge-icon">
+                        {{ badge.badge__icon|default:'🏆' }}
+                    </div>
+                    <div class="badge-level">LEVEL {{ badge.badge__level }}</div>
+                    <h3 class="badge-name">{{ badge.badge__name }}</h3>
+                    <p class="badge-status">Unlocked: {{ badge.unlocked_at|date:"M d, Y" }}</p>
+                </article>
+                {% empty %}
+                <p>No badges unlocked yet. Keep reading!</p>
+                {% endfor %}
             </div>
         </section>
 
@@ -122,15 +133,19 @@
                 <h2 class="section-title">Genre Master</h2>
             </header>
             <div class="genre-grid" id="dynamic-genre-grid">
-                <article class="genre-card" id="genre-card-1">
+                {% for genre in genre_progress %}
+                <article class="genre-card">
                     <div class="genre-card-header">
-                        <span class="genre-icon" id="genre-icon-1">--</span>
-                        <span class="status-tag" id="genre-status-1">--</span>
+                        <span class="genre-icon">📚</span>
+                        <span class="status-tag">In Progress</span>
                     </div>
-                    <h3 class="genre-title" id="genre-name-1">--</h3>
-                    <p class="genre-detail" id="genre-desc-1">--</p>
-                    <progress id="genre-progress-1" value="0" max="10" class="genre-progress"></progress>
+                    <h3 class="genre-title">{{ genre.book__genre__name }}</h3>
+                    <p class="genre-detail">Books read: {{ genre.count }}</p>
+                    <progress value="{{ genre.count }}" max="10" class="genre-progress"></progress>
                 </article>
+                {% empty %}
+                <p>You haven't read any books yet.</p>
+                {% endfor %}
             </div>
         </section>
 
@@ -145,6 +160,52 @@
         </footer>
     </main>
     <script type="module" src="{% static 'js/main.js' %}"></script>
+    <script>
+        document.getElementById('avatar-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            // Fetch CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            fetch("{% url 'update_avatar' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('user-avatar').src = data.avatar_url;
+                    document.querySelector('.avatar-img').src = data.avatar_url;
+                } else {
+                    alert(data.error || 'Error uploading avatar');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during upload.');
+            });
+        });
+    </script>
 </body>
 
 </html>
