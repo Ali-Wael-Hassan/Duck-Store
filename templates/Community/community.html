@@ -114,16 +114,15 @@
             <script>
     const searchInput = document.getElementById('scholar-search');
     const tableBody = document.getElementById('scholars-table-body');
-    const currentUserId = "{{ user.id }}"; // To keep highlighting 'You'
+    const currentUserId = "{{ user.id }}"; 
 
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value;
 
-        // Fetch results from the Django view we created earlier
         fetch(`{% url 'community_search' %}?q=${query}`)
             .then(response => response.json())
             .then(data => {
-                tableBody.innerHTML = ''; // Clear current rows
+                tableBody.innerHTML = ''; 
 
                 data.users.forEach((scholar, index) => {
                     const isUser = scholar.id == currentUserId;

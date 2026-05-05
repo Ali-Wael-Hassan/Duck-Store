@@ -36,7 +36,6 @@ def catalog_view(request):
     min_price = request.GET.get('minPrice')
     max_price = request.GET.get('maxPrice')
 
-    # --- FIX 1: Only filter if value is NOT empty ---
     if category and category.strip():
         book_list = book_list.filter(genre__name__iexact=category)
 
@@ -44,15 +43,14 @@ def catalog_view(request):
         try:
             book_list = book_list.filter(price__gte=float(min_price))
         except ValueError:
-            pass # Ignore if it's not a valid number
+            pass 
 
     if max_price and max_price.strip():
         try:
             book_list = book_list.filter(price__lte=float(max_price))
         except ValueError:
-            pass # Ignore if it's not a valid number
+            pass 
 
-    # --- Sorting remains the same ---
     if sort_by == 'price-low':
         book_list = book_list.order_by('price')
     elif sort_by == 'price-high':
@@ -60,7 +58,7 @@ def catalog_view(request):
     elif sort_by == 'title':
         book_list = book_list.order_by('title')
     else:
-        book_list = book_list.order_by('-sales') # Usually better for popularity
+        book_list = book_list.order_by('-sales') 
 
     paginator = Paginator(book_list, 12)
     page_number = request.GET.get('page')

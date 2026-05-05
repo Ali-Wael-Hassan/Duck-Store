@@ -6,7 +6,6 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('catalog/', views.catalog_view, name='catalog'),
     
-    # Add these placeholders so the {% url %} tags in your HTML work
     path('my-books/', views.home_view, name='my_books'), # Temporary: points to home
     path('community/', views.home_view, name='community'), # Temporary
     path('rewards/', views.home_view, name='rewards'), # Temporary
