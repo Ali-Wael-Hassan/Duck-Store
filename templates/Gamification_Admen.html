@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Gamification Configuration</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/Pages/gamification.css">
+</head>
+
+<body data-page="gamification">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html" class="active"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main>
+            <section>
+                <h1>Gamification Configuration</h1>
+                <p>Configure how users earn gold points across the Duck platform.</p>
+            </section>
+
+            <section id="config-points">
+                <form>
+                    <div class="card">
+                        <div>
+                            <h3>Daily Login Reward</h3>
+                            <p>Reward users for logging in once every 24 hours.</p>
+                        </div>
+                        <div>
+                            <label>Gold Points Per Login</label>
+                            <input type="number" min="0">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <h3>Book Review Reward</h3>
+                            <p>Points granted when a user submits a valid review.</p>
+                        </div>
+                        <div>
+                            <label>Base Points</label>
+                            <input type="number" min="0">
+                            <label>Bonus Points (if featured)</label>
+                            <input type="number" min="0">
+                            <label>Min. Character Count</label>
+                            <input type="number" min="0">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div>
+                            <h3>Purchase Reward</h3>
+                            <p>Points per dollar spent on books.</p>
+                        </div>
+                        <div>
+                            <label>Points per $1</label>
+                            <input type="number" min="0" step="0.5">
+                            <label>Maximum points per transaction</label>
+                            <input type="number" min="0">
+                        </div>
+                    </div>
+                </form>
+                <div id="form-actions">
+                    <button type="button" id="reset-points">Reset to Defaults</button>
+                    <button type="button" class="btn-primary" id="update-points">Update Configuration</button>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="../js/main.js"></script>
+</body>
+
+</html>
