@@ -43,7 +43,9 @@
             </section>
 
             <section id="config-points">
-                <form>
+                <form method="POST">
+                    {% csrf_token %}
+
                     <div class="card">
                         <div>
                             <h3>Daily Login Reward</h3>
@@ -51,9 +53,10 @@
                         </div>
                         <div>
                             <label>Gold Points Per Login</label>
-                            <input type="number" min="0">
+                            {{ form.login_points }}
                         </div>
                     </div>
+
                     <div class="card">
                         <div>
                             <h3>Book Review Reward</h3>
@@ -61,13 +64,16 @@
                         </div>
                         <div>
                             <label>Base Points</label>
-                            <input type="number" min="0">
+                            {{ form.review_base }}
+                            
                             <label>Bonus Points (if featured)</label>
-                            <input type="number" min="0">
+                            {{ form.review_bonus }}
+                            
                             <label>Min. Character Count</label>
-                            <input type="number" min="0">
+                            {{ form.review_min_char }}
                         </div>
                     </div>
+
                     <div class="card">
                         <div>
                             <h3>Purchase Reward</h3>
@@ -75,20 +81,32 @@
                         </div>
                         <div>
                             <label>Points per $1</label>
-                            <input type="number" min="0" step="0.5">
+                            {{ form.purchase_rate }}
+                            
                             <label>Maximum points per transaction</label>
-                            <input type="number" min="0">
+                            {{ form.purchase_max }}
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div>
+                            <h3>New User Reward</h3>
+                            <p>One-time bonus granted upon account creation.</p>
+                        </div>
+                        <div>
+                            <label>Signup Bonus Points</label>
+                            {{ form.signup_bonus }}
+                        </div>
+                    </div>
+
+                    <div id="form-actions">
+                        <button type="submit" name="reset" id="reset-points" onclick="return confirm('Reset to defaults?')">Reset to Defaults</button>
+                        <button type="submit" class="btn-primary" id="update-points">Update Configuration</button>
+                    </div>
                 </form>
-                <div id="form-actions">
-                    <button type="button" id="reset-points">Reset to Defaults</button>
-                    <button type="button" class="btn-primary" id="update-points">Update Configuration</button>
-                </div>
             </section>
         </main>
     </div>
-    <script type="module" src="../js/main.js"></script>
 </body>
 
 </html>
