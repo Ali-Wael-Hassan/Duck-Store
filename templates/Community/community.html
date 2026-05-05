@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Community Leaderboard</title>
+    
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Community/community.css' %}">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+</head>
+<body data-page="community">
+    
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'store' %}">Store</a>
+                <a href="{% url 'my_books' %}">My Books</a>
+                <a href="{% url 'community' %}" class="active">Community</a>
+                <a href="{% url 'rewards' %}">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="{% url 'profile' %}" class="avatar-link">
+                    <img src="{{ user.avatar|default:'#' }}" class="avatar-img">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <main class="leaderboard-main">
+            <header class="leaderboard-header">
+                <div class="leaderboard-header__tag">
+                    <i class="bi bi-trophy-fill"></i> GLOBAL RANKING
+                </div>
+                <h1 class="leaderboard-header__title">Community Leaderboard</h1>
+                <p class="leaderboard-header__subtitle">Recognizing our most dedicated scholars, readers, and knowledge contributors.</p>
+            </header>
+
+            <section class="podium" id="podium-container">
+                {% for item in podium %}
+                <article class="podium__card {{ item.slot }}">
+                    {% if item.rank == 1 %}
+                        <span class="podium__leader-tag">Current Leader</span>
+                    {% endif %}
+                    <div class="podium__avatar">
+                        <img src="{{ item.user.avatar }}" alt="{{ item.user.name }}">
+                        <span class="podium__rank">{{ item.rank }}</span>
+                    </div>
+                    <h2 class="podium__name">{{ item.user.name }}</h2>
+                    <span class="podium__role">{{ item.user.rank.name }}</span>
+                    <div class="podium__points">
+                        {{ item.user.points }} <span class="podium__points-label">PTS</span>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="loading-spinner">No scholars ranked yet...</div>
+                {% endfor %}
+            </section>
+
+            <section class="scholars-section">
+                <header class="scholars-section__header">
+                    <h2>Top Scholars</h2>
+                </header>
+                <div class="scholars-table-wrapper">
+                    <table class="scholars-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Scholar</th>
+                                <th>Readings</th>
+                                <th>Reviews</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scholars-table-body">
+                            {% for scholar in scholars %}
+                            <tr class="{% if scholar.id == user.id %}scholars-table__user-row{% endif %}">
+                                <td>#{{ forloop.counter }}</td>
+                                <td>
+                                    <div class="scholar-info">
+                                        <img src="{{ scholar.avatar }}" alt="{{ scholar.name }}">
+                                        <div>
+                                            <span class="scholar-info__name">
+                                                {% if scholar.id == user.id %}You ({{ scholar.name }}){% else %}{{ scholar.name }}{% endif %}
+                                            </span>
+                                            <span class="scholar-info__meta">Member since {{ scholar.date_joined|date:"Y" }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ scholar.readings }} books</td>
+                                <td>{{ scholar.reviews }}</td>
+                                <td class="highlighted-points">{{ scholar.points }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="stats-grid" id="stats-container">
+                <article class="stats-grid__card">
+                    <span class="stats-grid__label">Active Members</span>
+                    <span class="stats-grid__value">{{ total_members }}</span>
+                    <div class="stats-grid__trend stats-grid__trend--up">
+                        <i class="bi bi-graph-up"></i> Live Tracking
+                    </div>
+                </article>
+                <article class="stats-grid__card">
+                    <span class="stats-grid__label">Books Logged</span>
+                    <span class="stats-grid__value">{{ total_books_k }}k</span>
+                </article>
+                <article class="stats-grid__card">
+                    <span class="stats-grid__label">Knowledge Points</span>
+                    <span class="stats-grid__value">{{ total_points_m }}M</span>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    </body>
+</html>

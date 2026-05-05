@@ -13,4 +13,6 @@ urlpatterns = [
     path('profile/', views.home_view, name='profile'), # Temporary
     path('book/<int:id>/', views.home_view, name='book_detail'), # Temporary
     path('store/', views.catalog_view, name='catalog'),
+    path('store/', views.catalog_view, name='store'),
+
 ]
