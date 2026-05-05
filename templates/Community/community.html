@@ -67,8 +67,14 @@
             </section>
 
             <section class="scholars-section">
-                <header class="scholars-section__header">
-                    <h2>Top Scholars</h2>
+                <header class="scholars-section__header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Top Scholars</h2>
+        
+                    <div class="search-box" style="position: relative;">
+                        <i class="bi bi-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                        <input type="text" id="scholar-search" placeholder="Search scholars..." 
+                            style="padding: 8px 12px 8px 35px; border-radius: 20px; border: 1px solid #ddd; outline: none; width: 250px;">
+                    </div>
                 </header>
                 <div class="scholars-table-wrapper">
                     <table class="scholars-table">
@@ -105,7 +111,47 @@
                     </table>
                 </div>
             </section>
+            <script>
+    const searchInput = document.getElementById('scholar-search');
+    const tableBody = document.getElementById('scholars-table-body');
+    const currentUserId = "{{ user.id }}"; // To keep highlighting 'You'
 
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value;
+
+        // Fetch results from the Django view we created earlier
+        fetch(`{% url 'community_search' %}?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                tableBody.innerHTML = ''; // Clear current rows
+
+                data.users.forEach((scholar, index) => {
+                    const isUser = scholar.id == currentUserId;
+                    const rowClass = isUser ? 'scholars-table__user-row' : '';
+                    const displayName = isUser ? `You (${scholar.name})` : scholar.name;
+
+                    const row = `
+                        <tr class="${rowClass}">
+                            <td>#${index + 1}</td>
+                            <td>
+                                <div class="scholar-info">
+                                    <img src="${scholar.avatar}" alt="${scholar.name}">
+                                    <div>
+                                        <span class="scholar-info__name">${displayName}</span>
+                                        <span class="scholar-info__meta">${scholar.rank_name}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${scholar.readings} books</td>
+                            <td>${scholar.reviews}</td>
+                            <td class="highlighted-points">${scholar.points}</td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            });
+    });
+</script>
             <section class="stats-grid" id="stats-container">
                 <article class="stats-grid__card">
                     <span class="stats-grid__label">Active Members</span>

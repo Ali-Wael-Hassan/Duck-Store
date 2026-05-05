@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from Authentication.models import User 
 from django.db.models import Sum
+from django.http import JsonResponse
 
 def community_view(request):
     all_users = User.objects.all().order_by('-points')
@@ -26,3 +27,26 @@ def community_view(request):
         'total_books_k': round(total_books / 1000, 1),
         'total_points_m': round(total_points / 1000000, 1),
     })
+def search_scholars(request):
+    # Get the search term from the URL (e.g., ?q=moaz)
+    query = request.GET.get('q', '')
+    
+    if query:
+        # Search the 'name' or 'username' fields in your DB
+        results = User.objects.filter(name__icontains=query).order_by('-points')[:10]
+    else:
+        results = User.objects.all().order_by('-points')[:10]
+
+    # Convert the database objects into a list of dictionaries (JSON)
+    data = []
+    for user in results:
+        data.append({
+            'name': user.name,
+            'avatar': user.avatar if user.avatar else '/assets/dummy/default.jpg',
+            'points': user.points,
+            'readings': user.readings,
+            'reviews': user.reviews,
+            'rank_name': user.rank.name if user.rank else "Scholar"
+        })
+
+    return JsonResponse({'status': 'success', 'users': data})

@@ -5,4 +5,5 @@ urlpatterns = [
     # This makes the leaderboard available at the base of this app
     path('', views.community_view, name='community'),
     path('community', views.community_view, name='community'),
+    path('search/', views.search_scholars, name='community_search'),
 ]
