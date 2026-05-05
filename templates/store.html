@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | Book Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/Pages/store.css">
+</head>
+<body data-page="store">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="home.html">Home</a>
+                <a href="store.html" class="active">Store</a>
+                <a href="my-Books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside class="store-filters" id="filters-container">
+            </aside>
+
+        <main class="store-main">
+            <div class="catalog__header">
+                <div class="catalog__controls" id="catalog-meta"></div>
+            </div>
+
+            <div class="book-grid" id="book-grid"></div>
+
+            <div class="pagination" id="pagination-controls">
+                <button class="pagination__btn" id="prev-btn">← Prev</button>
+                <div class="pagination__numbers" id="page-numbers"></div>
+                <button class="pagination__btn" id="next-btn">Next →</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Books & Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/component.css">
+    <link rel="stylesheet" href="../css/classes.css">
+    <link rel="stylesheet" href="../css/Pages/Book-&-inventory.css">
+</head>
+<body data-page="inventory">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html" class="active"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main class="inventory-main">
+            <div class="inventory-header">
+                <div>
+                    <h1>Books & Inventory</h1>
+                    <p>Manage your global catalog and real-time stock levels.</p>
+                </div>
+                <div>
+                    <button class="btn-primary" id="add-book-btn">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Book Title & Author</th>
+                            <th>ISBN-13</th>
+                            <th>SKU</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        <tr>
+                            <td colspan="6" class="text-center">Loading inventory...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination flex-between" id="inventory-pagination">
+                <span class="subtext">Showing 0 of 0 books</span>
+                <div class="page-controls">
+                    <button class="btn-outline">Previous</button>
+                    <button class="btn-outline">Next</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+</html>
