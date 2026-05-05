@@ -10,8 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'AdminPanel/gamification.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminPanel/gamification.css' %}">
 </head>
 
 <body data-page="gamification">
@@ -34,10 +34,20 @@
             <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
             <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
             <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
-            <a href="Gamification_Admen.html" class="active"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+            <a href="{% url 'Gamification_Admin' %}" class="active"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
         </aside>
 
         <main>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <section>
                 <h1>Gamification Configuration</h1>
                 <p>Configure how users earn gold points across the Duck platform.</p>
@@ -55,6 +65,7 @@
                         <div>
                             <label>Gold Points Per Login</label>
                             {{ form.login_points }}
+                            {{ form.login_points.errors }}
                         </div>
                     </div>
 
@@ -72,6 +83,10 @@
                             
                             <label>Min. Character Count</label>
                             {{ form.review_min_char }}
+                            
+                            {% if form.review_base.errors or form.review_bonus.errors or form.review_min_char.errors %}
+                                <div class="error-text">Please check your values.</div>
+                            {% endif %}
                         </div>
                     </div>
 
