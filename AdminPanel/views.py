@@ -12,15 +12,15 @@ def gamification_admin_view(request):
         if 'reset' in request.POST:
             config.delete()
             messages.info(request, "Configuration reset to default values.")
-            return redirect('gamification_admin')
+            return redirect('Gamification_Admin')
 
         # updates the database with form data
         form = GamificationConfigForm(request.POST, instance=config)
         if form.is_valid():
             form.save()
             messages.success(request, "Configuration saved successfully!")
-            return redirect('gamification_admin')
+            return redirect('Gamification_Admin')
     else:
         form = GamificationConfigForm(instance=config)
 
-    return render(request, 'admin/gamification_setup.html', {'form': form})
+    return render(request, 'AdminPanel/Gamification_Admin.html', {'form': form})
