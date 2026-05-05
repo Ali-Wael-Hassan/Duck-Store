@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUCK Library | Book Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Storefront/store.css' %}">
+</head>
+<body data-page="store">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'catalog' %}" class="active">Store</a>
+                <a href="#">My Books</a>
+                <a href="#">Community</a>
+                <a href="#">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="#" class="avatar-link"><img src="{% static 'img/default-avatar.png' %}" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside class="store-filters">
+            <form id="filter-form" method="GET" action="{% url 'catalog' %}">
+                <div class="filter-group">
+                    <h3 class="filter-group__title"><span class="material-symbols-outlined">category</span>CATEGORIES</h3>
+                    <div id="genre-filters">
+                        {% for genre in genres %}
+                        <label class="filter-item">
+                            <input type="checkbox" name="category" value="{{ genre.name }}" class="filter-item__checkbox" onchange="this.form.submit()" {% if request.GET.category == genre.name %}checked{% endif %}>
+                            <span class="filter-item__label">{{ genre.name }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3 class="filter-group__title"><span class="material-symbols-outlined">payments</span>PRICE RANGE</h3>
+                    <div class="price-inputs">
+                        <input type="number" name="minPrice" id="min-price" placeholder="0" value="{{ request.GET.minPrice|default:0 }}">
+                        <span>to</span>
+                        <input type="number" name="maxPrice" id="max-price" value="{{ request.GET.maxPrice|default:100 }}">
+                    </div>
+                    <div class="price-range">
+                        <input type="range" class="price-range__slider" id="price-slider" min="0" max="200" value="{{ request.GET.maxPrice|default:100 }}">
+                        <div class="price-range__display">Max: <strong>$<span id="price-limit">{{ request.GET.maxPrice|default:100 }}</span></strong></div>
+                    </div>
+                </div>
+                <input type="hidden" name="sort" id="sort-input" value="{{ current_sort }}">
+            </form>
+        </aside>
+
+        <main class="store-main">
+            <div class="catalog__header">
+                <div class="catalog__controls" id="catalog-meta">
+                    <span class="results-meta">
+                        Showing <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong> of <strong>{{ page_obj.paginator.count }}</strong>
+                    </span>
+
+                    <div class="sort-by-container">
+                        <div class="sort-by" id="sort-trigger">
+                            <span>Sort by:</span> <strong id="current-sort-label">{{ current_sort|title }}</strong>
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                        <div class="sort-popup" id="sort-popup">
+                            <div class="sort-option" onclick="applySort('popularity')">Popularity</div>
+                            <div class="sort-option" onclick="applySort('price-low')">Price: Low to High</div>
+                            <div class="sort-option" onclick="applySort('price-high')">Price: High to Low</div>
+                            <div class="sort-option" onclick="applySort('title')">Title (A-Z)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-grid" id="book-grid">
+                {% for book in page_obj %}
+                <article class="book-card">
+                    <div class="book-card__image-container">
+                        {% if book.cover_img %}<img src="{{ book.cover_img.url }}" alt="{{ book.title }}" class="book-card__image">{% else %}<img src="{% static 'img/no-cover.png' %}" class="book-card__image">{% endif %}
+                    </div>
+                    <div class="book-card__body">
+                        <p class="book-card__genre">{{ book.genre.name }}</p>
+                        <h4 class="book-card__title">{{ book.title }}</h4>
+                        <div class="book-card__footer">
+                            <span class="price-value">${{ book.price }}</span>
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="no-results" style="padding: 2rem; color: #ccc;">No books found matching your criteria.</div>
+                {% endfor %}
+            </div>
+
+            <div class="pagination" id="pagination-controls">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__btn">← Prev</a>
+                {% endif %}
+
+                <div class="pagination__numbers">
+                    {% for num in page_obj.paginator.page_range %}
+                    <a href="?page={{ num }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__num {% if page_obj.number == num %}active{% endif %}">{{ num }}</a>
+                    {% endfor %}
+                </div>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__btn">Next →</a>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function applySort(val) {
+            document.getElementById('sort-input').value = val;
+            document.getElementById('filter-form').submit();
+        }
+    </script>
+    <script type="module" src='/js/main.js'></script>
+    <script type="module" src='/js/pages/store-page.js'></script>
+</body>
+</html>

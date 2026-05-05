@@ -25,16 +25,50 @@ def home_view(request):
     }
     return render(request, 'Storefront/home.html', context)
 
+from django.core.paginator import Paginator
+
 def catalog_view(request):
-    """
-    View for the 'Store' page (Catalog). 
-    Displays all books and genres for filtering.
-    """
-    books = Book.objects.all()
+    book_list = Book.objects.all()
     genres = Genre.objects.all()
-    
+
+    category = request.GET.get('category')
+    sort_by = request.GET.get('sort', 'popularity')
+    min_price = request.GET.get('minPrice')
+    max_price = request.GET.get('maxPrice')
+
+    # --- FIX 1: Only filter if value is NOT empty ---
+    if category and category.strip():
+        book_list = book_list.filter(genre__name__iexact=category)
+
+    if min_price and min_price.strip():
+        try:
+            book_list = book_list.filter(price__gte=float(min_price))
+        except ValueError:
+            pass # Ignore if it's not a valid number
+
+    if max_price and max_price.strip():
+        try:
+            book_list = book_list.filter(price__lte=float(max_price))
+        except ValueError:
+            pass # Ignore if it's not a valid number
+
+    # --- Sorting remains the same ---
+    if sort_by == 'price-low':
+        book_list = book_list.order_by('price')
+    elif sort_by == 'price-high':
+        book_list = book_list.order_by('-price')
+    elif sort_by == 'title':
+        book_list = book_list.order_by('title')
+    else:
+        book_list = book_list.order_by('-sales') # Usually better for popularity
+
+    paginator = Paginator(book_list, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'books': books,
+        'page_obj': page_obj,
         'genres': genres,
+        'current_sort': sort_by,
     }
     return render(request, 'Storefront/store.html', context)
