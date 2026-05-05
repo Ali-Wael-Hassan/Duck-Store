@@ -4,8 +4,10 @@ from . import views
 urlpatterns = [
     # This matches the link in your sidebar: <a href="Gamification_Admen.html">
     path('gamification-admin/', views.gamification_admin_view, name='Gamification_Admin'),
-    # The main landing page for the admin dashboard
-    path('dashboard/', views.dashboard_view, name='dashboard'),
+    # Dashboard route
+    path('dashboard/', views.AdminDashboardView.as_view(), name='dashboard'),
+    # Delete action route
+    path('order/delete/<int:order_id>/', views.OrderDeleteView.as_view(), name='delete_order'),
 
     # Route for the delete button in the transactions table
     path('order/delete/<int:order_id>/', views.delete_order, name='delete_order'),

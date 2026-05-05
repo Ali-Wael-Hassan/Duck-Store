@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import GamificationConfig, Order, Book, Stat
+from .models import GamificationConfig
 from .forms import GamificationConfigForm
+
+from django.views.generic import ListView, View
+from django.shortcuts import get_object_of_404
+from django.db.models import Sum
+from .models import DashboardStat, SalesPerformance
+from Storefront.models import Book, Order
 
 def gamification_admin_view(request):
     # gets the single config object or creates it
@@ -25,22 +31,30 @@ def gamification_admin_view(request):
 
     return render(request, 'AdminPanel/Gamification_Admin.html', {'form': form})
 
-def dashboard_view(request):
-    # Fetch data from Database
-    orders_list = Order.objects.all().order_by('-date')
-    trending_books = Book.objects.all().order_by('-sales')[:4]
-    stats = Stat.objects.all() # Or aggregate from Order model
-    
-    # Simple Pagination for the initial load
-    rows_per_page = 5
-    recent_transactions = orders_list[:rows_per_page]
-    
-    context = {
-        'orders': orders_list,
-        'recent_transactions': recent_transactions,
-        'trending_books': trending_books,
-        'stats': stats,
-        'total_orders': orders_list.count(),
-        'rows_per_page': rows_per_page,
-    }
-    return render(request, 'AdminPanel/Dashboard.html', context)
+class AdminDashboardView(ListView):
+    template_name = "dashboard.html"
+    context_object_name = "recent_orders"
+    model = Order
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Order.objects.all().order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context['stats'] = DashboardStat.objects.all().order_by('sort_order')
+        
+        context['sales_data'] = SalesPerformance.objects.filter(
+            period_type='weekly'
+        ).order_by('sort_order')
+        
+        context['trending_books'] = Book.objects.all().order_by('-sales')[:4]
+        
+        return context
+
+class OrderDeleteView(View):
+    def post(self, request, order_id):
+        order = get_object_of_404(Order, id=order_id)
+        order.delete()
+        return redirect('dashboard')
