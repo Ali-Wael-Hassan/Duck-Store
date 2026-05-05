@@ -42,7 +42,7 @@ class GamificationAdminView(View):
         return render(request, self.template_name, {'form': form})
 
 class AdminDashboardView(ListView):
-    template_name = "dashboard.html"
+    template_name = "AdminPanel/dashboard.html"
     context_object_name = "recent_orders"
     model = Order
     paginate_by = 5 #what is this

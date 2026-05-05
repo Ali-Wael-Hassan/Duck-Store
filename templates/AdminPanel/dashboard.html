@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +7,9 @@
     <title>DUCK Library | Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/classes.css">
-    <link rel="stylesheet" href="../css/Pages/dashboard.css">
+    
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminPanel/dashboard.css' %}">
 </head>
 <body data-page="dashboard">
 
@@ -20,69 +20,37 @@
                 <div class="logo-text">DUCK</div>
             </div>
             <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+                <a href="#" class="avatar-link"><img src="{% static 'images/default-avatar.png' %}" class="avatar-img"></a>
             </div>
         </div>
     </nav>
 
     <div class="layout-wrapper">
         <aside>
-            <a href="dashboard.html" class="active"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
-            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
-            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
-            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
-            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+            <a href="{% url 'dashboard' %}" class="active"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="#"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="#"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="#"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="{% url 'Gamification_Admin' %}"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
         </aside>
 
         <main class="dashboard-main">
             <section class="stats-row" id="stats-container">
+                {% for stat in stats %}
                 <div class="stat-card shadow-sm">
                     <div class="card-header">
-                        <div class="icon-wrapper bg-blue"><i class="fas fa-money-bill-wave"></i></div>
-                        <span class="trend" id="revenue-trend">...</span>
+                        <div class="icon-wrapper"><span class="material-symbols-outlined">{{ stat.icon_name }}</span></div>
+                        <span class="trend">{{ stat.trend_text }}</span>
                     </div>
                     <div class="card-body">
-                        <span class="stat-label">Total Revenue</span>
-                        <h3 class="stat-value" id="stat-revenue">$0</h3>
-                        <span class="stat-subtext" id="revenue-subtext">Loading...</span>
+                        <span class="stat-label">{{ stat.label }}</span>
+                        <h3 class="stat-value">{{ stat.value }}</h3>
+                        <span class="stat-subtext">{{ stat.subtext }}</span>
                     </div>
                 </div>
-
-                <div class="stat-card shadow-sm">
-                    <div class="card-header">
-                        <div class="icon-wrapper bg-orange"><i class="fas fa-user"></i></div>
-                        <span class="trend" id="users-trend">...</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="stat-label">Active Users</span>
-                        <h3 class="stat-value" id="stat-users">0</h3>
-                        <span class="stat-subtext" id="users-subtext">Loading...</span>
-                    </div>
-                </div>
-
-                <div class="stat-card shadow-sm">
-                    <div class="card-header">
-                        <div class="icon-wrapper bg-cyan"><i class="fas fa-shopping-cart"></i></div>
-                        <span class="trend" id="orders-trend">...</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="stat-label">Pending Orders</span>
-                        <h3 class="stat-value" id="stat-orders">0</h3>
-                        <span class="stat-subtext" id="orders-subtext">Loading...</span>
-                    </div>
-                </div>
-
-                <div class="stat-card shadow-sm">
-                    <div class="card-header">
-                        <div class="icon-wrapper bg-yellow"><i class="fas fa-star"></i></div>
-                        <span class="badge new-badge">New</span>
-                    </div>
-                    <div class="card-body">
-                        <span class="stat-label">New Reviews</span>
-                        <h3 class="stat-value" id="stat-reviews">0</h3>
-                        <span class="stat-subtext" id="reviews-subtext">Loading...</span>
-                    </div>
-                </div>
+                {% empty %}
+                <p>No statistics available.</p>
+                {% endfor %}
             </section>
 
             <div class="content-grid-wrapper">
@@ -90,7 +58,7 @@
                     <div class="panel-header flex-between">
                         <div>
                             <h3>Sales Performance</h3>
-                            <span class="subtext">Daily revenue overview</span>
+                            <span class="subtext">Weekly revenue overview</span>
                         </div>
                         <div class="toggle-group">
                             <button class="toggle-btn active">Week</button>
@@ -99,7 +67,13 @@
                     </div>
                     <div class="chart-area">
                         <div class="chart-grid" id="chart-grid">
-                            </div>
+                            {% for data in sales_data %}
+                                <div class="chart-bar-wrapper">
+                                    <div class="bar" style="height: {{ data.percentage }}%;"></div>
+                                    <span class="bar-label">{{ data.label }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
 
@@ -108,14 +82,22 @@
                         <h3>Trending Books</h3>
                     </div>
                     <div class="book-list" id="trending-books-list">
+                        {% for book in trending_books %}
+                        <div class="book-item flex-between" style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                            <span>{{ book.title }}</span>
+                            <span class="badge">{{ book.sales }} sold</span>
                         </div>
-                    <button class="btn-block-subtle mt-15" onclick="location.href='Book-&-inventory.html'">VIEW FULL CATALOG</button>
+                        {% empty %}
+                        <p class="subtext">No trending books.</p>
+                        {% endfor %}
+                    </div>
+                    <button class="btn-block-subtle mt-15">VIEW FULL CATALOG</button>
                 </div>
 
                 <div class="panel-card lg-col-span-2">
                     <div class="panel-header flex-between">
                         <h3>Recent Transactions</h3>
-                        <button class="btn-outline" id="download-csv-btn"><i class="fas fa-download"></i> Download CSV</button>
+                        <button class="btn-outline" id="download-csv-btn"><span class="material-symbols-outlined">download</span> Download CSV</button>
                     </div>
                     <div class="table-responsive">
                         <table>
@@ -130,21 +112,55 @@
                                 </tr>
                             </thead>
                             <tbody id="transactions-tbody">
-                                </tbody>
+                                {% for order in recent_orders %}
+                                <tr>
+                                    <td>#{{ order.id }}</td>
+                                    <td>{{ order.customer_name|default:"Guest" }}</td>
+                                    <td>{{ order.date|date:"M d, Y" }}</td>
+                                    <td>${{ order.total_amount|default:"0.00" }}</td>
+                                    <td><span class="status-badge">{{ order.status }}</span></td>
+                                    <td>
+                                        <form action="{% url 'delete_order' order.id %}" method="post" onsubmit="return confirm('Delete this order?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn-outline" style="color: red; border-color: red;">
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center;">No transactions found.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Pagination Logic -->
                     <div class="pagination flex-between" id="transactions-pagination">
-                        <span class="subtext">Loading transactions...</span>
+                        {% if is_paginated %}
+                        <span class="subtext">Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
                         <div class="page-controls">
-                            <button class="btn-outline">Previous</button>
-                            <button class="btn-outline active">Next</button>
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline">Previous</a>
+                            {% else %}
+                                <button class="btn-outline" disabled>Previous</button>
+                            {% endif %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}" class="btn-outline active">Next</a>
+                            {% else %}
+                                <button class="btn-outline" disabled>Next</button>
+                            {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <script type="module" src="../js/main.js"></script>
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
 </body>
 </html>
