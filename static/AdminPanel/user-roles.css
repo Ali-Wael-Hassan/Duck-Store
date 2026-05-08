@@ -446,3 +446,17 @@ td:last-child, th:last-child {
     .modal-actions button { padding: 6px 12px; font-size: 0.75rem; }
     .btn-outline { padding: 3px 10px; font-size: 0.7rem; }
 }
+.modal {
+    display: none; 
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add this to show it when JS triggers */
+.modal[style*="display: flex"] {
+    display: flex !important;
+}

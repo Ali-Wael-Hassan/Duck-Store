@@ -85,3 +85,19 @@ class GamificationConfig(models.Model):
     class Meta:
         verbose_name = "Gamification Configuration"
 
+class Order(models.Model):
+    id = models.CharField(max_length=20, primary_key=True)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length=150)
+    
+    # Add related_name='admin_orders' here
+    book = models.ForeignKey(
+        'Storefront.Book', 
+        on_delete=models.CASCADE, 
+        related_name='admin_orders'
+    )
+    
+    book_title = models.CharField(max_length=255)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20)
+    date = models.DateField()

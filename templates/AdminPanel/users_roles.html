@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Users & Roles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminPanel/user-roles.css' %}">
+</head>
+<body data-page="users-roles">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="#" class="avatar-link">
+                    <img src="{{ request.user.avatar.url|default:'#' }}" class="avatar-img" alt="Profile">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="#"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="#"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="{% url 'users_roles_index' %}" class="active"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="{% url 'sales_refunds_index' %}"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="#"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main class="users-main">
+            {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+            <header class="users-header">
+                <h1>Users & Roles</h1>
+                <button class="add" id="open-add-modal">
+                    <span class="material-symbols-outlined">person_add</span> Add User
+                </button>
+            </header>
+
+            <div class="actions">
+                <div class="role-filter" id="role-filters">
+                    <a href="?role=all" class="filter {% if current_filter == 'all' %}active{% endif %}">All Roles</a>
+                    <a href="?role=admin" class="filter {% if current_filter == 'admin' %}active{% endif %}">Admin</a>
+                    <a href="?role=user" class="filter {% if current_filter == 'user' %}active{% endif %}">User</a>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th>USER</th>
+                                <th>ROLE</th>
+                                <th>STATUS</th>
+                                <th>LAST ACTIVE</th>
+                                <th style="text-align: right;">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-tbody">
+                            {% for u in page_obj %}
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="{% if u.avatar %}{{ u.avatar.url }}{% else %}{% static 'assets/users/guest.png' %}{% endif %}" 
+                                             class="avatar-img" style="width: 35px; height: 35px; border-radius: 50%;">
+                                        <div class="user-info">
+                                            <div class="user-name" style="font-weight: 600;">{{ u.username }}</div>
+                                            <div class="user-email" style="font-size: 0.85rem; color: #666;">{{ u.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="role {% if u.is_staff %}admin{% else %}user{% endif %}">
+                                        {% if u.is_staff %}Admin{% else %}User{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status {% if u.is_active %}active-status{% else %}offline{% endif %}">
+                                        {% if u.is_active %}Active{% else %}Inactive{% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ u.last_login|date:"d / m / Y"|default:"Never" }}</td>
+                                <td style="text-align: right;">
+                                    <form action="{% url 'toggle_user_role' u.id %}" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="edit" onclick="return confirm('Change role for {{ u.username }}?')">
+                                            Edit Role <span class="material-symbols-outlined" style="font-size: 16px;">edit</span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align:center; padding: 2rem;">No users found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination">
+                    <span class="subtext" id="pagination-info">
+                        Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ total_count }} users
+                    </span>
+                    <div class="page-controls">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}&role={{ current_filter }}" class="btn-outline">Previous</a>
+                        {% else %}
+                            <button class="btn-outline" disabled>Previous</button>
+                        {% endif %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}&role={{ current_filter }}" class="btn-outline">Next</a>
+                        {% else %}
+                            <button class="btn-outline" disabled>Next</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <h3>Permissions Matrix Preview</h3>
+            <div class="table-responsive">
+                <table class="matrix">
+                    <thead>
+                        <tr>
+                            <th>Resource</th>
+                            <th>Admin</th>
+                            <th>User</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inventory Catalog</td>
+                            <td><div class="circle active"></div></td>
+                            <td><div class="circle"></div></td>
+                        </tr>
+                        <tr>
+                            <td>User Profile</td>
+                            <td><div class="circle active"></div></td>
+                            <td><div class="circle"></div></td>
+                        </tr>
+                        <tr>
+                            <td>Purchase Records</td>
+                            <td><div class="circle active"></div></td>
+                            <td><div class="circle active"></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="add-user-modal">
+        <div class="modal-content">
+            <button class="close-modal"><span class="material-symbols-outlined">close</span></button>
+            <h2>Add New User</h2>
+           <form id="add-user-form" action="{% url 'add_user' %}" method="POST">
+    {% csrf_token %} <label>Username</label>
+    <input type="text" name="username" required>
+    
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Password</label>
+    <input type="password" name="password" required>
+    
+    <label>Role</label>
+    <select name="role">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+    </select>
+    
+    <div class="modal-actions">
+        <button type="submit" class="primary">Create User</button>
+    </div>
+</form>
+        </div>
+    </div>
+
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('add-user-modal');
+    const openBtn = document.getElementById('open-add-modal');
+    const closeBtns = document.querySelectorAll('.close-modal');
+    const addUserForm = document.getElementById('add-user-form');
+
+    // Show modal
+    if (openBtn) {
+        openBtn.onclick = function() {
+            modal.style.display = 'flex';
+        };
+    }
+
+    // Hide modal
+    closeBtns.forEach(btn => {
+        btn.onclick = function() {
+            modal.style.display = 'none';
+        };
+    });
+
+    // Hide if clicking outside the box
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Prevent the "Dark Screen" by closing modal on submit
+    // Note: Do NOT use e.preventDefault() here, or Django won't get the data
+    if (addUserForm) {
+        addUserForm.onsubmit = function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerText = "Creating...";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.5";
+            submitBtn.style.cursor = "not-allowed";
+            
+            // The page will naturally refresh once Django processes the POST request
+        };
+    }
+});
+</script>
+    
+</body>
+</html>

@@ -23,4 +23,6 @@ urlpatterns = [
     path('community/', include('Community.urls')),
     path('storefront/', include('Storefront.urls')),
     path('user/', include('UserAccount.urls')),
+    path('dashboard/', include('AdminPanel.urls')),
+    
 ]
