@@ -39,7 +39,10 @@
         <main>
             <section class="left">
                 <div id="book-cover-container">
-                    <img src="{{ book.cover_img }}" alt="{{ book.title }}" class="responsive-cover">
+                    {# Fixed: Added .url to show the image correctly #}
+                    <img src="{% if book.cover_img %}{{ book.cover_img.url }}{% else %}{% static 'assets/dummy/book-cover.png' %}{% endif %}" 
+                         alt="{{ book.title }}" 
+                         class="responsive-cover">
                 </div>
                 <div class="actions">
                     <form action="{% url 'book_action' book.id 'owned' %}" method="POST" class="actions-form">
@@ -72,18 +75,20 @@
                     </p>
                 </div>
 
-<div class="meta-container">
-    <div class="meta-box">
-        <span>PAGES</span>
-        <strong>{{ book.pages }}</strong> </div>
-    <div class="meta-box">
-        <span>FORMAT</span>
-        <strong>Digital</strong> </div>
-    <div class="meta-box">
-        <span>PUBLISHED</span>
-        <strong>{{ book.published_date }}</strong>
-    </div>
-</div>
+                <div class="meta-container">
+                    <div class="meta-box">
+                        <span>PAGES</span>
+                        <strong>{{ book.pages }}</strong> 
+                    </div>
+                    <div class="meta-box">
+                        <span>FORMAT</span>
+                        <strong>Digital</strong> 
+                    </div>
+                    <div class="meta-box">
+                        <span>PUBLISHED</span>
+                        <strong>{{ book.published_date }}</strong>
+                    </div>
+                </div>
 
                 <article class="description">
                     <h2>Synopsis</h2>

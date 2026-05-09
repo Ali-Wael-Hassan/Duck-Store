@@ -3,17 +3,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Duck Store | Add Book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Store | {% if is_edit %}Edit{% else %}Add{% endif %} Book</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'AdminPanel/book_form.css' %}">
 </head>
 <body>
     <div class="layout-wrapper">
         <main class="form-main-content">
+            
             <div class="inventory-header">
                 <div>
-                    <h1>Add New Book</h1>
-                    <p>Enter book metadata and real-time stock levels.</p>
+                    <h1>{% if is_edit %}Edit Book{% else %}Add New Book{% endif %}</h1>
+                    <p>
+                        {% if is_edit %}
+                        Update the metadata and stock levels for this entry.
+                        {% else %}
+                        Enter book metadata and real-time stock levels.
+                        {% endif %}
+                    </p>
                 </div>
             </div>
 
@@ -22,17 +34,36 @@
                     {% csrf_token %}
                     
                     <div class="form-grid">
+                        {# Your CSS styles the <p> tags generated here #}
                         {{ form.as_p }}
                     </div>
 
                     <div class="form-actions-row">
-                        <button type="submit" class="btn-add">
-                            <span class="material-symbols-outlined">save</span> Save to Inventory
+                        <button type="submit" class="btn-save">
+                            <span class="material-symbols-outlined">save</span> 
+                            {% if is_edit %}Update Changes{% else %}Save to Inventory{% endif %}
                         </button>
-                        <a href="{% url 'inventory_dashboard' %}" class="btn-cancel-link">Cancel</a>
+                        
+                        <a href="{% url 'inventory_dashboard' %}" class="btn-cancel-link">
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
+
+            {% if is_edit %}
+            <div class="book-form-card">
+                <h3>Remove from Catalog</h3>
+                <p>Deleting this book is a permanent action.</p>
+                
+                <form action="{% url 'delete_book' form.instance.pk %}" method="POST" onsubmit="return confirm('Are you sure?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cancel">
+                        Delete Permanently
+                    </button>
+                </form>
+            </div>
+            {% endif %}
         </main>
     </div>
 </body>

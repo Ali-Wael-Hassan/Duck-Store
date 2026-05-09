@@ -1,42 +1,56 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Book, UserBook
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.views.generic import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Book, UserBook, Review
 
-def book_detail_view(request, book_id):
-    book = get_object_or_404(Book, id=book_id)
-    
-    # Check if user already owns/borrows the book
-    is_owned = False
-    is_borrowed = False
-    if request.user.is_authenticated:
-        user_entry = UserBook.objects.filter(user=request.user, book=book).first()
-        if user_entry:
-            is_owned = user_entry.ownership_type == 'owned'
-            is_borrowed = user_entry.ownership_type == 'borrowed'
+class BookDetailView(DetailView):
+    """
+    Handles displaying the book details, ownership status, and reviews.
+    Replaces: book_detail_view()
+    """
+    model = Book
+    template_name = 'Storefront/book-view.html'
+    context_object_name = 'book'
+    pk_url_kwarg = 'book_id'
 
-    # Description "Read More" logic
-    limit = 150
-    has_more = len(book.description) > limit
-    main_desc = book.description[:limit] if has_more else book.description
-    extra_desc = book.description[limit:] if has_more else ""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = self.object
+        request = self.request
 
-    context = {
-        'book': book,
-        'is_owned': is_owned,
-        'is_borrowed': is_borrowed,
-        'main_desc': main_desc,
-        'extra_desc': extra_desc,
-        'has_more': has_more,
-        'star_range': range(1, 6), # To loop 5 times for stars
-    }
-    return render(request, 'Storefront/book-view.html', context)
+        # Logic for Ownership Status
+        is_owned = False
+        is_borrowed = False
+        if request.user.is_authenticated:
+            user_entry = UserBook.objects.filter(user=request.user, book=book).first()
+            if user_entry:
+                is_owned = user_entry.ownership_type == 'owned'
+                is_borrowed = user_entry.ownership_type == 'borrowed'
 
-@login_required
-def add_review(request, book_id):
-    if request.method == 'POST':
-        book = get_object_or_404(Book, id=book_id)
+        # Synopsis "Read More" logic
+        limit = 150
+        desc = book.description
+        has_more = len(desc) > limit
         
-        # Get data from the form
+        context.update({
+            'is_owned': is_owned,
+            'is_borrowed': is_borrowed,
+            'main_desc': desc[:limit] if has_more else desc,
+            'extra_desc': desc[limit:] if has_more else "",
+            'has_more': has_more,
+            'star_range': range(1, 6),
+            'show_review_form': request.GET.get('show_form') == 'true'
+        })
+        return context
+
+class AddReviewView(LoginRequiredMixin, View):
+    """
+    Handles creating a new book review.
+    Replaces: add_review()
+    """
+    def post(self, request, book_id):
+        book = get_object_or_404(Book, id=book_id)
         rating_value = request.POST.get('rating')
         comment_text = request.POST.get('comment')
 
@@ -48,20 +62,18 @@ def add_review(request, book_id):
                 rating=int(rating_value),
                 comment=comment_text
             )
-        
-        # This sends you back to the book page
         return redirect('book_detail', book_id=book_id)
-    
-    return redirect('book_detail', book_id=book_id)
 
-@login_required
-def handle_book_action(request, book_id, action_type):
-    book = get_object_or_404(Book, id=book_id)
-    # This saves the record to your account
-    UserBook.objects.get_or_create(
-        user=request.user,
-        book=book,
-        defaults={'ownership_type': action_type}
-    )
-    # This sends you back to the page so the button updates to "IN LIBRARY"
-    return redirect('book_detail', book_id=book_id)
+class BookActionView(LoginRequiredMixin, View):
+    """
+    Handles Buy/Borrow logic.
+    Replaces: handle_book_action()
+    """
+    def post(self, request, book_id, action_type):
+        book = get_object_or_404(Book, id=book_id)
+        UserBook.objects.get_or_create(
+            user=request.user,
+            book=book,
+            defaults={'ownership_type': action_type}
+        )
+        return redirect('book_detail', book_id=book_id)

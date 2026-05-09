@@ -2,19 +2,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # Main Inventory Table
-    # URL: http://127.0.0.1:8000/admin-panel/
-    path('', views.inventory_dashboard, name='inventory_dashboard'),
+    # Dashboard
+    path('', views.InventoryDashboardView.as_view(), name='inventory_dashboard'),
 
     # Add New Book
-    # URL: http://127.0.0.1:8000/admin-panel/add/
-    path('add/', views.manage_book, name='add_book'),
+    path('add/', views.BookCreateView.as_view(), name='add_book'),
 
     # Edit Existing Book
-    # URL: http://127.0.0.1:8000/admin-panel/edit/5/
-    path('edit/<int:pk>/', views.manage_book, name='edit_book'),
+    path('edit/<int:pk>/', views.BookUpdateView.as_view(), name='edit_book'),
 
     # Delete Book
-    # URL: http://127.0.0.1:8000/admin-panel/delete/5/
-    path('delete/<int:pk>/', views.delete_book, name='delete_book'),
+    path('delete/<int:pk>/', views.BookDeleteView.as_view(), name='delete_book'),
 ]

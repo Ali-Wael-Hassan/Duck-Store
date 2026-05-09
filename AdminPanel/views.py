@@ -1,57 +1,58 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.shortcuts import redirect
 from .models import Book
 from .forms import BookForm
 
-def inventory_dashboard(request):
+class InventoryDashboardView(ListView):
     """
-    Main Inventory Table View.
-    Replaces InventoryController.renderInventory()
+    Handles the main inventory table with pagination.
+    Replaces: inventory_dashboard()
     """
-    # Get all books, newest first
-    book_list = Book.objects.all().order_by('-id')
-    
-    # Pagination: 5 books per page
-    paginator = Paginator(book_list, 5)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    return render(request, 'AdminPanel/Book-&-inventory.html', {
-        'page_obj': page_obj
-    })
+    model = Book
+    template_name = 'AdminPanel/Book-&-inventory.html'
+    context_object_name = 'page_obj'  # Matches your current template variable
+    paginate_by = 5
+    ordering = ['-id']
 
-def manage_book(request, pk=None):
-    # If pk is provided, we are editing; otherwise, adding
-    book = get_object_or_404(Book, pk=pk) if pk else None
-    
-    if request.method == 'POST':
-        # Replaces manual data collection from JS modal
-        form = BookForm(request.POST, request.FILES, instance=book)
-        if form.is_valid():
-            form.save() # Automatic ISBN/SKU generation happens in models.py
-            return redirect('inventory_dashboard')
-    else:
-        # GET request: Show the form
-        form = BookForm(instance=book)
-    
-    return render(request, 'AdminPanel/book_form.html', {
-        'form': form,
-        'is_edit': bool(pk)
-    })
-def delete_book(request, pk):
+class BookBaseView:
     """
-    Delete View.
-    Replaces deleteBook(id) from JS
+    A Mixin to share common logic between Create and Update.
+    Keeps code DRY (Don't Repeat Yourself).
     """
-    book = get_object_or_404(Book, pk=pk)
-    title = book.title
-    
-    # We use a POST check for safety to prevent accidental deletions via GET
-    if request.method == 'POST':
-        book.delete()
-        messages.warning(request, f"Book '{title}' has been removed from inventory.")
-        return redirect('inventory_dashboard')
-    
-    # If someone tries to access via GET, just show them the dashboard
-    return redirect('inventory_dashboard')
+    model = Book
+    form_class = BookForm
+    template_name = 'AdminPanel/book_form.html'
+    success_url = reverse_lazy('inventory_dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Check if we are updating or creating to set the heading
+        context['is_edit'] = self.object is not None
+        return context
+
+class BookCreateView(BookBaseView, CreateView):
+    """Handles adding a new book."""
+    pass
+
+class BookUpdateView(BookBaseView, UpdateView):
+    """Handles editing an existing book."""
+    pass
+
+class BookDeleteView(DeleteView):
+    """
+    Handles book deletion. 
+    Matches your requirement of only allowing POST for deletion.
+    """
+    model = Book
+    success_url = reverse_lazy('inventory_dashboard')
+
+    def post(self, request, *args, **kwargs):
+        book = self.get_object()
+        messages.warning(request, f"Book '{book.title}' has been removed from inventory.")
+        return super().post(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        """Redirects to dashboard if accessed via GET, preventing accidental deletes."""
+        return redirect(self.success_url)

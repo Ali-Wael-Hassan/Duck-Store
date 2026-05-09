@@ -1,40 +1,95 @@
-/* Add these to your existing file */
-
-/* Control form visibility based on Django logic */
-.django-visible-form {
-    display: block !important; /* Overrides the default hidden state */
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-main);
-    background: var(--input-bg);
+/* Container for the whole book display */
+main {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
 }
 
-/* Button Layout for the Review Form */
-.review-form-actions {
+/* Left Section: Cover & Buttons */
+.left {
+    flex: 0 0 300px; /* Keeps the cover area at a fixed width */
     display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#book-cover-container {
+    width: 100%;
+    border-radius: var(--radius-main);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--border-color);
+}
+
+.responsive-cover {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* Right Section: Content */
+.right {
+    flex: 1;
+}
+
+/* Fix Meta Info (PAGES, FORMAT, PUBLISHED) */
+.meta-container {
+    display: flex;
+    gap: 40px;
+    margin: 25px 0;
+    padding: 15px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.meta-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-box span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.meta-box strong {
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+/* Typography Improvements */
+.head h1 {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.author-line {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
     gap: 10px;
 }
 
-.review-form-actions button,
-.review-form-actions .btn-cancel {
-    width: auto;
-    padding: 10px 20px;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-}
-
-/* Fix for the Purple Link issue */
-.write-review-btn, .write-review-btn:visited {
-    color: var(--brand-primary);
-    text-decoration: none;
-}
-
-.review-star-color {
+.description h2 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
     color: var(--brand-primary);
 }
 
-.review-muted-text {
-    color: var(--text-muted);
+.description p {
+    line-height: 1.8;
+    font-size: 1rem;
+}
+
+/* Review Section Styling */
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
