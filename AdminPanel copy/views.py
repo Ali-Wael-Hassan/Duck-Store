@@ -10,20 +10,20 @@ from .models import DashboardStat, SalesPerformance
 from Storefront.models import Book, Order
 
 class GamificationAdminView(View):
-    template_name = 'AdminPanel/Gamification_Admin.html'
+    template_name = 'Gamification_Admin.html'
 
-    def get_config(self):
-        # Helper method to get the singleton object
+    # Helper method to get the config
+    def getConfig(self):
         config, created = GamificationConfig.objects.get_or_create(pk=1)
         return config
 
-    def get(self, request, *args, **kwargs):
-        config = self.get_config()
+    def get(self, request):
+        config = self.getConfig()
         form = GamificationConfigForm(instance=config)
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
-        config = self.get_config()
+    def post(self, request):
+        config = self.getConfig()
 
         # Handle Reset Logic
         if 'reset' in request.POST:
@@ -33,6 +33,8 @@ class GamificationAdminView(View):
 
         # Handle Save Logic
         form = GamificationConfigForm(request.POST, instance=config)
+        
+        # TODO replace this is_valid with new validation logic
         if form.is_valid():
             form.save()
             messages.success(request, "Configuration saved successfully!")
@@ -42,15 +44,16 @@ class GamificationAdminView(View):
         return render(request, self.template_name, {'form': form})
 
 class AdminDashboardView(ListView):
-    template_name = "AdminPanel/dashboard.html"
+    template_name = "dashboard.html"
     context_object_name = "recent_orders"
     model = Order
-    paginate_by = 5 #what is this
+    paginate_by = 5 # Each 5 transaction = 1 Page
 
     def get_queryset(self):
         return Order.objects.all().order_by('-date')
 
     def get_context_data(self, **kwargs):
+        # TODO make it accepts both monthly and weekly dynamically
         context = super().get_context_data(**kwargs)
         
         context['stats'] = DashboardStat.objects.all().order_by('sort_order')
