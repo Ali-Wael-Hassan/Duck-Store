@@ -1,72 +1,78 @@
+from django.views import View
 from django.shortcuts import render
 from .models import Book, FeaturedPromo, CuratedConfig, Genre
+from django.views.generic import ListView
+class HomeView(View):
+    template_name = 'Storefront/home.html'
 
-def home_view(request):
-    """
-    Logic for the Home Page. 
-    Fetches featured promos, top sales (trending), and curated recommendations.
-    """
-    featured_promos = FeaturedPromo.objects.filter(is_active=True)
-    
-    trending_books = Book.objects.order_by('-sales')[:7]
-    
-    curated_setup = CuratedConfig.objects.first()
-    curated_books = []
-    if curated_setup:
-        curated_books = Book.objects.filter(
-            genre=curated_setup.display_genre
-        )[:curated_setup.limit]
+    def get(self, request, *args, **kwargs):
+        """
+        Fetches featured promos, trending books, and curated recommendations.
+        """
+        featured_promos = FeaturedPromo.objects.filter(is_active=True)
+        trending_books = Book.objects.order_by('-sales')[:7]
+        
+        curated_setup = CuratedConfig.objects.first()
+        curated_books = []
+        if curated_setup:
+            curated_books = Book.objects.filter(
+                genre=curated_setup.display_genre
+            )[:curated_setup.limit]
 
-    context = {
-        'featured_promos': featured_promos,
-        'trending_books': trending_books,
-        'curated_books': curated_books,
-        'curated_config': curated_setup,
-    }
-    return render(request, 'Storefront/home.html', context)
+        context = {
+            'featured_promos': featured_promos,
+            'trending_books': trending_books,
+            'curated_books': curated_books,
+            'curated_config': curated_setup,
+        }
+        return render(request, self.template_name, context)
+class CatalogView(ListView):
+    model = Book
+    template_name = 'Storefront/store.html'
+    context_object_name = 'page_obj'  # Keeping this name so your HTML doesn't change
+    paginate_by = 12
 
-from django.core.paginator import Paginator
+    def get_queryset(self):
+        """
+        Handles filtering by category, price range, and sorting.
+        """
+        queryset = Book.objects.all()
+        
+        # Get Filter Params
+        category = self.request.GET.get('category')
+        sort_by = self.request.GET.get('sort', 'popularity')
+        min_price = self.request.GET.get('minPrice')
+        max_price = self.request.GET.get('maxPrice')
 
-def catalog_view(request):
-    book_list = Book.objects.all()
-    genres = Genre.objects.all()
+        # Filter by Category
+        if category and category.strip():
+            queryset = queryset.filter(genre__name__iexact=category)
 
-    category = request.GET.get('category')
-    sort_by = request.GET.get('sort', 'popularity')
-    min_price = request.GET.get('minPrice')
-    max_price = request.GET.get('maxPrice')
-
-    if category and category.strip():
-        book_list = book_list.filter(genre__name__iexact=category)
-
-    if min_price and min_price.strip():
+        # Filter by Price Range
         try:
-            book_list = book_list.filter(price__gte=float(min_price))
+            if min_price and min_price.strip():
+                queryset = queryset.filter(price__gte=float(min_price))
+            if max_price and max_price.strip():
+                queryset = queryset.filter(price__lte=float(max_price))
         except ValueError:
             pass 
 
-    if max_price and max_price.strip():
-        try:
-            book_list = book_list.filter(price__lte=float(max_price))
-        except ValueError:
-            pass 
+        # Sorting Logic
+        sort_mapping = {
+            'price-low': 'price',
+            'price-high': '-price',
+            'title': 'title',
+            'popularity': '-sales'
+        }
+        
+        order_field = sort_mapping.get(sort_by, '-sales')
+        return queryset.order_by(order_field)
 
-    if sort_by == 'price-low':
-        book_list = book_list.order_by('price')
-    elif sort_by == 'price-high':
-        book_list = book_list.order_by('-price')
-    elif sort_by == 'title':
-        book_list = book_list.order_by('title')
-    else:
-        book_list = book_list.order_by('-sales') 
-
-    paginator = Paginator(book_list, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-        'genres': genres,
-        'current_sort': sort_by,
-    }
-    return render(request, 'Storefront/store.html', context)
+    def get_context_data(self, **kwargs):
+        """
+        Adds extra context like genres and the current sort state.
+        """
+        context = super().get_context_data(**kwargs)
+        context['genres'] = Genre.objects.all()
+        context['current_sort'] = self.request.GET.get('sort', 'popularity')
+        return context

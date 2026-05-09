@@ -1,17 +1,7 @@
 from django.urls import path
-from . import views
-# from .views import Your Views
+from .views import HomeView, CatalogView
 
 urlpatterns = [
-    path('', views.home_view, name='home'),
-    path('catalog/', views.catalog_view, name='catalog'),
-    
-    path('my-books/', views.home_view, name='my_books'), # Temporary: points to home
-    path('community/', views.home_view, name='community'), # Temporary
-    path('rewards/', views.home_view, name='rewards'), # Temporary
-    path('profile/', views.home_view, name='profile'), # Temporary
-    path('book/<int:id>/', views.home_view, name='book_detail'), # Temporary
-    path('store/', views.catalog_view, name='catalog'),
-    path('store/', views.catalog_view, name='store'),
-
+    path('', HomeView.as_view(), name='home'),
+    path('store/', CatalogView.as_view(), name='store'),
 ]

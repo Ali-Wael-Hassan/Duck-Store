@@ -23,13 +23,13 @@
             <div class="nav">
                 <a href="{% url 'home' %}">Home</a>
                 <a href="{% url 'store' %}">Store</a>
-                <a href="{% url 'my_books' %}">My Books</a>
+                <a href="#">My Books</a>
                 <a href="{% url 'community' %}" class="active">Community</a>
-                <a href="{% url 'rewards' %}">Rewards</a>
+                <a href="#">Rewards</a>
             </div>
             <div class="header__actions">
-                <a href="{% url 'profile' %}" class="avatar-link">
-                    <img src="{{ user.avatar|default:'#' }}" class="avatar-img">
+                <a href="#" class="avatar-link">
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/dummy/default.jpg' %}{% endif %}" class="avatar-img">
                 </a>
             </div>
         </div>
@@ -52,11 +52,11 @@
                         <span class="podium__leader-tag">Current Leader</span>
                     {% endif %}
                     <div class="podium__avatar">
-                        <img src="{{ item.user.avatar }}" alt="{{ item.user.name }}">
+                        <img src="{% if item.user.avatar %}{{ item.user.avatar.url }}{% else %}{% static 'assets/dummy/default.jpg' %}{% endif %}" alt="{{ item.user.name }}">
                         <span class="podium__rank">{{ item.rank }}</span>
                     </div>
                     <h2 class="podium__name">{{ item.user.name }}</h2>
-                    <span class="podium__role">{{ item.user.rank.name }}</span>
+                    <span class="podium__role">{{ item.user.rank.name|default:"Scholar" }}</span>
                     <div class="podium__points">
                         {{ item.user.points }} <span class="podium__points-label">PTS</span>
                     </div>
@@ -93,7 +93,7 @@
                                 <td>#{{ forloop.counter }}</td>
                                 <td>
                                     <div class="scholar-info">
-                                        <img src="{{ scholar.avatar }}" alt="{{ scholar.name }}">
+                                        <img src="{% if scholar.avatar %}{{ scholar.avatar.url }}{% else %}{% static 'assets/dummy/default.jpg' %}{% endif %}" alt="{{ scholar.name }}">
                                         <div>
                                             <span class="scholar-info__name">
                                                 {% if scholar.id == user.id %}You ({{ scholar.name }}){% else %}{{ scholar.name }}{% endif %}
@@ -111,7 +111,8 @@
                     </table>
                 </div>
             </section>
-            <script>
+
+<script>
     const searchInput = document.getElementById('scholar-search');
     const tableBody = document.getElementById('scholars-table-body');
     const currentUserId = "{{ user.id }}"; 
@@ -119,6 +120,7 @@
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value;
 
+        // Fetch calls the ScholarSearchView class
         fetch(`{% url 'community_search' %}?q=${query}`)
             .then(response => response.json())
             .then(data => {
@@ -151,6 +153,7 @@
             });
     });
 </script>
+
             <section class="stats-grid" id="stats-container">
                 <article class="stats-grid__card">
                     <span class="stats-grid__label">Active Members</span>

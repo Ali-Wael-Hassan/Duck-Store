@@ -20,26 +20,30 @@
             </div>
             <div class="nav">
                 <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'catalog' %}" class="active">Store</a>
+                <a href="{% url 'store' %}" class="active">Store</a>
                 <a href="#">My Books</a>
-                <a href="#">Community</a>
+                <a href="{% url 'community' %}">Community</a>
                 <a href="#">Rewards</a>
             </div>
             <div class="header__actions">
-                <a href="#" class="avatar-link"><img src="{% static 'img/default-avatar.png' %}" class="avatar-img"></a>
+                <a href="#" class="avatar-link">
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" class="avatar-img">
+                </a>
             </div>
         </div>
     </nav>
 
     <div class="layout-wrapper">
         <aside class="store-filters">
-            <form id="filter-form" method="GET" action="{% url 'catalog' %}">
+            <form id="filter-form" method="GET" action="{% url 'store' %}">
                 <div class="filter-group">
                     <h3 class="filter-group__title"><span class="material-symbols-outlined">category</span>CATEGORIES</h3>
                     <div id="genre-filters">
                         {% for genre in genres %}
                         <label class="filter-item">
-                            <input type="checkbox" name="category" value="{{ genre.name }}" class="filter-item__checkbox" onchange="this.form.submit()" {% if request.GET.category == genre.name %}checked{% endif %}>
+                            <input type="checkbox" name="category" value="{{ genre.name }}" 
+                                   class="filter-item__checkbox" onchange="this.form.submit()" 
+                                   {% if request.GET.category == genre.name %}checked{% endif %}>
                             <span class="filter-item__label">{{ genre.name }}</span>
                         </label>
                         {% endfor %}
@@ -51,13 +55,16 @@
                     <div class="price-inputs">
                         <input type="number" name="minPrice" id="min-price" placeholder="0" value="{{ request.GET.minPrice|default:0 }}">
                         <span>to</span>
-                        <input type="number" name="maxPrice" id="max-price" value="{{ request.GET.maxPrice|default:100 }}">
+                        <input type="number" name="maxPrice" id="max-price" value="{{ request.GET.maxPrice|default:200 }}">
                     </div>
                     <div class="price-range">
-                        <input type="range" class="price-range__slider" id="price-slider" min="0" max="200" value="{{ request.GET.maxPrice|default:100 }}">
-                        <div class="price-range__display">Max: <strong>$<span id="price-limit">{{ request.GET.maxPrice|default:100 }}</span></strong></div>
+                        <input type="range" class="price-range__slider" id="price-slider" min="0" max="200" 
+                               value="{{ request.GET.maxPrice|default:200 }}" oninput="document.getElementById('price-limit').innerText = this.value">
+                        <div class="price-range__display">Max: <strong>$<span id="price-limit">{{ request.GET.maxPrice|default:200 }}</span></strong></div>
                     </div>
+                    <button type="submit" class="filter-apply-btn" style="margin-top: 10px; width: 100%; cursor: pointer;">Apply Price</button>
                 </div>
+                
                 <input type="hidden" name="sort" id="sort-input" value="{{ current_sort }}">
             </form>
         </aside>
@@ -71,9 +78,13 @@
 
                     <div class="sort-by-container">
                         <div class="sort-by" id="sort-trigger">
-                            <span>Sort by:</span> <strong id="current-sort-label">{{ current_sort|title }}</strong>
+                            <span>Sort by:</span> 
+                            <strong id="current-sort-label">
+                                {{ current_sort|title }}
+                            </strong>
                             <span class="material-symbols-outlined">expand_more</span>
                         </div>
+
                         <div class="sort-popup" id="sort-popup">
                             <div class="sort-option" onclick="applySort('popularity')">Popularity</div>
                             <div class="sort-option" onclick="applySort('price-low')">Price: Low to High</div>
@@ -88,7 +99,11 @@
                 {% for book in page_obj %}
                 <article class="book-card">
                     <div class="book-card__image-container">
-                        {% if book.cover_img %}<img src="{{ book.cover_img.url }}" alt="{{ book.title }}" class="book-card__image">{% else %}<img src="{% static 'img/no-cover.png' %}" class="book-card__image">{% endif %}
+                        {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}" class="book-card__image">
+                        {% else %}
+                            <img src="{% static 'img/no-cover.png' %}" class="book-card__image">
+                        {% endif %}
                     </div>
                     <div class="book-card__body">
                         <p class="book-card__genre">{{ book.genre.name }}</p>
@@ -105,29 +120,70 @@
 
             <div class="pagination" id="pagination-controls">
                 {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__btn">← Prev</a>
+                <a href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}" class="pagination__btn">← Prev</a>
                 {% endif %}
 
                 <div class="pagination__numbers">
                     {% for num in page_obj.paginator.page_range %}
-                    <a href="?page={{ num }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__num {% if page_obj.number == num %}active{% endif %}">{{ num }}</a>
+                        {% if page_obj.number == num %}
+                            <span class="pagination__num active">{{ num }}</span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}" class="pagination__num">{{ num }}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
 
                 {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category }}&maxPrice={{ request.GET.maxPrice }}" class="pagination__btn">Next →</a>
+                <a href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}" class="pagination__btn">Next →</a>
                 {% endif %}
             </div>
         </main>
     </div>
 
     <script>
+        // Sort Functionality
         function applySort(val) {
             document.getElementById('sort-input').value = val;
             document.getElementById('filter-form').submit();
         }
+
+        // Dropdown toggle logic
+        document.getElementById('sort-trigger').addEventListener('click', function() {
+            document.getElementById('sort-popup').classList.toggle('show');
+        });
+
+        // Price slider real-time display
+        const slider = document.getElementById('price-slider');
+        const output = document.getElementById('price-limit');
+        const maxInput = document.getElementById('max-price');
+
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+            maxInput.value = this.value;
+        }
+        function applySort(val) {
+            const sortInput = document.getElementById('sort-input');
+            if (sortInput) {
+                sortInput.value = val;
+                document.getElementById('filter-form').submit();
+            }
+        }
+
+        const sortTrigger = document.getElementById('sort-trigger');
+        const sortPopup = document.getElementById('sort-popup');
+
+        if (sortTrigger && sortPopup) {
+            sortTrigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                sortPopup.classList.toggle('active'); 
+            });
+        }
+
+        document.addEventListener('click', function() {
+            if (sortPopup) sortPopup.classList.remove('active');
+        });
     </script>
-    <script type="module" src='/js/main.js'></script>
-    <script type="module" src='/js/pages/store-page.js'></script>
+    
+    <script type="module" src="{% static 'js/main.js' %}"></script>
 </body>
 </html>
