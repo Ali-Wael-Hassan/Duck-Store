@@ -129,5 +129,3 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'Authentication.User'
-# settings.py
-LOGIN_URL = '/auth/login/'  # Change this to your actual login path

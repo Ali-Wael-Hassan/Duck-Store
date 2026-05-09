@@ -1,6 +1,10 @@
 from django.urls import path
-# from .views import Your Views
+from . import views
 
 urlpatterns = [
-    # Put here the urls
+    path('book/<int:book_id>/', views.book_detail_view, name='book_detail'),
+    
+    # Add these two lines
+    path('book/<int:book_id>/review/', views.add_review, name='add_review'),
+    path('book/<int:book_id>/action/<str:action_type>/', views.handle_book_action, name='book_action'),
 ]

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Duck Store | Add Book</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminPanel/book_form.css' %}">
+</head>
+<body>
+    <div class="layout-wrapper">
+        <main class="form-main-content">
+            <div class="inventory-header">
+                <div>
+                    <h1>Add New Book</h1>
+                    <p>Enter book metadata and real-time stock levels.</p>
+                </div>
+            </div>
+
+            <div class="book-form-card">
+                <form method="POST" enctype="multipart/form-data" class="compact-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-grid">
+                        {{ form.as_p }}
+                    </div>
+
+                    <div class="form-actions-row">
+                        <button type="submit" class="btn-add">
+                            <span class="material-symbols-outlined">save</span> Save to Inventory
+                        </button>
+                        <a href="{% url 'inventory_dashboard' %}" class="btn-cancel-link">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
