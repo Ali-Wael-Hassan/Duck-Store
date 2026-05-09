@@ -1,6 +1,13 @@
 from django.urls import path
-# from .views import Your Views
+from . import views
 
 urlpatterns = [
-    # Put here the urls
-]
+    # ============================================================
+    # BOOK DETAIL — Task 1
+    # ============================================================
+    path("book-view.html", views.BookView.detail, name="book_detail_html"),
+    path("book/<int:book_id>/", views.BookView.detail, name="book_detail"),
+    path("api/book/<int:book_id>/buy/", views.BookView.buy, name="buy_book"),
+    path("api/book/<int:book_id>/borrow/", views.BookView.borrow, name="borrow_book"),
+    path("api/book/<int:book_id>/review/", views.BookView.add_review, name="add_review"),
+]

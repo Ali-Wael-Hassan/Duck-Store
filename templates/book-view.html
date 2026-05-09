@@ -1,26 +1,14 @@
-<<<<<<< HEAD
-=======
 {% load static %}
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>Duck Library | View Book</title>
-=======
     <title>Duck Library | {{ book.title }}</title>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
 
-<<<<<<< HEAD
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/classes.css">
-    <link rel="stylesheet" href="../css/Pages/book_view.css">
-=======
     <!-- Assuming static files are correctly configured -->
     <link rel="stylesheet" href="{% static 'css/component.css' %}">
     <link rel="stylesheet" href="{% static 'css/classes.css' %}">
@@ -32,7 +20,6 @@
             border-radius: 8px;
         }
     </style>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
 </head>
 <body data-page="book-view"> 
 
@@ -43,16 +30,6 @@
                 <div class="logo-text">DUCK</div>
             </div>
             <div class="nav">
-<<<<<<< HEAD
-                <a href="home.html">Home</a>
-                <a href="store.html" class="active">Store</a>
-                <a href="my-Books.html">My Books</a>
-                <a href="community.html">Community</a>
-                <a href="reward.html">Rewards</a>
-            </div>
-            <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
-=======
                 <a href="/">Home</a>
                 <a href="/store/" class="active">Store</a>
                 <a href="/my-books/">My Books</a>
@@ -71,26 +48,11 @@
                 {% else %}
                     <a href="/login/" class="btn-primary">Login</a>
                 {% endif %}
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
             </div>
         </div>
     </nav>
 
     <main>
-<<<<<<< HEAD
-        <section class="left">
-            <div id="book-cover-container" class="placeholder-img">
-                <p>LOADING...</p>
-            </div>
-            <div class="actions">
-                <button id="buyButton" class="btn-primary" onclick="bookPage.handleAction(this, 'userBooks')">
-                    BUY
-                </button>
-                <button id="borrowButton" class="btn-secondary" onclick="bookPage.handleAction(this, 'borrowedBooks')">
-                    BORROW
-                </button>
-            </div>
-=======
         {% csrf_token %}
         <section class="left">
             <div id="book-cover-container" class="placeholder-img">
@@ -116,18 +78,10 @@
             </div>
             <div id="action-message" style="margin-top: 10px; color: green; display: none;"></div>
             <div id="action-error" style="margin-top: 10px; color: red; display: none;"></div>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
         </section>
 
         <section class="right">
             <div class="head">
-<<<<<<< HEAD
-                <h1 id="book-title">Loading...</h1>
-                <p class="author-line">
-                    <strong id="book-author">---</strong> •
-                    <span id="star-rating-container" class="stars"></span>
-                    <span id="book-rating">0.0</span>
-=======
                 <h1 id="book-title">{{ book.title }}</h1>
                 <p class="author-line">
                     <strong id="book-author">{{ book.author }}</strong> •
@@ -136,38 +90,21 @@
                         <i class="bi bi-star-fill" style="color: #FFD700;"></i>
                     </span>
                     <span id="book-rating">{{ book_detail.rating }}</span>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
                 </p>
             </div>
 
             <div class="meta-container">
-<<<<<<< HEAD
-                <div class="meta-box"><span>PAGES</span><strong id="meta-pages">---</strong></div>
-                <div class="meta-box"><span>FORMAT</span><strong id="meta-format">Digital</strong></div>
-                <div class="meta-box"><span>LANGUAGE</span><strong id="meta-lang">English</strong></div>
-                <div class="meta-box"><span>PUBLISHED</span><strong id="meta-date">---</strong></div>
-=======
                 <div class="meta-box"><span>PAGES</span><strong id="meta-pages">{{ book.pages }}</strong></div>
                 <div class="meta-box"><span>FORMAT</span><strong id="meta-format">Digital</strong></div>
                 <div class="meta-box"><span>LANGUAGE</span><strong id="meta-lang">English</strong></div>
                 <div class="meta-box"><span>PUBLISHED</span><strong id="meta-date">{{ book.published_date|default:"N/A" }}</strong></div>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
             </div>
 
             <article class="description">
                 <h2>Synopsis</h2>
                 <p>
-<<<<<<< HEAD
-                    <span id="synopsis-content">Loading summary...</span>
-                    <span id="extra-content" class="hidden"></span> 
-                </p>
-                <button id="readMoreBtn" class="read-more-link" onclick="bookPage.toggleSynopsis('readMoreBtn', 'extra-content')">
-                    Read more →
-                </button>
-=======
                     <span id="synopsis-content">{{ book_detail.synopsis }}</span>
                 </p>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
             </article>
 
             <hr class="section-divider">
@@ -175,16 +112,6 @@
             <div class="reviews">
                 <div class="reviews-header">
                     <h3>Reader Reviews</h3>
-<<<<<<< HEAD
-                    <button class="btn-secondary write-review-btn" onclick="bookPage.handleAddReview()">
-                        <i class="bi bi-pencil-square"></i> Write a Review
-                    </button>
-                </div>
-                <div id="review-list"></div>
-                <button class="btn-secondary load-more" onclick="bookPage.handleLoadMore(this)">
-                    Load more reviews
-                </button>
-=======
                     {% if user %}
                     <button class="btn-secondary write-review-btn" onclick="toggleReviewForm()">
                         <i class="bi bi-pencil-square"></i> Write a Review
@@ -218,16 +145,10 @@
                         <p>No reviews yet. Be the first to review!</p>
                     {% endfor %}
                 </div>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
             </div>
         </section>
     </main>
 
-<<<<<<< HEAD
-    <script type="module" src="../js/main.js"></script>
-</body>
-</html>
-=======
     <script>
         function getCookie(name) {
             let cookieValue = null;
@@ -344,4 +265,3 @@
     </script>
 </body>
 </html>
->>>>>>> f60a2ec0c9eca2c357c5f2e4c860c7c234f7ecd0
