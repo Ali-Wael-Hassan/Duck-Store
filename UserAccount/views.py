@@ -14,17 +14,17 @@ class MyBooksView:
     class MyBooksHelper:
         @staticmethod
         def _getOwnedBooks(user: User):
-            """[PRIVATE] Owned-books queryset — used only inside MyBooksView."""
+            # get the purchased books for the requested user
             return UserBook.objects.filter(user=user, ownership_type="bought").select_related("book")
 
         @staticmethod
         def _getBorrowedBooks(user: User):
-            """[PRIVATE] Borrowed-books queryset — used only inside MyBooksView."""
+            # get the borrowed books for the requested user
             return UserBook.objects.filter(user=user, ownership_type="rented").select_related("book")
 
     @staticmethod
     @require_GET
-    def index(request) -> HttpResponse:  # [PUBLIC] URL-mapped
+    def index(request) -> HttpResponse:  # URL-mapped
         user = SharedHelper.loginRequired(request)
         if not user:
             return redirect("login")
@@ -43,7 +43,7 @@ class MyBooksView:
 
     @staticmethod
     @require_GET
-    def filter(request, filter_type: str) -> JsonResponse:  # [PUBLIC] URL-mapped
+    def filter(request, filter_type: str) -> JsonResponse:  # URL-mapped
         user = SharedHelper.loginRequired(request)
         if not user:
             return JsonResponse({"error": "Login required."}, status=401)
@@ -72,19 +72,19 @@ class MyBooksView:
 
 
 
-# ── UserProfileView ──────────────────────────────────────────────────────────
+# == UserProfileView =========================================
 
 class UserProfileView:
 
     class UserProfileHelper:
         @staticmethod
         def _getRankTier(user: User) -> str:
-            """[PRIVATE] Tier label — used only inside UserProfileView.index."""
+            # delegates the method to the model
             return user.get_tier()
 
         @staticmethod
         def _getBadgeConfig(user: User) -> list:
-            """[PRIVATE] Badge list — used only inside UserProfileView.index."""
+            # gets badges of the user
             return list(
                 UserBadge.objects.filter(user=user)
                 .select_related("badge")
@@ -93,7 +93,7 @@ class UserProfileView:
 
         @staticmethod
         def _getGenreProgress(user: User) -> list:
-            """[PRIVATE] Genre read counts — used only inside UserProfileView.index."""
+            # gets the genre count for the user
             return (
                 UserBook.objects.filter(user=user)
                 .values("book__genre__name", "book__genre__slug")
@@ -103,7 +103,7 @@ class UserProfileView:
 
         @staticmethod
         def _getAchievements(user: User) -> list:
-            """[PRIVATE] Achievement list — used only inside UserProfileView.index."""
+            # gets the user 
             return list(
                 UserBadge.objects.filter(user=user)
                 .select_related("badge")
@@ -113,7 +113,7 @@ class UserProfileView:
 
     @staticmethod
     @require_GET
-    def index(request) -> HttpResponse:  # [PUBLIC] URL-mapped
+    def index(request) -> HttpResponse:  # URL-mapped
         user = SharedHelper.loginRequired(request)
         if not user:
             return redirect("login")
@@ -135,7 +135,7 @@ class UserProfileView:
 
     @staticmethod
     @require_POST
-    def updateAvatar(request) -> JsonResponse:  # [PUBLIC] URL-mapped
+    def updateAvatar(request) -> JsonResponse:  # URL-mapped
         user = SharedHelper.loginRequired(request)
         if not user:
             return JsonResponse({"error": "Login required."}, status=401)

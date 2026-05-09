@@ -20,68 +20,85 @@ PAGE_SIZE = 10
 class SharedHelper:
     @staticmethod
     def loginRequired(request):
-        """Return the logged-in User object or None."""
+        # gets the user session
         session_id = request.session.get("session_id")
         if not session_id:
             return None
+        
+        # gets the user from the DB
         return User.objects.filter(session_id=session_id).first()
 
     @staticmethod
     def paginate(queryset, page_number, per_page=PAGE_SIZE):
+        # delegates the pagination to django built-in class
         paginator = Paginator(queryset, per_page)
         return paginator.get_page(page_number)
 
     @staticmethod
     def _checkAndAwardBadges(user: User) -> None:
-        """[PRIVATE] Award badges the user now qualifies for."""
+        # get the unlocked badges
         eligible = Badge.objects.filter(requirement__lte=user.points)
+        # gets the badge id of the awarded badges of the user
         already_awarded = UserBadge.objects.filter(user=user).values_list("badge_id", flat=True)
         for badge in eligible:
+            # if the user didn't unlock the badge then unlock it
             if badge.pk not in already_awarded:
                 UserBadge.objects.create(user=user, badge=badge)
 
     @staticmethod
     def _getFeaturedPromos():
-        """[PRIVATE] Returns active promos queryset."""
+        # eturns active promos queryset
         return FeaturedPromo.objects.filter(is_active=True)
 
 
 
-# Create your views here.
+# Helper Class
 class BookActionHelper:
 
     @staticmethod
     def checkOwnership(user: User, book_id: int) -> bool:
+        # checks whether the user owns the book or not
         return UserBook.objects.filter(user=user, book_id=book_id).exists()
-    # TODO USE CONFIG MODEL
-    # TODO USE USER MODEL
+
     @staticmethod
     def _awardReviewPoints(user: User, comment: str) -> int:
-        """[PRIVATE] Credit review points; called only from BookView.add_review."""
+        # gets the config for rewards
         config = GamificationConfig.load()
         points = config.review_base
+        
+        # validates the length of the review and calculate points
         if len(comment or "") >= config.review_min_char:
             points += config.review_bonus
         user.points += points
         user.reviews = (user.reviews or 0) + 1
+        
+        # save query for the updated fields
         user.save(update_fields=["points", "reviews"])
+        
+        # update badges
         SharedHelper._checkAndAwardBadges(user)
         return points
 
     @staticmethod
     def _awardPurchasePoints(user: User, price: Decimal) -> int:
-        """[PRIVATE] Credit purchase points; called only from BookView.buy."""
+        # gets the config for rewards
         config = GamificationConfig.load()
+        
+        # limit the bonus of purshase
         earned = min(int(float(price) * config.purchase_rate), config.purchase_max)
         user.points += earned
+        
+        # updates user readings
         user.readings = (user.readings or 0) + 1
+        
+        # save query for the updated fields
         user.save(update_fields=["points", "readings"])
+        
+        # update badges
         SharedHelper._checkAndAwardBadges(user)
         return earned
 
-# TODO MAKE IT INNER CLASS OF THE BOOKVIEW CLASS
 class BookView:
-    """Book detail + action endpoints."""
 
     class BookDetailTemplate:
         @staticmethod
@@ -94,16 +111,18 @@ class BookView:
 
     @staticmethod
     def _action_pipeline(request, book_id: int, logic_func):
-        """Pipeline to check login and then perform the action logic."""
+        # Pipeline to check login and then perform the action logic
         user = SharedHelper.loginRequired(request)
         if not user:
             return JsonResponse({"error": "Login required."}, status=401)
         book = get_object_or_404(Book, pk=book_id)
+        
+        # If validation passed, do the logic
         return logic_func(request, user, book)
 
     @staticmethod
     @require_GET
-    def detail(request, book_id: int) -> HttpResponse:  # [PUBLIC] URL-mapped
+    def detail(request, book_id: int) -> HttpResponse:  # URL-mapped
         book = get_object_or_404(Book.objects.select_related("genre", "inventory"), pk=book_id)
         reviews = Review.objects.filter(book=book).order_by("-created_at")[:5]
         user = SharedHelper.loginRequired(request)
@@ -121,7 +140,7 @@ class BookView:
 
     @staticmethod
     @require_POST
-    def buy(request, book_id: int) -> JsonResponse:  # [PUBLIC] URL-mapped
+    def buy(request, book_id: int) -> JsonResponse:  # URL-mapped
         def logic(req, current_user, current_book):
             inventory = get_object_or_404(Inventory, book=current_book)
             if inventory.stock < 1:
@@ -145,7 +164,7 @@ class BookView:
 
     @staticmethod
     @require_POST
-    def borrow(request, book_id: int) -> JsonResponse:  # [PUBLIC] URL-mapped
+    def borrow(request, book_id: int) -> JsonResponse:  # URL-mapped
         def logic(req, current_user, current_book):
             if BookActionHelper.checkOwnership(current_user, current_book.id):
                 return JsonResponse({"error": "Already in your library."}, status=400)
@@ -155,7 +174,7 @@ class BookView:
 
     @staticmethod
     @require_POST
-    def add_review(request, book_id: int) -> JsonResponse:  # [PUBLIC] URL-mapped
+    def add_review(request, book_id: int) -> JsonResponse:  # URL-mapped
         def logic(req, current_user, current_book):
             rating = int(req.POST.get("rating", 0))
             comment = req.POST.get("comment", "").strip()
