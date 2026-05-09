@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUCK Library | Rewards Hub</title>
     
-    <link rel="stylesheet" href="../css/component.css">
-    <link rel="stylesheet" href="../css/classes.css">
-    <link rel="stylesheet" href="../css/Pages/reward.css">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/reward.css' %}">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
@@ -42,7 +43,7 @@
                 <div class="points-balance" id="points-display">
                     <i class="bi bi-gem" aria-hidden="true"></i>
                     <span class="points-balance__label">CURRENT BALANCE</span>
-                    <span class="points-balance__value" id="points-value">...</span>
+                    <span class="points-balance__value" id="points-value">{{ user.points }}</span>
                     <span class="points-balance__unit">PTS</span>
                 </div>
             </header>
@@ -53,13 +54,45 @@
                     <section class="legend-status">
                         <h2>Your Legend Status</h2>
                         <ul class="badge-list" id="sidebar-badges">
-                            </ul>
+                            {% for badge in badges %}
+                            <li class="badge-item" style="--badge-color: {{ badge.color }};">
+                                <span class="badge-icon">{{ badge.icon }}</span>
+                                <div class="badge-info">
+                                    <span class="badge-name">{{ badge.name }}</span>
+                                    <span class="badge-req">{{ badge.requirement }} pts required</span>
+                                </div>
+                            </li>
+                            {% empty %}
+                            <li style="color:#888;">No badges available yet.</li>
+                            {% endfor %}
+                        </ul>
                     </section>
 
                     <section class="redeemable-rewards">
                         <h2>Redeemable Rewards</h2>
                         <div class="rewards-grid" id="rewards-grid">
+                            {% for reward in rewards %}
+                            <div class="reward-card">
+                                {% if reward.cover_image %}
+                                <img src="{{ reward.cover_image.url }}" alt="{{ reward.title }}" class="reward-img">
+                                {% endif %}
+                                <div class="reward-card__body">
+                                    <h3>{{ reward.title }}</h3>
+                                    <p>{{ reward.description }}</p>
+                                    <div class="reward-footer">
+                                        <span class="reward-cost"><i class="bi bi-gem"></i> {{ reward.cost }} pts</span>
+                                        <button class="btn-primary redeem-btn" 
+                                                data-reward-id="{{ reward.id }}"
+                                                {% if user.points < reward.cost %}disabled{% endif %}>
+                                            {% if user.points >= reward.cost %}Redeem{% else %}Not enough pts{% endif %}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            {% empty %}
+                            <p style="color:#888;">No rewards available at the moment.</p>
+                            {% endfor %}
+                        </div>
                     </section>
                 </div>
 
@@ -83,6 +116,21 @@
         </main>
     </div>
 
-    <script type="module" src="../js/main.js"></script>
+    <script>
+    // Redeem button handler
+    document.querySelectorAll('.redeem-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const rewardId = this.dataset.rewardId;
+            const res = await fetch(`/api/rewards/${rewardId}/redeem/`, {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}});
+            const data = await res.json();
+            if (data.success) {
+                alert('Reward redeemed! Your new balance: ' + data.new_points + ' pts');
+                location.reload();
+            } else {
+                alert(data.error || 'Could not redeem reward.');
+            }
+        });
+    });
+    </script>
 </body>
 </html>
