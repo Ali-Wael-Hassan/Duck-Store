@@ -1,10 +1,16 @@
 from django.urls import path
-from . import views
+from .views import SalesRefundsView, UsersRolesIndexView, AddUserView, ToggleUserRoleView
 
 urlpatterns = [
-    # Mapping the Sales & Refunds index view
-    path('sales-refunds/', views.sales_refunds_view, name='sales_refunds_index'),
-    path('users/', views.users_roles_index, name='users_roles_index'),
-    path('users/add/', views.add_user, name='add_user'),
-path('users/toggle/<int:user_id>/', views.toggle_user_role, name='toggle_user_role'),
+    # Sales & Refunds
+    path('sales-refunds/', SalesRefundsView.as_view(), name='sales_refunds_index'),
+    
+    # Users & Roles Index (Listing, Filtering, Search)
+    path('users/', UsersRolesIndexView.as_view(), name='users_roles_index'),
+    
+    # Add User Action
+    path('users/add/', AddUserView.as_view(), name='add_user'),
+    
+    # Toggle User Role Action
+    path('users/toggle/<int:user_id>/', ToggleUserRoleView.as_view(), name='toggle_user_role'),
 ]
