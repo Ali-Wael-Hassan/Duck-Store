@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+<<<<<<< HEAD:Duck_Store_Project/urls.py
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,3 +29,15 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+=======
+urlpatterns = [
+    path('admin/', admin.site.urls), # updated to our admin
+    path('auth/', include('Authentication.urls')),
+    path('community/', include('Community.urls')),
+    path('storefront/', include('Storefront.urls')),
+    path('user/', include('UserAccount.urls')),
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+>>>>>>> 4645f46133396f3d2ea401cb2065b287d2ade125:config/urls.py
