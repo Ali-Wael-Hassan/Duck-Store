@@ -35,3 +35,15 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.name} ({self.email})"
     
+    def get_global_rank(self):
+        return User.objects.filter(points__gt=self.points).count() + 1
+    
+    def get_tier(self):
+        try:
+            rank = Rank.objects.get(
+                min_points__lte=self.points,
+                max_points__gte=self.points
+            )
+            return rank.name
+        except Rank.DoesNotExis:
+            return "Unranked"
