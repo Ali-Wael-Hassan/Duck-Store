@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Books & Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'AdminPanel/Book-&-inventory.css' %}">
+</head>
+<body data-page="inventory">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="#" class="avatar-link">
+                    <img src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'assets/dummy/avatar.png' %}{% endif %}" class="avatar-img">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="#"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="{% url 'inventory_dashboard' %}" class="active"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="#"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="#"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="#"><span class="material-symbols-outlined">trophy</span> Gamification</a>
+        </aside>
+
+        <main class="inventory-main">
+            <div class="inventory-header">
+                <div>
+                    <h1>Books & Inventory</h1>
+                    <p>Manage your global catalog and real-time stock levels.</p>
+                </div>
+                <div>
+            <a href="{% url 'add_book' %}" class="btn-add" style="text-decoration: none;">
+    <span class="material-symbols-outlined">add</span> Add New Book
+            </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Book Title & Author</th>
+                            <th>ISBN-13</th>
+                            <th>SKU</th>
+                            <th>Stock Level</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-tbody">
+                        {% for book in page_obj %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <h4 style="margin:0">{{ book.title }}</h4>
+                                    <span class="subtext">{{ book.author }}</span>
+                                </div>
+                            </td>
+                            <td>{{ book.isbn }}</td>
+                            <td>{{ book.sku }}</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-track">
+                                        <div class="{% if book.stock < 10 %}progress-bar-yellow{% else %}progress-bar{% endif %}" 
+                                             style="width: {% widthratio book.stock book.max_stock 100 %}%">
+                                        </div>
+                                    </div>
+                                    <span style="{% if book.stock == 0 %}{% endif %}">{{ book.stock }}</span>
+                                </div>
+                            </td>
+                            <td><span class="{{ book.status_ui.class }}">{{ book.status_ui.text }}</span></td>
+                            <td>
+                                <a href="{% url 'edit_book' book.pk %}" class="action-icon" style="text-decoration:none;">⋮</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No books found in inventory.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="inventory-pagination">
+                <span class="subtext">
+                    Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books
+                </span>
+                <div class="page-controls">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" style="text-decoration: none;">
+                            <button>Previous</button>
+                        </a>
+                    {% else %}
+                        <button disabled>Previous</button>
+                    {% endif %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" style="text-decoration: none;">
+                            <button>Next</button>
+                        </a>
+                    {% else %}
+                        <button disabled>Next</button>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

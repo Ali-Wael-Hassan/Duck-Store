@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | {{ book.title }}</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Storefront/book_view.css' %}">
+</head>
+<body data-page="book-view"> 
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="#">Home</a>
+                <a href="#" class="active">Store</a>
+                <a href="#">My Books</a>
+                <a href="#">Community</a>
+                <a href="#">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="#" class="avatar-link">
+                    <img src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'assets/dummy/avatar.png' %}{% endif %}" class="avatar-img">
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <main>
+            <section class="left">
+                <div id="book-cover-container">
+                    {# Fixed: Added .url to show the image correctly #}
+                    <img src="{% if book.cover_img %}{{ book.cover_img.url }}{% else %}{% static 'assets/dummy/book-cover.png' %}{% endif %}" 
+                         alt="{{ book.title }}" 
+                         class="responsive-cover">
+                </div>
+                <div class="actions">
+                    <form action="{% url 'book_action' book.id 'owned' %}" method="POST" class="actions-form">
+                        {% csrf_token %}
+                        <button class="btn-primary {% if is_owned %}btn-disabled{% endif %}" {% if is_owned %}disabled{% endif %}>
+                            {% if is_owned %}OWNED{% else %}BUY FOR ${{ book.price }}{% endif %}
+                        </button>
+                    </form>
+                    
+                    <form action="{% url 'book_action' book.id 'borrowed' %}" method="POST" class="actions-form">
+                        {% csrf_token %}
+                        <button class="btn-secondary {% if is_borrowed %}btn-disabled{% endif %}" {% if is_borrowed %}disabled{% endif %}>
+                            {% if is_borrowed %}IN LIBRARY{% else %}BORROW{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section class="right">
+                <div class="head">
+                    <h1>{{ book.title }}</h1>
+                    <p class="author-line">
+                        <strong>{{ book.author }}</strong> • 
+                        <span class="stars">
+                            {% for i in star_range %}
+                                <i class="bi {% if i <= book.rating %}bi-star-fill{% else %}bi-star{% endif %}"></i>
+                            {% endfor %}
+                        </span>
+                        <span>{{ book.rating|floatformat:1 }}</span>
+                    </p>
+                </div>
+
+                <div class="meta-container">
+                    <div class="meta-box">
+                        <span>PAGES</span>
+                        <strong>{{ book.pages }}</strong> 
+                    </div>
+                    <div class="meta-box">
+                        <span>FORMAT</span>
+                        <strong>Digital</strong> 
+                    </div>
+                    <div class="meta-box">
+                        <span>PUBLISHED</span>
+                        <strong>{{ book.published_date }}</strong>
+                    </div>
+                </div>
+
+                <article class="description">
+                    <h2>Synopsis</h2>
+                    <p>
+                        {{ main_desc }}
+                        {% if request.GET.read_more == 'true' %}
+                            {{ extra_desc }}
+                        {% endif %}
+                    </p>
+                    {% if has_more %}
+                        <a href="?{% if request.GET.read_more == 'true' %}{% else %}read_more=true{% endif %}" class="read-more-link">
+                            {% if request.GET.read_more == 'true' %}Show less ←{% else %}Read more →{% endif %}
+                        </a>
+                    {% endif %}
+                </article>
+
+                <hr class="section-divider">
+
+                <div class="reviews">
+                    <div class="reviews-header">
+                        <h3>Reader Reviews</h3>
+                        {% if not show_review_form %}
+                            <a href="?show_form=true#form-start" class="write-review-btn">
+                                <i class="bi bi-pencil-square"></i> Write a Review
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div id="form-start"></div>
+
+                    {% if show_review_form %}
+                    <div id="review-form-container" class="django-visible-form">
+                        <form method="POST" action="{% url 'add_review' book.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Rating (1-5)</label>
+                                <input type="number" name="rating" min="1" max="5" step="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Comment</label>
+                                <textarea name="comment" placeholder="Your review..." required></textarea>
+                            </div>
+                            <div class="review-form-actions">
+                                <button type="submit" class="btn-primary">Post Review</button>
+                                <a href="?" class="btn-cancel">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                    <div id="review-list">
+                        {% for review in book.book_reviews.all %}
+                            <div class="review-item">
+                                <strong>{{ review.user_name }}</strong> 
+                                <span class="review-star-color">({{ review.rating }}★)</span>
+                                <p>{{ review.comment }}</p>
+                                <small class="review-muted-text">{{ review.created_at|date:"M d, Y" }}</small>
+                            </div>
+                        {% empty %}
+                            <p>No reviews yet. Be the first to write one!</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

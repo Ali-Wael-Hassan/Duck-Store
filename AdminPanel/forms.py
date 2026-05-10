@@ -1,4 +1,5 @@
 from django import forms
+<<<<<<< HEAD
 from .models import GamificationConfig
 
 class GamificationConfigForm(forms.ModelForm):
@@ -16,3 +17,15 @@ class GamificationConfigForm(forms.ModelForm):
     def validatePoints():
         # TODO check for negative and non digits to be False and otherwise True
         return True;
+=======
+from .models import Book
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'genre', 'price', 'pages', 
+                  'published_date', 'rating', 'description', 'image', 'stock']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+        }
+>>>>>>> be0a2b60eb63af18f99b35217a3412662200d247

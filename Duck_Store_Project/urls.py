@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Duck_Store_Project/urls.py
 """
 URL configuration for Duck_Store_Project project.
 
@@ -15,6 +16,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+=======
+>>>>>>> be0a2b60eb63af18f99b35217a3412662200d247:config/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -22,6 +25,7 @@ from django.conf.urls.static import static
 <<<<<<< HEAD:Duck_Store_Project/urls.py
 
 urlpatterns = [
+<<<<<<< HEAD:Duck_Store_Project/urls.py
     path("admin/", admin.site.urls),
     path("", include("Storefront.urls")),
     path("", include("UserAccount.urls")),
@@ -32,6 +36,10 @@ if settings.DEBUG:
 =======
 urlpatterns = [
     path('admin/', admin.site.urls), # updated to our admin
+=======
+    path('AdminPanel/', include('AdminPanel.urls')),
+    path('admin/', admin.site.urls),
+>>>>>>> be0a2b60eb63af18f99b35217a3412662200d247:config/urls.py
     path('auth/', include('Authentication.urls')),
     path('community/', include('Community.urls')),
     path('storefront/', include('Storefront.urls')),

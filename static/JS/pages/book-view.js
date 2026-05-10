@@ -270,4 +270,5 @@ export class BookViewPage {
     handleLoadMore(btn) {
         this.reviews.loadNext(btn);
     }
+    
 }
