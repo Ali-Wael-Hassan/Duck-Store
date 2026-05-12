@@ -1,351 +1,276 @@
-<<<<<<< HEAD
 import uuid
-from django.views import View
-from django.views.generic import ListView
 from datetime import date
 from decimal import Decimal
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+from django.views.generic import ListView
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponse
-from django.core.paginator import Paginator
-from django.views.decorators.http import require_GET, require_POST
+from django.http import JsonResponse
 from django.db.models import Avg
 
-from Authentication.models import User
 from Community.models import Badge, UserBadge
-from Storefront.models import Book, Review, Inventory, Order, FeaturedPromo, UserBook, CuratedConfig, Genre
+from Storefront.models import (
+    Book, Review, Inventory, Order,
+    FeaturedPromo, UserBook,
+    CuratedConfig, Genre
+)
 from AdminPanel.models import GamificationConfig
 
 
 PAGE_SIZE = 10
 
 
+# =========================================================
+# Shared utilities (no auth logic here)
+# =========================================================
 class SharedHelper:
-    @staticmethod
-    def loginRequired(request):
-        # gets the user session
-        session_id = request.session.get("session_id")
-        if not session_id:
-            return None
-        
-        # gets the user from the DB
-        return User.objects.filter(session_id=session_id).first()
 
     @staticmethod
     def paginate(queryset, page_number, per_page=PAGE_SIZE):
-        # delegates the pagination to django built-in class
-        paginator = Paginator(queryset, per_page)
-        return paginator.get_page(page_number)
+        from django.core.paginator import Paginator
+        return Paginator(queryset, per_page).get_page(page_number)
 
     @staticmethod
-    def _checkAndAwardBadges(user: User) -> None:
-        # get the unlocked badges
+    def _checkAndAwardBadges(user):
         eligible = Badge.objects.filter(requirement__lte=user.points)
-        # gets the badge id of the awarded badges of the user
         already_awarded = UserBadge.objects.filter(user=user).values_list("badge_id", flat=True)
+
         for badge in eligible:
-            # if the user didn't unlock the badge then unlock it
             if badge.pk not in already_awarded:
                 UserBadge.objects.create(user=user, badge=badge)
 
     @staticmethod
     def _getFeaturedPromos():
-        # eturns active promos queryset
         return FeaturedPromo.objects.filter(is_active=True)
 
 
-
-# Helper Class
+# =========================================================
+# Book business logic
+# =========================================================
 class BookActionHelper:
 
     @staticmethod
-    def checkOwnership(user: User, book_id: int) -> bool:
-        # checks whether the user owns the book or not
+    def checkOwnership(user, book_id: int) -> bool:
         return UserBook.objects.filter(user=user, book_id=book_id).exists()
 
     @staticmethod
-    def _awardReviewPoints(user: User, comment: str) -> int:
-        # gets the config for rewards
+    def _awardReviewPoints(user, comment: str) -> int:
         config = GamificationConfig.load()
+
         points = config.review_base
-        
-        # validates the length of the review and calculate points
         if len(comment or "") >= config.review_min_char:
             points += config.review_bonus
+
         user.points += points
         user.reviews = (user.reviews or 0) + 1
-        
-        # save query for the updated fields
         user.save(update_fields=["points", "reviews"])
-        
-        # update badges
+
         SharedHelper._checkAndAwardBadges(user)
         return points
 
     @staticmethod
-    def _awardPurchasePoints(user: User, price: Decimal) -> int:
-        # gets the config for rewards
+    def _awardPurchasePoints(user, price: Decimal) -> int:
         config = GamificationConfig.load()
-        
-        # limit the bonus of purshase
+
         earned = min(int(float(price) * config.purchase_rate), config.purchase_max)
+
         user.points += earned
-        
-        # updates user readings
         user.readings = (user.readings or 0) + 1
-        
-        # save query for the updated fields
         user.save(update_fields=["points", "readings"])
-        
-        # update badges
+
         SharedHelper._checkAndAwardBadges(user)
         return earned
 
-class BookView:
 
-    class BookDetailTemplate:
-        @staticmethod
-        def build_context(book: Book) -> dict:
-            return {
-                "synopsis": (book.description or "").strip() or "No synopsis available for this book.",
+# =========================================================
+# BOOK DETAIL (LOGIN REQUIRED)
+# =========================================================
+class BookDetailView(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def get(self, request, book_id: int):
+        book = get_object_or_404(
+            Book.objects.select_related("genre", "inventory"),
+            pk=book_id
+        )
+
+        user = request.user
+
+        return render(request, "Storefront/book-view.html", {
+            "book": book,
+            "reviews": Review.objects.filter(book=book).order_by("-created_at")[:5],
+            "owned": BookActionHelper.checkOwnership(user, book_id),
+            "user": user,
+            "featured": SharedHelper._getFeaturedPromos().first(),
+            "book_detail": {
+                "synopsis": (book.description or "").strip()
+                or "No synopsis available for this book.",
                 "cover": book.cover_img.url if book.cover_img else None,
                 "rating": float(book.rating or 0.0),
-            }
+            },
+        })
 
-    @staticmethod
-    def _action_pipeline(request, book_id: int, logic_func):
-        # Pipeline to check login and then perform the action logic
-        user = SharedHelper.loginRequired(request)
-        if not user:
-            return JsonResponse({"error": "Login required."}, status=401)
+
+# =========================================================
+# BUY BOOK (LOGIN REQUIRED)
+# =========================================================
+class BookBuyView(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def post(self, request, book_id: int):
+        user = request.user
         book = get_object_or_404(Book, pk=book_id)
-        
-        # If validation passed, do the logic
-        return logic_func(request, user, book)
+        inventory = get_object_or_404(Inventory, book=book)
 
-    @staticmethod
-    @require_GET
-    def detail(request, book_id: int) -> HttpResponse:  # URL-mapped
-        book = get_object_or_404(Book.objects.select_related("genre", "inventory"), pk=book_id)
-        reviews = Review.objects.filter(book=book).order_by("-created_at")[:5]
-        user = SharedHelper.loginRequired(request)
-        owned = BookActionHelper.checkOwnership(user, book_id) if user else False
-        featured = SharedHelper._getFeaturedPromos().first()
-        context = {
-            "book": book,
-            "reviews": reviews,
-            "owned": owned,
-            "user": user,
-            "featured": featured,
-            "book_detail": BookView.BookDetailTemplate.build_context(book),
-        }
-        return render(request, "book-view.html", context)
+        if inventory.stock < 1:
+            return JsonResponse({"error": "Out of stock."}, status=400)
 
-    @staticmethod
-    @require_POST
-    def buy(request, book_id: int) -> JsonResponse:  # URL-mapped
-        def logic(req, current_user, current_book):
-            inventory = get_object_or_404(Inventory, book=current_book)
-            if inventory.stock < 1:
-                return JsonResponse({"error": "Out of stock."}, status=400)
-            if BookActionHelper.checkOwnership(current_user, current_book.id):
-                return JsonResponse({"error": "Already owned."}, status=400)
-            order_id = f"ORD-{uuid.uuid4().hex[:8].upper()}"
-            Order.objects.create(
-                id=order_id, customer=current_user, customer_name=current_user.name,
-                book=current_book, book_title=current_book.title,
-                total=current_book.price, status="completed", date=date.today(),
-            )
-            UserBook.objects.create(user=current_user, book=current_book, ownership_type="bought")
-            inventory.stock -= 1
-            inventory.save(update_fields=["stock"])
-            current_book.sales = (current_book.sales or 0) + 1
-            current_book.save(update_fields=["sales"])
-            pts = BookActionHelper._awardPurchasePoints(current_user, current_book.price)
-            return JsonResponse({"success": True, "order_id": order_id, "points_earned": pts})
-        return BookView._action_pipeline(request, book_id, logic)
+        if BookActionHelper.checkOwnership(user, book.id):
+            return JsonResponse({"error": "Already owned."}, status=400)
 
-    @staticmethod
-    @require_POST
-    def borrow(request, book_id: int) -> JsonResponse:  # URL-mapped
-        def logic(req, current_user, current_book):
-            if BookActionHelper.checkOwnership(current_user, current_book.id):
-                return JsonResponse({"error": "Already in your library."}, status=400)
-            UserBook.objects.create(user=current_user, book=current_book, ownership_type="rented")
-            return JsonResponse({"success": True})
-        return BookView._action_pipeline(request, book_id, logic)
+        order_id = f"ORD-{uuid.uuid4().hex[:8].upper()}"
 
-    @staticmethod
-    @require_POST
-    def add_review(request, book_id: int) -> JsonResponse:  # URL-mapped
-        def logic(req, current_user, current_book):
-            rating = int(req.POST.get("rating", 0))
-            comment = req.POST.get("comment", "").strip()
-            if not (1 <= rating <= 5):
-                return JsonResponse({"error": "Rating must be between 1 and 5."}, status=400)
-            Review.objects.create(
-                book=current_book, user=current_user, user_name=current_user.name,
-                rating=rating, comment=comment
-            )
-            avg = Review.objects.filter(book=current_book).aggregate(a=Avg("rating"))["a"] or 0.0
-            current_book.rating = round(avg, 2)
-            current_book.save(update_fields=["rating"])
-            pts = BookActionHelper._awardReviewPoints(current_user, comment)
-            return JsonResponse({"success": True, "points_earned": pts, "new_rating": current_book.rating})
+        Order.objects.create(
+            id=order_id,
+            customer=user,
+            customer_name=user.name,
+            book=book,
+            book_title=book.title,
+            total=book.price,
+            status="completed",
+            date=date.today(),
+        )
 
-        return BookView._action_pipeline(request, book_id, logic)
+        UserBook.objects.create(user=user, book=book, ownership_type="bought")
+
+        inventory.stock -= 1
+        inventory.save(update_fields=["stock"])
+
+        book.sales = (book.sales or 0) + 1
+        book.save(update_fields=["sales"])
+
+        points = BookActionHelper._awardPurchasePoints(user, book.price)
+
+        return JsonResponse({
+            "success": True,
+            "order_id": order_id,
+            "points_earned": points
+        })
 
 
+# =========================================================
+# BORROW BOOK (LOGIN REQUIRED)
+# =========================================================
+class BookBorrowView(LoginRequiredMixin, View):
+    login_url = "login"
 
+    def post(self, request, book_id: int):
+        user = request.user
+        book = get_object_or_404(Book, pk=book_id)
+
+        if BookActionHelper.checkOwnership(user, book.id):
+            return JsonResponse({"error": "Already in your library."}, status=400)
+
+        UserBook.objects.create(user=user, book=book, ownership_type="rented")
+
+        return JsonResponse({"success": True})
+
+
+# =========================================================
+# ADD REVIEW (LOGIN REQUIRED)
+# =========================================================
+class BookReviewView(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def post(self, request, book_id: int):
+        user = request.user
+        book = get_object_or_404(Book, pk=book_id)
+
+        rating = int(request.POST.get("rating", 0))
+        comment = request.POST.get("comment", "").strip()
+
+        if not (1 <= rating <= 5):
+            return JsonResponse({"error": "Rating must be between 1 and 5."}, status=400)
+
+        Review.objects.create(
+            book=book,
+            user=user,
+            user_name=user.name,
+            rating=rating,
+            comment=comment
+        )
+
+        avg = Review.objects.filter(book=book).aggregate(a=Avg("rating"))["a"] or 0.0
+        book.rating = round(avg, 2)
+        book.save(update_fields=["rating"])
+
+        points = BookActionHelper._awardReviewPoints(user, comment)
+
+        return JsonResponse({
+            "success": True,
+            "points_earned": points,
+            "new_rating": book.rating
+        })
+
+
+# =========================================================
+# HOME (PUBLIC)
+# =========================================================
 class HomeView(View):
-    template_name = 'Storefront/home.html'
+    template_name = "Storefront/home.html"
 
     def get(self, request):
-        
-        featured_promos = FeaturedPromo.objects.filter(is_active=True)
-        trending_books = Book.objects.order_by('-sales')[:7]
-        
         curated_setup = CuratedConfig.objects.first()
-        curated_books = []
-        if curated_setup:
-            curated_books = Book.objects.filter(
-                genre=curated_setup.display_genre
-            )[:curated_setup.limit]
 
-        context = {
-            'featured_promos': featured_promos,
-            'trending_books': trending_books,
-            'curated_books': curated_books,
-            'curated_config': curated_setup,
-        }
-        return render(request, self.template_name, context)
-    
+        return render(request, self.template_name, {
+            "featured_promos": FeaturedPromo.objects.filter(is_active=True),
+            "trending_books": Book.objects.order_by("-sales")[:7],
+            "curated_books": (
+                Book.objects.filter(genre=curated_setup.display_genre)[:curated_setup.limit]
+                if curated_setup else []
+            ),
+            "curated_config": curated_setup,
+        })
+
+
+# =========================================================
+# CATALOG (PUBLIC)
+# =========================================================
 class CatalogView(ListView):
     model = Book
-    template_name = 'Storefront/store.html'
-    context_object_name = 'page_obj'
+    template_name = "Storefront/store.html"
+    context_object_name = "page_obj"
     paginate_by = PAGE_SIZE
 
     def get_queryset(self):
-        # Handles filtering by category, price range, and sorting.
         queryset = Book.objects.all()
-        
-        # Get Filter Params
-        category = self.request.GET.get('category')
-        sort_by = self.request.GET.get('sort', 'popularity')
-        min_price = self.request.GET.get('minPrice')
-        max_price = self.request.GET.get('maxPrice')
 
-        # Filter by Category
-        if category and category.strip():
+        category = self.request.GET.get("category")
+        sort_by = self.request.GET.get("sort", "popularity")
+
+        if category:
             queryset = queryset.filter(genre__name__iexact=category)
 
-        # Filter by Price Range
         try:
-            if min_price and min_price.strip():
-                queryset = queryset.filter(price__gte=float(min_price))
-            if max_price and max_price.strip():
-                queryset = queryset.filter(price__lte=float(max_price))
+            if self.request.GET.get("minPrice"):
+                queryset = queryset.filter(price__gte=float(self.request.GET["minPrice"]))
+            if self.request.GET.get("maxPrice"):
+                queryset = queryset.filter(price__lte=float(self.request.GET["maxPrice"]))
         except ValueError:
-            pass 
+            pass
 
-        # Sorting Logic
-        sort_mapping = {
-            'price-low': 'price',
-            'price-high': '-price',
-            'title': 'title',
-            'popularity': '-sales'
+        sort_map = {
+            "price-low": "price",
+            "price-high": "-price",
+            "title": "title",
+            "popularity": "-sales"
         }
-        
-        order_field = sort_mapping.get(sort_by, '-sales')
-        return queryset.order_by(order_field)
 
-    def get_context_data(self, **kwargs):
-        """
-        Adds extra context like genres and the current sort state.
-        """
-        context = super().get_context_data(**kwargs)
-        context['genres'] = Genre.objects.all()
-        context['current_sort'] = self.request.GET.get('sort', 'popularity')
-        return context
-=======
-from django.shortcuts import get_object_or_404, redirect
-from django.views import View
-from django.views.generic import DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Book, UserBook, Review
-
-class BookDetailView(DetailView):
-    """
-    Handles displaying the book details, ownership status, and reviews.
-    Replaces: book_detail_view()
-    """
-    model = Book
-    template_name = 'Storefront/book-view.html'
-    context_object_name = 'book'
-    pk_url_kwarg = 'book_id'
+        return queryset.order_by(sort_map.get(sort_by, "-sales"))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = self.object
-        request = self.request
-
-        # Logic for Ownership Status
-        is_owned = False
-        is_borrowed = False
-        if request.user.is_authenticated:
-            user_entry = UserBook.objects.filter(user=request.user, book=book).first()
-            if user_entry:
-                is_owned = user_entry.ownership_type == 'owned'
-                is_borrowed = user_entry.ownership_type == 'borrowed'
-
-        # Synopsis "Read More" logic
-        limit = 150
-        desc = book.description
-        has_more = len(desc) > limit
-        
-        context.update({
-            'is_owned': is_owned,
-            'is_borrowed': is_borrowed,
-            'main_desc': desc[:limit] if has_more else desc,
-            'extra_desc': desc[limit:] if has_more else "",
-            'has_more': has_more,
-            'star_range': range(1, 6),
-            'show_review_form': request.GET.get('show_form') == 'true'
-        })
+        context["genres"] = Genre.objects.all()
+        context["current_sort"] = self.request.GET.get("sort", "popularity")
         return context
-
-class AddReviewView(LoginRequiredMixin, View):
-    """
-    Handles creating a new book review.
-    Replaces: add_review()
-    """
-    def post(self, request, book_id):
-        book = get_object_or_404(Book, id=book_id)
-        rating_value = request.POST.get('rating')
-        comment_text = request.POST.get('comment')
-
-        if rating_value and comment_text:
-            Review.objects.create(
-                user=request.user,
-                book=book,
-                user_name=request.user.username,
-                rating=int(rating_value),
-                comment=comment_text
-            )
-        return redirect('book_detail', book_id=book_id)
-
-class BookActionView(LoginRequiredMixin, View):
-    """
-    Handles Buy/Borrow logic.
-    Replaces: handle_book_action()
-    """
-    def post(self, request, book_id, action_type):
-        book = get_object_or_404(Book, id=book_id)
-        UserBook.objects.get_or_create(
-            user=request.user,
-            book=book,
-            defaults={'ownership_type': action_type}
-        )
-        return redirect('book_detail', book_id=book_id)
->>>>>>> be0a2b60eb63af18f99b35217a3412662200d247

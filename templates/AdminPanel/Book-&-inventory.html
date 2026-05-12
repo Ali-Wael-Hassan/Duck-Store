@@ -8,8 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'AdminPanel/Book-&-inventory.css' %}">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/Book-&-inventory.css' %}">
 </head>
 <body data-page="inventory">
 
@@ -20,20 +21,18 @@
                 <div class="logo-text">DUCK</div>
             </div>
             <div class="header__actions">
-                <a href="#" class="avatar-link">
-                    <img src="{% if user.profile_img %}{{ user.profile_img.url }}{% else %}{% static 'assets/dummy/avatar.png' %}{% endif %}" class="avatar-img">
-                </a>
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
             </div>
         </div>
     </nav>
 
     <div class="layout-wrapper">
         <aside>
-            <a href="#"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
-            <a href="{% url 'inventory_dashboard' %}" class="active"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
-            <a href="#"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
-            <a href="#"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
-            <a href="#"><span class="material-symbols-outlined">trophy</span> Gamification</a>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html" class="active"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" ><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
         </aside>
 
         <main class="inventory-main">
@@ -43,9 +42,9 @@
                     <p>Manage your global catalog and real-time stock levels.</p>
                 </div>
                 <div>
-            <a href="{% url 'add_book' %}" class="btn-add" style="text-decoration: none;">
-    <span class="material-symbols-outlined">add</span> Add New Book
-            </a>
+                    <button class="btn-primary" id="add-book-btn">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </button>
                 </div>
             </div>
 
@@ -62,63 +61,69 @@
                         </tr>
                     </thead>
                     <tbody id="inventory-tbody">
-                        {% for book in page_obj %}
+                        {% for item in inventory %}
                         <tr>
                             <td>
-                                <div>
-                                    <h4 style="margin:0">{{ book.title }}</h4>
-                                    <span class="subtext">{{ book.author }}</span>
-                                </div>
-                            </td>
-                            <td>{{ book.isbn }}</td>
-                            <td>{{ book.sku }}</td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-track">
-                                        <div class="{% if book.stock < 10 %}progress-bar-yellow{% else %}progress-bar{% endif %}" 
-                                             style="width: {% widthratio book.stock book.max_stock 100 %}%">
-                                        </div>
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    {% if item.book.cover_img %}
+                                    <img src="{{ item.book.cover_img.url }}" alt="{{ item.book.title }}" style="width:40px;height:55px;object-fit:cover;border-radius:3px;">
+                                    {% else %}
+                                    <div style="width:40px;height:55px;background:#e9ecef;border-radius:3px;"></div>
+                                    {% endif %}
+                                    <div>
+                                        <div style="font-weight:600;">{{ item.book.title }}</div>
+                                        <div style="font-size:0.85rem;color:#888;">{{ item.book.author }}</div>
+                                        <div style="font-size:0.8rem;color:#aaa;">{{ item.book.genre.name }}</div>
                                     </div>
-                                    <span style="{% if book.stock == 0 %}{% endif %}">{{ book.stock }}</span>
                                 </div>
                             </td>
-                            <td><span class="{{ book.status_ui.class }}">{{ book.status_ui.text }}</span></td>
+                            <td style="font-family:monospace;">{{ item.isbn }}</td>
+                            <td style="font-family:monospace;">{{ item.sku }}</td>
                             <td>
-                                <a href="{% url 'edit_book' book.pk %}" class="action-icon" style="text-decoration:none;">⋮</a>
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <div style="flex:1;height:6px;background:#e9ecef;border-radius:3px;">
+                                        <div style="width:{{ item.stock_percent }}%;height:100%;background:{% if item.stock == 0 %}#ef4444{% elif item.stock_percent < 20 %}#f59e0b{% else %}#10b981{% endif %};border-radius:3px;"></div>
+                                    </div>
+                                    <span style="font-weight:600;">{{ item.stock }}/{{ item.max_stock }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="padding:3px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;
+                                    background:{% if item.get_status == 'In Stock' %}#d1fae5;color:#065f46{% elif item.get_status == 'Low Stock' %}#fef3c7;color:#92400e{% else %}#fee2e2;color:#991b1b{% endif %};">
+                                    {{ item.get_status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-outline edit-btn" data-book-id="{{ item.book.id }}" style="padding:5px 10px;font-size:0.8rem;">
+                                    Edit
+                                </button>
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center">No books found in inventory.</td>
-                        </tr>
+                        <tr><td colspan="6" style="text-align:center;padding:30px;color:#888;">No inventory found.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
 
-            <div class="pagination" id="inventory-pagination">
-                <span class="subtext">
-                    Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books
-                </span>
+            <div class="pagination flex-between" id="inventory-pagination">
+                <span class="subtext">Showing {{ inventory.start_index }}-{{ inventory.end_index }} of {{ inventory.paginator.count }} books</span>
                 <div class="page-controls">
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" style="text-decoration: none;">
-                            <button>Previous</button>
-                        </a>
+                    {% if inventory.has_previous %}
+                    <a href="?page={{ inventory.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
                     {% else %}
-                        <button disabled>Previous</button>
+                    <button class="btn-outline" disabled>Previous</button>
                     {% endif %}
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" style="text-decoration: none;">
-                            <button>Next</button>
-                        </a>
+                    {% if inventory.has_next %}
+                    <a href="?page={{ inventory.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
                     {% else %}
-                        <button disabled>Next</button>
+                    <button class="btn-outline" disabled>Next</button>
                     {% endif %}
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- <script type="module" src="{% static 'js/main.js' %}"></script> -->
 </body>
 </html>

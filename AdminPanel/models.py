@@ -9,6 +9,7 @@ from Storefront.models import FeaturedPromo, CuratedConfig
 
 
 class Book(models.Model):
+    sales = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     genre = models.ForeignKey('Storefront.Genre', on_delete=models.SET_NULL, null=True)
@@ -17,7 +18,7 @@ class Book(models.Model):
     published_date = models.CharField(max_length=100)
     rating = models.FloatField(default=0.0)
     description = models.TextField()
-    image = models.ImageField(upload_to='books/', default='assets/dummy/a1.jpg')
+    image = models.CharField(max_length=255, default='assets/dummy/a1.jpg')
     
     # Inventory Logic (from JS)
     isbn = models.CharField(max_length=20, unique=True, blank=True)
@@ -121,3 +122,23 @@ class GamificationConfig(models.Model):
     class Meta:
         verbose_name = "Gamification Configuration"
 
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+class Order(models.Model):
+    id = models.CharField(max_length=20, primary_key=True)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length=150)
+    
+    book = models.ForeignKey(
+        'Storefront.Book', 
+        on_delete=models.CASCADE, 
+        related_name='admin_orders'
+    )
+    
+    book_title = models.CharField(max_length=255)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20)
+    date = models.DateField()

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | Sign In{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{% static 'css/Authentication/login.css' %}">
+{% endblock style %}
+
+{% block content %}
+<header class="text-center m-bottom-lg">
+    <h1 class="brand-logo">
+        <img src="{% static 'assets/images/logo.png' %}" alt="DUCK Library Logo">
+        DUCK <span class="text-accent">STORE</span>
+    </h1>
+    <p class="text-muted">Step into a world of curated wisdom</p>
+</header>
+
+<main class="page-center">
+    <section class="card">
+
+        <header class="card__header card__header--accent m-bottom-lg">
+            <h2>Welcome Back</h2>
+            <p class="text-accent">Access your premium digital library</p>
+        </header>
+
+        <form id="login-form" class="form-auth" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-auth__errors">
+                    {% for error in form.non_field_errors %}
+                        <p><strong>{{ error }}</strong></p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- EMAIL -->
+            <div class="form-auth__field">
+                <label class="form-auth__label" for="email-input">Email Address</label>
+                <div class="form-auth__input-group">
+                    <i class="bi bi-envelope form-auth__icon"></i>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-auth__field">
+                <div class="form-auth__row-space">
+                    <label class="form-auth__label" for="password-input">Password</label>
+                </div>
+
+                <div class="form-auth__input-group">
+                    <i class="bi bi-lock form-auth__icon"></i>
+                    {{ form.password }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary">Sign Into Library</button>
+
+            <div class="divider">OR CONTINUE WITH</div>
+
+            <button type="button" id="google-signin-btn" class="btn btn--outline">
+                <i class="bi bi-google"></i>
+                <span>Continue with Google</span>
+            </button>
+        </form>
+
+        <footer class="card__footer">
+            <p class="text-muted">
+                Don't have an account?
+                <a href="{% url 'signup' %}" class="link-accent">Request Invitation</a>
+            </p>
+        </footer>
+
+    </section>
+</main>
+{% endblock content %}

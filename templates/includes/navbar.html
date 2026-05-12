@@ -1,0 +1,64 @@
+{% load static %}
+
+{% block navbar %}
+<nav class="header" id="main-nav">
+    <div class="container header__inner">
+
+        <!-- Logo -->
+        <div class="logo-group">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">menu_book</span>
+            </div>
+            <div class="logo-text">DUCK</div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav">
+
+            <a href="{% url 'home' %}"
+               class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                Home
+            </a>
+
+            <a href="{% url 'store' %}"
+               class="{% if request.resolver_match.url_name == 'store' %}active{% endif %}">
+                Store
+            </a>
+
+            <a href="{% url 'my_books' %}"
+               class="{% if request.resolver_match.url_name == 'my_books' %}active{% endif %}">
+                My Books
+            </a>
+
+            <a href="{% url 'community' %}"
+               class="{% if request.resolver_match.url_name == 'community' %}active{% endif %}">
+                Community
+            </a>
+
+            <a href="#"
+               class="{% if request.resolver_match.url_name == 'rewards' %}active{% endif %}">
+                Rewards
+            </a>
+
+        </div>
+
+        <!-- User -->
+        <div class="header__actions">
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'user_profile' %}" class="avatar-link">
+                    <img
+                        src="{% if user.avatar %}{{ user.avatar }}{% else %}{% static 'assets/images/logo.png' %}{% endif %}"
+                        class="avatar-img"
+                        alt="avatar"
+                    >
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-login">Login</a>
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+{% endblock navbar %}

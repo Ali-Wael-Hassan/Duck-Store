@@ -37,7 +37,7 @@ main {
 
 .auth-split__side-visual {
     background-image: linear-gradient(135deg, rgba(255, 215, 0, 0.08) 0%, rgba(22, 27, 34, 0.95) 100%),
-                      url('../assets/logo.png');
+                      url("/static/assets/images/logo.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;

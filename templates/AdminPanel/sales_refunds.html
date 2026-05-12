@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Library | Sales & Refunds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/sales_refunds.css' %}">
+</head>
+<body data-page="sales-refunds">
+
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        <aside>
+            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
+            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
+            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
+            <a href="sales_refunds.html" class="active"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
+            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
+        </aside>
+
+        <main class="sales-main">
+            <div class="sales-header">
+                <h1>Sales & Refunds</h1>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <h4>Total Gross Sales</h4>
+                    <p class="yellow" id="stat-gross">$0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Refunds Issued</h4>
+                    <p class="red" id="stat-refunds">-$0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h4>Net Revenue</h4>
+                    <p class="yellow" id="stat-net">$0.00</p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="sales-table">
+                    <thead>
+                        <tr>
+                            <th>BOOK</th>
+                            <th>CUSTOMER</th>
+                            <th>STATUS</th>
+                            <th>DATE</th>
+                            <th>AMOUNT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-tbody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">Loading transactions...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination flex-between" id="sales-pagination">
+                <span class="subtext">Showing 0-0 of 0 transactions</span>
+                <div class="page-controls">
+                    <button class="btn-outline" id="prev-page">Previous</button>
+                    <button class="btn-outline" id="next-page">Next</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

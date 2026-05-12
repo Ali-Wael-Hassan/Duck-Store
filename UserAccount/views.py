@@ -5,7 +5,6 @@ from django.views.decorators.http import require_GET, require_POST
 from Authentication.models import User, Rank
 from Storefront.models import UserBook
 from Community.models import UserBadge
-from Storefront.views import SharedHelper
 
 # Create your views here.
 
@@ -14,22 +13,30 @@ class MyBooksView:
     class MyBooksHelper:
         @staticmethod
         def _getOwnedBooks(user: User):
-            # get the purchased books for the requested user
-            return UserBook.objects.filter(user=user, ownership_type="bought").select_related("book")
+            return UserBook.objects.filter(
+                user=user,
+                ownership_type="bought"
+            ).select_related("book")
 
         @staticmethod
         def _getBorrowedBooks(user: User):
-            # get the borrowed books for the requested user
-            return UserBook.objects.filter(user=user, ownership_type="rented").select_related("book")
+            return UserBook.objects.filter(
+                user=user,
+                ownership_type="rented"
+            ).select_related("book")
+
 
     @staticmethod
     @require_GET
-    def index(request) -> HttpResponse:  # URL-mapped
-        user = SharedHelper.loginRequired(request)
-        if not user:
+    def index(request) -> HttpResponse:
+
+        if not request.user.is_authenticated:
             return redirect("login")
 
+        user = request.user
+
         tab = request.GET.get("tab", "all")
+
         if tab == "owned":
             library = MyBooksView.MyBooksHelper._getOwnedBooks(user)
         elif tab == "borrowed":
@@ -37,24 +44,41 @@ class MyBooksView:
         else:
             library = UserBook.objects.filter(user=user).select_related("book")
 
-        page = SharedHelper.paginate(library, request.GET.get("page", 1))
-        context = {"library": page, "tab": tab, "user": user}
-        return render(request, "my-Books.html", context)
+        # simple pagination (keep your old function if you have one)
+        from django.core.paginator import Paginator
+        paginator = Paginator(library, 12)
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+
+        context = {
+            "library": page,
+            "tab": tab,
+            "user": user,
+        }
+
+        return render(request, "UserAccount/my-Books.html", context)
+
 
     @staticmethod
     @require_GET
-    def filter(request, filter_type: str) -> JsonResponse:  # URL-mapped
-        user = SharedHelper.loginRequired(request)
-        if not user:
+    def filter(request, filter_type: str) -> JsonResponse:
+
+        if not request.user.is_authenticated:
             return JsonResponse({"error": "Login required."}, status=401)
+
+        user = request.user
 
         mapping = {
             "owned": MyBooksView.MyBooksHelper._getOwnedBooks,
             "borrowed": MyBooksView.MyBooksHelper._getBorrowedBooks,
         }
+
         qs_fn = mapping.get(filter_type)
-        qs = qs_fn(user) if qs_fn else UserBook.objects.filter(user=user).select_related("book")
-        page = SharedHelper.paginate(qs, request.GET.get("page", 1))
+        qs = qs_fn(user) if qs_fn else UserBook.objects.filter(user=user)
+
+        from django.core.paginator import Paginator
+        paginator = Paginator(qs, 12)
+        page = paginator.get_page(request.GET.get("page"))
 
         data = [
             {
@@ -67,7 +91,11 @@ class MyBooksView:
             }
             for ub in page
         ]
-        return JsonResponse({"books": data, "has_next": page.has_next()})
+
+        return JsonResponse({
+            "books": data,
+            "has_next": page.has_next()
+        })
 
 
 
@@ -78,13 +106,11 @@ class UserProfileView:
 
     class UserProfileHelper:
         @staticmethod
-        def _getRankTier(user: User) -> str:
-            # delegates the method to the model
+        def _getRankTier(user: User):
             return user.get_tier()
 
         @staticmethod
-        def _getBadgeConfig(user: User) -> list:
-            # gets badges of the user
+        def _getBadgeConfig(user: User):
             return list(
                 UserBadge.objects.filter(user=user)
                 .select_related("badge")
@@ -92,8 +118,7 @@ class UserProfileView:
             )
 
         @staticmethod
-        def _getGenreProgress(user: User) -> list:
-            # gets the genre count for the user
+        def _getGenreProgress(user: User):
             return (
                 UserBook.objects.filter(user=user)
                 .values("book__genre__name", "book__genre__slug")
@@ -102,8 +127,7 @@ class UserProfileView:
             )
 
         @staticmethod
-        def _getAchievements(user: User) -> list:
-            # gets the user 
+        def _getAchievements(user: User):
             return list(
                 UserBadge.objects.filter(user=user)
                 .select_related("badge")
@@ -111,15 +135,19 @@ class UserProfileView:
                 .values("badge__name", "badge__icon", "badge__level", "unlocked_at")
             )
 
+
     @staticmethod
     @require_GET
-    def index(request) -> HttpResponse:  # URL-mapped
-        user = SharedHelper.loginRequired(request)
-        if not user:
+    def index(request):
+
+        if not request.user.is_authenticated:
             return redirect("login")
 
+        user = request.user
+
         rank = Rank.objects.filter(
-            min_points__lte=user.points, max_points__gte=user.points
+            min_points__lte=user.points,
+            max_points__gte=user.points
         ).first()
 
         context = {
@@ -131,14 +159,18 @@ class UserProfileView:
             "genre_progress": UserProfileView.UserProfileHelper._getGenreProgress(user),
             "achievements": UserProfileView.UserProfileHelper._getAchievements(user),
         }
-        return render(request, "user_profile.html", context)
+
+        return render(request, "UserAccount/user_profile.html", context)
+
 
     @staticmethod
     @require_POST
-    def updateAvatar(request) -> JsonResponse:  # URL-mapped
-        user = SharedHelper.loginRequired(request)
-        if not user:
+    def updateAvatar(request):
+
+        if not request.user.is_authenticated:
             return JsonResponse({"error": "Login required."}, status=401)
+
+        user = request.user
 
         avatar = request.FILES.get("avatar")
         if not avatar:
@@ -146,4 +178,5 @@ class UserProfileView:
 
         user.avatar = avatar
         user.save(update_fields=["avatar"])
+
         return JsonResponse({"success": True, "avatar_url": user.avatar.url})
