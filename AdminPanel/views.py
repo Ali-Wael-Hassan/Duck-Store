@@ -10,7 +10,7 @@ from django.db.models import Sum, Q
 
 import csv
 from .models import GamificationConfig, DashboardStat, SalesPerformance
-from .forms import GamificationConfigForm, BookForm
+from .forms import AddUserForm, GamificationConfigForm, BookForm
 from Storefront.models import Inventory, Order, Book
 
 User = get_user_model()
@@ -250,26 +250,22 @@ class UsersRolesIndexView(View):
             'current_filter': role_filter,
             'search_query': search_query,
             'total_count': user_list.count(),
+            'form': AddUserForm(),  # Add this line
         }
         return render(request, 'AdminPanel/users_roles.html', context)
 
 class AddUserView(View):
-    def post(self, request):
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
+    def get(self, request):
+        form = AddUserForm()
+        return render(request, 'AdminPanel/user_form.html', {'form': form})
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
-        else:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            if role == 'admin':
-                user.is_staff = True
-                user.save()
-            messages.success(request, f"User {username} created successfully!")
-            
-        return redirect('users_roles_index')
+    def post(self, request):
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"User {form.cleaned_data['username']} created successfully!")
+            return redirect('roles')
+        return render(request, 'AdminPanel/user_form.html', {'form': form})
 
 class ToggleUserRoleView(View):
     def post(self, request, user_id):
@@ -278,10 +274,10 @@ class ToggleUserRoleView(View):
         if target_user == request.user:
             messages.error(request, "You cannot change your own role to prevent lockout.")
         else:
-            target_user.is_staff = not target_user.is_staff
+            target_user.role = "admin" if target_user.role == "User" else "User"
             target_user.save()
             
-            new_role = "Admin" if target_user.is_staff else "User"
+            new_role = "admin" if target_user.role == "admin" else "User"
             messages.success(request, f"Updated {target_user.username} to {new_role}.")
             
-        return redirect('users_roles_index')
+        return redirect('roles')

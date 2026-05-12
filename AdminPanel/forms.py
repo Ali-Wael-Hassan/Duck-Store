@@ -1,6 +1,9 @@
 from django import forms
+
+
 from .models import GamificationConfig
 from Storefront.models import Book
+from Authentication.models import User
 
 
 class GamificationConfigForm(forms.ModelForm):
@@ -44,3 +47,21 @@ class BookForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={'step': 1, 'min': 0}),
             'pages': forms.NumberInput(attrs={'step': 1, 'min': 1}),
         }
+
+class AddUserForm(forms.ModelForm):
+    # We add a custom choice field for the Role since 'is_staff' is a boolean
+    role = forms.ChoiceField(choices=[('user', 'User'), ('admin', 'Admin')], required=True)
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        # Set is_staff based on the role dropdown
+        user.is_staff = (self.cleaned_data['role'] == 'admin')
+        if commit:
+            user.save()
+        return user
