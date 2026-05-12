@@ -22,7 +22,7 @@ class SignUpView(View):
             
             login(request, user)
             
-            return redirect('login')
+            return redirect('home')
         
         # If form is invalid, re-render the template with validation errors
         return render(request, self.template_name, {'form': form})
