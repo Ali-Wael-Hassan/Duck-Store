@@ -9,9 +9,9 @@ from django.core.paginator import Paginator
 from django.db.models import Sum, Q
 
 import csv
-from .models import GamificationConfig, DashboardStat, SalesPerformance, Book
+from .models import GamificationConfig, DashboardStat, SalesPerformance
 from .forms import GamificationConfigForm, BookForm
-from Storefront.models import Order
+from Storefront.models import Inventory, Order, Book
 
 User = get_user_model()
 
@@ -116,7 +116,7 @@ class ExportOrdersCSVView(View):
         return response
 
 class InventoryDashboardView(ListView):
-    model = Book
+    model = Inventory
     template_name = 'AdminPanel/Book-&-inventory.html'
     context_object_name = 'page_obj'
     paginate_by = 5
@@ -136,11 +136,42 @@ class BookBaseView:
 
 
 class BookCreateView(BookBaseView, CreateView):
-    pass
+    def form_valid(self, form):
+        # 1. Save the Book first
+        response = super().form_valid(form)
+        
+        # 2. Get the stock value from the cleaned form data
+        stock_value = form.cleaned_data.get('stock')
+        
+        # 3. Create or update the Inventory record for this book
+        # Assuming Inventory has a field named 'book' that links to Book
+        Inventory.objects.update_or_create(
+            book=self.object, 
+            defaults={'stock': stock_value}
+        )
+        
+        return response
 
 
 class BookUpdateView(BookBaseView, UpdateView):
-    pass
+    def get_initial(self):
+        initial = super().get_initial()
+        # Look up the stock for this specific book
+        inventory_item = Inventory.objects.filter(book=self.get_object()).first()
+        if inventory_item:
+            initial['stock'] = inventory_item.stock
+        return initial
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        stock_value = form.cleaned_data.get('stock')
+        
+        # Update the related inventory
+        Inventory.objects.update_or_create(
+            book=self.object,
+            defaults={'stock': stock_value}
+        )
+        return response
 
 
 class BookDeleteView(DeleteView):
