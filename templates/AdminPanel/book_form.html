@@ -1,18 +1,18 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duck Store | {% if is_edit %}Edit{% else %}Add{% endif %} Book</title>
-    
+
+{% block title %}DUCK Library | {% if is_edit %}Edit{% else %}Add{% endif %} Book{% endblock title %}
+
+{% block style %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <link rel="stylesheet" href="{% static 'AdminPanel/book_form.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdminPanel/book_form.css' %}">
+{% endblock style %}
+
+
+{% block content %}
     <div class="layout-wrapper">
         <main class="form-main-content">
             
@@ -44,7 +44,7 @@
                             {% if is_edit %}Update Changes{% else %}Save to Inventory{% endif %}
                         </button>
                         
-                        <a href="{% url 'inventory_dashboard' %}" class="btn-cancel-link">
+                        <a href="{% url 'inventory' %}" class="btn-cancel-link">
                             Cancel
                         </a>
                     </div>
@@ -66,5 +66,4 @@
             {% endif %}
         </main>
     </div>
-</body>
-</html>
+{% endblock content %}

@@ -127,7 +127,7 @@ class BookBaseView:
     model = Book
     form_class = BookForm
     template_name = 'AdminPanel/book_form.html'
-    success_url = reverse_lazy('inventory_dashboard')
+    success_url = reverse_lazy('inventory')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -176,7 +176,7 @@ class BookUpdateView(BookBaseView, UpdateView):
 
 class BookDeleteView(DeleteView):
     model = Book
-    success_url = reverse_lazy('inventory_dashboard')
+    success_url = reverse_lazy('inventory')
 
     def post(self, request, *args, **kwargs):
         book = self.get_object()

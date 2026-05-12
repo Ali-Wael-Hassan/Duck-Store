@@ -43,9 +43,9 @@
                     <p>Manage your global catalog and real-time stock levels.</p>
                 </div>
                 <div>
-                    <button class="btn-primary" id="add-book-btn">
+                    <a href="{% url 'add_book' %}" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                         <i class="fas fa-plus"></i> Add New Book
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -95,9 +95,9 @@
                                 </span>
                             </td>
                             <td>
-                                <button class="btn-outline edit-btn" data-book-id="{{ item.book.id }}" style="padding:5px 10px;font-size:0.8rem;">
+                                <a href="{% url 'edit_book' item.book.id %}" class="btn-outline" style="text-decoration: none; padding: 5px 10px; font-size: 0.8rem;">
                                     Edit
-                                </button>
+                                </a>
                             </td>
                         </tr>
                         {% empty %}
