@@ -198,13 +198,12 @@ class BookDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         return redirect(self.success_url)
 
-
 class SalesRefundsView(View):
     def get(self, request):
         orders_qs = Order.objects.all().order_by('-date')
-
+        
         refund_filter = Q(status__iexact='Refunded') | Q(status__iexact='Refund')
-
+        
         gross_sales = orders_qs.exclude(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
         total_refunds = orders_qs.filter(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
         net_sales = gross_sales - total_refunds
@@ -222,7 +221,6 @@ class SalesRefundsView(View):
         }
         return render(request, 'AdminPanel/sales_refunds.html', context)
 
-
 class UsersRolesIndexView(View):
     def get(self, request):
         role_filter = request.GET.get('role', 'all').lower()
@@ -237,7 +235,7 @@ class UsersRolesIndexView(View):
 
         if search_query:
             user_list = user_list.filter(
-                Q(username__icontains=search_query) |
+                Q(username__icontains=search_query) | 
                 Q(email__icontains=search_query) |
                 Q(first_name__icontains=search_query) |
                 Q(last_name__icontains=search_query)
@@ -255,7 +253,6 @@ class UsersRolesIndexView(View):
         }
         return render(request, 'AdminPanel/users_roles.html', context)
 
-
 class AddUserView(View):
     def post(self, request):
         username = request.POST.get('username')
@@ -271,21 +268,20 @@ class AddUserView(View):
                 user.is_staff = True
                 user.save()
             messages.success(request, f"User {username} created successfully!")
-
+            
         return redirect('users_roles_index')
-
 
 class ToggleUserRoleView(View):
     def post(self, request, user_id):
         target_user = get_object_or_404(User, id=user_id)
-
+        
         if target_user == request.user:
             messages.error(request, "You cannot change your own role to prevent lockout.")
         else:
             target_user.is_staff = not target_user.is_staff
             target_user.save()
-
+            
             new_role = "Admin" if target_user.is_staff else "User"
             messages.success(request, f"Updated {target_user.username} to {new_role}.")
-
+            
         return redirect('users_roles_index')
