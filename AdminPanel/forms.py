@@ -1,5 +1,6 @@
 from django import forms
-from .models import GamificationConfig, Book
+from .models import GamificationConfig
+from Storefront.models import Book
 
 
 class GamificationConfigForm(forms.ModelForm):
@@ -26,10 +27,13 @@ class GamificationConfigForm(forms.ModelForm):
         return cleaned_data
 
 class BookForm(forms.ModelForm):
+
+    stock = forms.IntegerField(label="Current Stock", initial=0, min_value=0)
+    
     class Meta:
         model = Book
         fields = ['title', 'author', 'genre', 'price', 'pages',
-                  'published_date', 'rating', 'description', 'image', 'stock']
+                  'published_date', 'rating', 'description', 'cover_img', 'stock']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
         }
