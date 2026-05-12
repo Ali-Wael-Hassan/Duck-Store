@@ -28,6 +28,8 @@ class GamificationConfigForm(forms.ModelForm):
 
 class BookForm(forms.ModelForm):
 
+    isbn = forms.CharField(max_length=20, required=True, label="ISBN")
+    sku = forms.CharField(max_length=20, required=True, label="SKU")
     stock = forms.IntegerField(label="Current Stock", initial=0, min_value=0)
     
     class Meta:
@@ -36,4 +38,9 @@ class BookForm(forms.ModelForm):
                   'published_date', 'rating', 'description', 'cover_img', 'stock']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
+            'published_date': forms.DateInput(attrs={'type': 'date'}),
+            'price': forms.NumberInput(attrs={'step': '0.01', 'min': 0}),
+            'rating': forms.NumberInput(attrs={'step': '0.1', 'min': 0, 'max': 5}),
+            'stock': forms.NumberInput(attrs={'step': 1, 'min': 0}),
+            'pages': forms.NumberInput(attrs={'step': 1, 'min': 1}),
         }

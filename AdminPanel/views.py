@@ -118,7 +118,7 @@ class ExportOrdersCSVView(View):
 class InventoryDashboardView(ListView):
     model = Inventory
     template_name = 'AdminPanel/Book-&-inventory.html'
-    context_object_name = 'page_obj'
+    context_object_name = 'inventory_list'
     paginate_by = 5
     ordering = ['-id']
 
@@ -142,12 +142,17 @@ class BookCreateView(BookBaseView, CreateView):
         
         # 2. Get the stock value from the cleaned form data
         stock_value = form.cleaned_data.get('stock')
-        
+        isbn_value = form.cleaned_data.get('isbn')
+        sku_value = form.cleaned_data.get('sku')
         # 3. Create or update the Inventory record for this book
         # Assuming Inventory has a field named 'book' that links to Book
         Inventory.objects.update_or_create(
             book=self.object, 
-            defaults={'stock': stock_value}
+            defaults={
+                'stock': stock_value,
+                'isbn': isbn_value,
+                'sku': sku_value
+            }
         )
         
         return response
@@ -160,16 +165,23 @@ class BookUpdateView(BookBaseView, UpdateView):
         inventory_item = Inventory.objects.filter(book=self.get_object()).first()
         if inventory_item:
             initial['stock'] = inventory_item.stock
+            initial['isbn'] = inventory_item.isbn
+            initial['sku'] = inventory_item.sku
         return initial
 
     def form_valid(self, form):
         response = super().form_valid(form)
         stock_value = form.cleaned_data.get('stock')
-        
+        isbn_value = form.cleaned_data.get('isbn')
+        sku_value = form.cleaned_data.get('sku')
         # Update the related inventory
         Inventory.objects.update_or_create(
             book=self.object,
-            defaults={'stock': stock_value}
+            defaults={
+                'stock': stock_value,
+                'isbn': isbn_value,
+                'sku': sku_value
+            }
         )
         return response
 
