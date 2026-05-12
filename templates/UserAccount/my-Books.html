@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | My Books{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap">
+<link rel="stylesheet" href="{% static 'css/UserAccount/my_books.css' %}">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<div class="layout-wrapper">
+
+    <main class="content-area">
+
+        <!-- ================= HEADER ================= -->
+        <div class="content-header">
+            <div>
+                <h1>My Books</h1>
+                <p class="subtitle">Manage your active rentals and personal digital collection</p>
+            </div>
+        </div>
+
+        <!-- ================= TABS ================= -->
+        <div class="tabs">
+            <a href="?tab=all" class="tab-link {% if tab == 'all' %}active{% endif %}">All Collection</a>
+            <a href="?tab=borrowed" class="tab-link {% if tab == 'borrowed' %}active{% endif %}">Active Rentals</a>
+            <a href="?tab=owned" class="tab-link {% if tab == 'owned' %}active{% endif %}">Owned</a>
+        </div>
+
+        <!-- ================= BOOK GRID ================= -->
+        <section class="book-grid">
+
+            {% for user_book in library %}
+            <article class="book-card">
+
+                <div class="image-container">
+
+                    {% if user_book.book.cover_img %}
+                        <img src="{{ user_book.book.cover_img.url }}" alt="{{ user_book.book.title }}">
+                    {% else %}
+                        <img src="{% static 'assets/placeholder.png' %}" alt="No cover">
+                    {% endif %}
+
+                    <div class="book-overlay">
+                        <button class="btn-read"
+                                onclick="window.location.href='{% url 'book_detail' user_book.book.id %}'">
+                            <i class="fas fa-play"></i>
+                            {% if user_book.progress == 100 %}
+                                Read Again
+                            {% else %}
+                                Continue
+                            {% endif %}
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="book-details">
+                    <h3>{{ user_book.book.title }}</h3>
+                    <p>{{ user_book.book.author }}</p>
+
+                    <div class="progress-meta">
+                        <span>Reading Progress</span>
+                        <span>{{ user_book.progress }}%</span>
+                    </div>
+
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: {{ user_book.progress }}%;"></div>
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% empty %}
+            <div class="empty-state">
+                <span class="material-symbols-outlined">library_books</span>
+                <h3>No books found</h3>
+                <p>You don't have any books in this category.</p>
+                <a href="{% url 'store' %}" class="empty-state-btn">Browse Store</a>
+            </div>
+            {% endfor %}
+
+        </section>
+
+        <!-- ================= PAGINATION ================= -->
+        <div class="pagination">
+
+            {% if library.has_previous %}
+                <a href="?tab={{ tab }}&page={{ library.previous_page_number }}"
+                   class="pagination__btn">← Prev</a>
+            {% endif %}
+
+            <div class="pagination__numbers">
+                Page {{ library.number }} of {{ library.paginator.num_pages }}
+            </div>
+
+            {% if library.has_next %}
+                <a href="?tab={{ tab }}&page={{ library.next_page_number }}"
+                   class="pagination__btn">Next →</a>
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock content %}

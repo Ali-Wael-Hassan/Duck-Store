@@ -1,0 +1,66 @@
+/* Center the form on the page while respecting the dashboard layout */
+.form-main-content {
+    max-width: 800px; /* Limits the width of the main area */
+    margin: 40px auto; /* Centers the card horizontally */
+}
+
+.book-form-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-main);
+    padding: 30px;
+    margin-top: 20px;
+}
+
+/* Fix the stretching of Django form paragraphs */
+.compact-form p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.compact-form label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Style inputs to match your dashboard inventory style */
+.compact-form input, 
+.compact-form select, 
+.compact-form textarea {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 12px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.compact-form input:focus {
+    border-color: var(--brand-primary);
+    outline: none;
+}
+
+/* Action section at the bottom */
+.form-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-cancel-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.btn-cancel-link:hover {
+    color: var(--text-main);
+}

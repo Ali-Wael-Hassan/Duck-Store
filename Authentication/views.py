@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.views import View
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from .forms import SignUpForm, LoginForm
 from .models import User
+from AdminPanel.models import GamificationConfig
+from django.utils.timezone import now
 
 class SignUpView(View):
-    template_name = 'signup.html'
+    template_name = 'Authentication/signup.html'
     
     def get(self, request):
         form = SignUpForm()
@@ -25,7 +28,7 @@ class SignUpView(View):
         return render(request, self.template_name, {'form': form})
 
 class LoginView(View):
-    template_name = 'login.html'
+    template_name = 'Authentication/login.html'
     
     def get(self, request):
         form = LoginForm()
@@ -38,7 +41,6 @@ class LoginView(View):
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
             
-            # Find user with the same email
             user_obj = User.objects.filter(email=email).first()
             
             if user_obj:
@@ -46,16 +48,29 @@ class LoginView(View):
                 
                 if user is not None:
                     login(request, user)
-                    
-                    # Redirect
+
+                    config = GamificationConfig.load()
+                    current_date = now().date()
+
+                    if user.last_active is None:
+                        user.last_active = current_date
+                        user.points += config.login_points
+                        user.save(update_fields=['points', 'last_active'])
+
+                    elif user.last_active < current_date:
+                        user.points += config.login_points
+                        user.last_active = current_date
+                        user.save(update_fields=['points', 'last_active'])
+
                     if user.role == 'admin':
-                        # return redirect('dashboard')
-                        return redirect('login')
-                    
-                    return redirect('login')
-            # If authentication fails
+                        return redirect('dashboard')
+
+                    return redirect('home')
+
             form.add_error(None, "Invalid email or password")
-            
-        # Re-render page with errors
+
         return render(request, self.template_name, {'form': form})
-            
+
+def debug_logout(request):
+    logout(request)
+    return JsonResponse({"message": "session cleared"})

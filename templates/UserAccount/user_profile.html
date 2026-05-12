@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | Profile{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/UserAccount/user-profile-style.css' %}">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<main class="dashboard-content">
+
+    {% csrf_token %}
+
+    <!-- PROFILE CARD -->
+    <section class="profile-card-container">
+
+        <header class="profile-card-header">
+            <div class="header-text">
+                <h2 class="section-title">Profile Information</h2>
+                <p class="section-subtitle">Basic details for your public identification.</p>
+            </div>
+        </header>
+
+        <div class="profile-card-body">
+
+            <div class="profile-avatar-column">
+                <div class="avatar-relative">
+
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/images/logo.png' %}{% endif %}"
+                         id="user-avatar"
+                         class="user-avatar-img">
+
+                    <label for="avatar-upload" class="avatar-upload-label">
+                        <span class="camera-icon">📷</span>
+                        <input type="file" name="avatar" id="avatar-upload" hidden accept="image/*">
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="profile-details-grid">
+
+                <div class="detail-item">
+                    <span class="detail-label">FULL NAME</span>
+                    <p class="detail-value">{{ user.name }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">EMAIL ADDRESS</span>
+                    <p class="detail-value">{{ user.email }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">USERNAME</span>
+                    <p class="detail-value">@{{ user.username }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">MEMBER SINCE</span>
+                    <p class="detail-value">{{ user.date_joined|date:"M d, Y" }}</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- PAGE INTRO -->
+    <header class="page-intro">
+
+        <h1 class="page-title">Achievements & Badges</h1>
+
+        <p class="page-description">
+            Track your literary milestones and unlock exclusive rewards as you explore the world of books.
+        </p>
+
+        <div class="action-buttons">
+            <a href="{% url 'community' %}" class="btn-primary">
+                View Leaderboard
+            </a>
+        </div>
+
+    </header>
+
+
+    <!-- STATS -->
+    <section class="stats-overview">
+
+        <article class="stat-card">
+            <h2>Total Points</h2>
+            <p>{{ user.points }}</p>
+        </article>
+
+        <article class="stat-card">
+            <h2>Global Rank</h2>
+            <p>#{{ global_rank }}</p>
+            <p>{{ tier }} Tier</p>
+        </article>
+
+        <article class="stat-card">
+            <h2>Total Books Read</h2>
+            <p>{{ user.readings }}</p>
+        </article>
+
+    </section>
+
+
+    <!-- BADGES -->
+    <section class="achievement-section">
+
+        <h2>Reading Streaks</h2>
+
+        <div class="badge-grid">
+
+            {% for badge in badges %}
+            <article class="badge-item">
+
+                <div class="badge-icon">
+                    {{ badge.badge__icon|default:"🏆" }}
+                </div>
+
+                <div class="badge-level">
+                    LEVEL {{ badge.badge__level }}
+                </div>
+
+                <h3>{{ badge.badge__name }}</h3>
+
+                <p>Unlocked: {{ badge.unlocked_at|date:"M d, Y" }}</p>
+
+            </article>
+            {% empty %}
+            <p>No badges unlocked yet. Keep reading!</p>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- GENRES -->
+    <section class="achievement-section">
+
+        <h2>Genre Master</h2>
+
+        <div class="genre-grid">
+
+            {% for genre in genre_progress %}
+            <article class="genre-card">
+
+                <div class="genre-card-header">
+                    <span class="genre-icon">📚</span>
+                    <span class="status-tag">In Progress</span>
+                </div>
+
+                <h3>{{ genre.book__genre__name }}</h3>
+
+                <p>Books read: {{ genre.count }}</p>
+
+                <progress value="{{ genre.count }}" max="10" class="genre-progress"></progress>
+
+            </article>
+            {% empty %}
+            <p>You haven't read any books yet.</p>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- COMMUNITY -->
+    <section class="achievement-section">
+
+        <h2>Community Contributor</h2>
+
+        <ul class="contributor-grid"></ul>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        <p>Keep reading to unlock more mysteries of the library.</p>
+    </footer>
+
+</main>
+
+{% endblock content %}

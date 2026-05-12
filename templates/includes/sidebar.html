@@ -1,0 +1,23 @@
+{% block sidebar %}
+<aside>
+    <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        <span class="material-symbols-outlined">bar_chart</span> Dashboard
+    </a>
+
+    <a href="{% url 'inventory' %}" class="{% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
+        <span class="material-symbols-outlined">inventory_2</span> Books & Inventory
+    </a>
+
+    <a href="{% url 'roles' %}" class="{% if request.resolver_match.url_name == 'roles' %}active{% endif %}">
+        <span class="material-symbols-outlined">groups</span> Users & Roles
+    </a>
+
+    <a href="{% url 'sales' %}" class="{% if request.resolver_match.url_name == 'sales' %}active{% endif %}">
+        <span class="material-symbols-outlined">payments</span> Sales & Refunds
+    </a>
+
+    <a href="{% url 'gamification' %}" class="{% if request.resolver_match.url_name == 'gamification' %}active{% endif %}">
+        <span class="material-symbols-outlined">trophy</span> Gamification
+    </a>
+</aside>
+{% endblock sidebar %}
