@@ -6,7 +6,7 @@
 {% block style %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="{% static 'css/AdminPanel/cur-config.css' %}">
 {% endblock style %}
 
 {% block navbar %}
@@ -16,36 +16,36 @@
 {% block content %}
 <div class="layout-wrapper">
     {% include "includes/sidebar.html" %}
-    <main class="dashboard-main" style="padding: 30px;">
+    <main class="dashboard-main" >
 
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div >
             <h1>Curated For You</h1>
             <a href="{% url 'add_curated_config' %}" class="btn-add">+ Add New</a>
         </div>
 
         {% if configs %}
-        <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+        <table>
             <thead>
-                <tr style="background:#f1f5f9;text-align:left;">
-                    <th style="padding:12px;">Category</th>
-                    <th style="padding:12px;">Book</th>
-                    <th style="padding:12px;">Cover</th>
-                    <th style="padding:12px;">Actions</th>
+                <tr>
+                    <th>Category</th>
+                    <th>Book</th>
+                    <th>Cover</th>
+                    <th >Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for config in configs %}
-                <tr style="border-bottom:1px solid #e2e8f0;">
-                    <td style="padding:12px;">{{ config.category.name|default:"—" }}</td>
-                    <td style="padding:12px;">{{ config.book.title|default:"—" }}</td>
-                    <td style="padding:12px;">
+                <tr >
+                    <td >{{ config.category.name|default:"—" }}</td>
+                    <td >{{ config.book.title|default:"—" }}</td>
+                    <td >
                         {% if config.book and config.book.cover_img %}
-                        <img src="{{ config.book.cover_img.url }}" style="width:50px;height:70px;object-fit:cover;">
+                        <img src="{{ config.book.cover_img.url }}" >
                         {% endif %}
                     </td>
-                    <td style="padding:12px;">
+                    <td >
                         <a href="{% url 'edit_curated_config' config.id %}" class="btn-sm">Edit</a>
-                        <form action="{% url 'delete_curated_config' config.id %}" method="post" style="display:inline;">
+                        <form action="{% url 'delete_curated_config' config.id %}" method="post" >
                             {% csrf_token %}
                             <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Delete this configuration?')">Delete</button>
                         </form>
@@ -55,7 +55,7 @@
             </tbody>
         </table>
         {% else %}
-        <p style="margin-top:30px;color:#64748b;">No curated configurations yet. Create one!</p>
+        <p >No curated configurations yet. Create one!</p>
         {% endif %}
 
     </main>
