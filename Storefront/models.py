@@ -55,6 +55,7 @@ class UserBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='owned_by')
     ownership_type = models.CharField(max_length=10)
     acquired_at = models.DateField(auto_now_add=True)
+    due_date = models.DateField(null=True, blank=True)
     progress = models.IntegerField(default=0)
     
     class Meta:
@@ -92,19 +93,24 @@ class Order(models.Model):
     
 # Configuration
 class CuratedConfig(models.Model):
-    display_genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    limit = models.IntegerField(default=4)
+    book = models.ForeignKey('Book', null=True, blank=True, on_delete=models.CASCADE, related_name='curated_configs')
 
     def __str__(self):
-        return f"Curated: {self.display_genre.name}"
+        return f"Curated: {self.book.title}"
 
 class FeaturedPromo(models.Model):
+    PROMO_TYPES = [
+        ('banner', 'Banner'),
+        ('sidebar', 'Sidebar'),
+        ('popup', 'Popup'),
+        ('featured', 'Featured'),
+    ]
     title = models.CharField(max_length=200)
     description = models.TextField()
-    promo_type = models.CharField(max_length=50)
+    promo_type = models.CharField(max_length=50, choices=PROMO_TYPES, default='banner')
     badge_label = models.CharField(max_length=50)
     btn_text = models.CharField(max_length=100)
-    image = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='promos/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

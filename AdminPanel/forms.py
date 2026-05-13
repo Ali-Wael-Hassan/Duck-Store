@@ -2,7 +2,7 @@ from django import forms
 
 
 from .models import GamificationConfig
-from Storefront.models import Book, Genre
+from Storefront.models import Book, Genre, FeaturedPromo, CuratedConfig
 from Authentication.models import User
 
 
@@ -10,8 +10,9 @@ class GamificationConfigForm(forms.ModelForm):
     class Meta:
         model = GamificationConfig
         fields = [
-            'login_points', 'review_base', 'review_bonus', 
-            'review_min_char', 'purchase_rate', 'purchase_max', 'signup_bonus'
+            'login_points', 'review_base', 'review_bonus',
+            'review_min_char', 'borrow_rate', 'borrow_max_points', 'signup_bonus',
+            'borrow_limit', 'borrow_duration_days',
         ]
         widgets = {
             field: forms.NumberInput(attrs={'step': 'any'}) 
@@ -67,6 +68,24 @@ class BookForm(forms.ModelForm):
         )
         self.instance.genre = genre
         return name
+
+class FeaturedPromoForm(forms.ModelForm):
+    class Meta:
+        model = FeaturedPromo
+        fields = ['title', 'description', 'promo_type', 'badge_label', 'btn_text', 'image', 'is_active']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3}),
+        }
+
+
+class CuratedConfigForm(forms.ModelForm):
+    class Meta:
+        model = CuratedConfig
+        fields = ['book']
+        widgets = {
+            'book': forms.Select(attrs={'class': 'combobox'}),
+        }
+
 
 class AddUserForm(forms.ModelForm):
     # We add a custom choice field for the Role since 'is_staff' is a boolean

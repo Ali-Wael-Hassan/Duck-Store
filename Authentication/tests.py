@@ -454,6 +454,54 @@ class BuyBookTests(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.points, 5000)
 
+    def test_buy_does_not_increment_readings(self):
+        self.client.force_login(self.user)
+        self.client.post(f"/store/book/{self.book.id}/buy/")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.readings, 0)
+
+    def test_borrow_awards_points(self):
+        self.client.force_login(self.user)
+        resp = self.client.post(f"/store/book/{self.book.id}/borrow/")
+        self.assertRedirects(resp, f"/store/book/{self.book.id}/")
+        self.user.refresh_from_db()
+        earned = min(int(float(self.book.price) * 2.0), 500)
+        self.assertEqual(self.user.points, 5000 + earned)
+
+    def test_borrow_increments_readings(self):
+        self.client.force_login(self.user)
+        self.client.post(f"/store/book/{self.book.id}/borrow/")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.readings, 1)
+
+    def test_borrow_sets_due_date(self):
+        self.client.force_login(self.user)
+        self.client.post(f"/store/book/{self.book.id}/borrow/")
+        ub = UserBook.objects.get(user=self.user, book=self.book)
+        expected = date.today() + timedelta(days=14)
+        self.assertEqual(ub.due_date, expected)
+        self.assertEqual(ub.ownership_type, "rented")
+
+    def test_borrow_limit_enforced(self):
+        for i in range(5):
+            b = Book.objects.create(
+                id=100 + i, title=f"Book {i}", author="A",
+                price=100, pages=50, rating=3, published_date="2024",
+                description="d", genre=self.genre,
+            )
+            UserBook.objects.create(user=self.user, book=b, ownership_type="rented")
+        self.client.force_login(self.user)
+        resp = self.client.post(f"/store/book/{self.book.id}/borrow/")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.points, 5000)
+
+    def test_borrow_already_borrowed(self):
+        UserBook.objects.create(user=self.user, book=self.book, ownership_type="rented")
+        self.client.force_login(self.user)
+        resp = self.client.post(f"/store/book/{self.book.id}/borrow/")
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.points, 5000)
+
 
 @override_settings(ROOT_URLCONF="config.urls")
 class StoreFilterTests(TestCase):

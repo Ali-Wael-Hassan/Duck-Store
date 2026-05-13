@@ -80,9 +80,11 @@ class GamificationConfig(models.Model):
     review_base = models.IntegerField(default=25)
     review_bonus = models.IntegerField(default=50)
     review_min_char = models.IntegerField(default=100)
-    purchase_rate = models.FloatField(default=2.0)
-    purchase_max = models.IntegerField(default=500)
+    borrow_rate = models.FloatField(default=2.0, help_text="Points per $1 of book price for borrowing")
+    borrow_max_points = models.IntegerField(default=500, help_text="Max points per borrow transaction")
     signup_bonus = models.IntegerField(default=50)
+    borrow_limit = models.IntegerField(default=5, help_text="Max books a user can borrow at once")
+    borrow_duration_days = models.IntegerField(default=14, help_text="Borrow duration in days")
 
     class Meta:
         verbose_name = "Gamification Configuration"

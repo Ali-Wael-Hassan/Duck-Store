@@ -55,6 +55,13 @@
                 <div class="book-details">
                     <h3>{{ user_book.book.title }}</h3>
                     <p>{{ user_book.book.author }}</p>
+                    {% if user_book.ownership_type == "rented" and user_book.due_date %}
+                        {% if user_book.due_date < today %}
+                        <p class="due-date overdue">OVERDUE (was due {{ user_book.due_date|date:"M d" }})</p>
+                        {% else %}
+                        <p class="due-date">{{ user_book.due_date|timeuntil }} remaining (due {{ user_book.due_date|date:"M d" }})</p>
+                        {% endif %}
+                    {% endif %}
                 </div>
 
             </article>

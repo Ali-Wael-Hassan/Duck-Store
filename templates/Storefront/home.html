@@ -94,8 +94,8 @@
         <header class="section-header">
             <h2>Curated For You</h2>
 
-            {% if curated_config %}
-            <a href="{% url 'store' %}?category={{ curated_config.display_genre.name }}" class="view-all">
+            {% if curated_configs %}
+            <a href="{% url 'store' %}" class="view-all">
                 See recommendations
             </a>
             {% endif %}
@@ -112,11 +112,9 @@
                 </div>
 
                 <div class="curated-details">
-                    {% if curated_config %}
                     <span class="reason-tag">
-                        BASED ON {{ curated_config.display_genre.name|upper }}
+                        CURATED FOR YOU
                     </span>
-                    {% endif %}
 
                     <h4>{{ book.title }}</h4>
                     <span class="status">Recommended</span>

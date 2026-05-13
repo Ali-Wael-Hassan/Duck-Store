@@ -1,6 +1,7 @@
 from django.views import View
 from django.shortcuts import render
 from django.db.models import Sum
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 
 from Authentication.models import User
@@ -47,9 +48,14 @@ class CommunityView(View):
             total=Sum('readings')
         )['total'] or 0
 
+        # ---------- PAGINATION ----------
+        paginator = Paginator(all_users[3:], 10)
+        page_number = request.GET.get('page')
+        scholars_page = paginator.get_page(page_number)
+
         context = {
             'podium': podium,
-            'scholars': all_users,
+            'scholars': scholars_page,
             'total_members': len(all_users),
             'total_books_k': round(total_books / 1000, 1),
             'total_points_m': round(total_points / 1_000_000, 1),

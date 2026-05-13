@@ -50,10 +50,13 @@ class MyBooksView:
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
+        from datetime import date
+
         context = {
             "library": page,
             "tab": tab,
             "user": user,
+            "today": date.today(),
         }
 
         return render(request, "UserAccount/my-Books.html", context)

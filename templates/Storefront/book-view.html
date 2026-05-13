@@ -42,6 +42,10 @@
                     <button class="btn-primary" style="opacity: 0.5; cursor: not-allowed;" disabled>
                         OWNED
                     </button>
+                {% elif borrowed %}
+                    <button class="btn-primary" style="opacity: 0.5; cursor: not-allowed;" disabled>
+                        BORROWED
+                    </button>
                 {% else %}
                     {% if user.is_authenticated %}
                     <p style="text-align:center;margin:0 0 8px;font-size:0.9rem;color:var(--text-muted);">

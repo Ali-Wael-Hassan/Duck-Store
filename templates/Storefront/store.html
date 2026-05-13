@@ -128,8 +128,8 @@
         <!-- BOOK GRID -->
         <div class="book-grid">
 
-            {% for book in page_obj %}
-            <article class="book-card">
+            {% for book in books %}
+            <a href="{% url 'book_detail' book.id %}" class="book-card">
 
                 <div class="book-card__image-container">
                     {% if book.cover_img %}
@@ -148,7 +148,7 @@
                     </div>
                 </div>
 
-            </article>
+            </a>
             {% empty %}
                 <div class="no-results">No books found matching your criteria.</div>
             {% endfor %}
@@ -161,7 +161,7 @@
 
             {% if page_obj.has_previous %}
             <a class="pagination__btn"
-               href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}">
+               href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
                 ← Prev
             </a>
             {% endif %}
@@ -172,7 +172,7 @@
                         <span class="pagination__num active">{{ num }}</span>
                     {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                         <a class="pagination__num"
-                           href="?page={{ num }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}">
+                           href="?page={{ num }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
                             {{ num }}
                         </a>
                     {% endif %}
@@ -181,7 +181,7 @@
 
             {% if page_obj.has_next %}
             <a class="pagination__btn"
-               href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category }}&minPrice={{ request.GET.minPrice }}&maxPrice={{ request.GET.maxPrice }}&sort={{ current_sort }}">
+               href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
                 Next →
             </a>
             {% endif %}

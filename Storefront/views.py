@@ -1,6 +1,5 @@
 import uuid
-from datetime import date
-from decimal import Decimal
+from datetime import date, timedelta
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -52,35 +51,40 @@ class BookActionHelper:
     def checkOwnership(user, book_id: int) -> bool:
         if not user.is_authenticated:
             return False
-        return UserBook.objects.filter(user=user, book_id=book_id).exists()
+        return UserBook.objects.filter(
+            user=user, book_id=book_id, ownership_type="bought"
+        ).exists()
+
+    @staticmethod
+    def checkBorrowed(user, book_id: int) -> bool:
+        if not user.is_authenticated:
+            return False
+        return UserBook.objects.filter(
+            user=user, book_id=book_id, ownership_type="rented"
+        ).exists()
+
+    @staticmethod
+    def activeBorrowCount(user):
+        return UserBook.objects.filter(
+            user=user, ownership_type="rented"
+        ).count()
 
     @staticmethod
     def _awardReviewPoints(user, comment: str) -> int:
         config = GamificationConfig.load()
 
-        points = config.review_base
-        if len(comment or "") >= config.review_min_char:
-            points += config.review_bonus
+        if len(comment or "") < config.review_min_char:
+            user.reviews = (user.reviews or 0) + 1
+            user.save(update_fields=["reviews"])
+            return 0
 
+        points = config.review_base + config.review_bonus
         user.points += points
         user.reviews = (user.reviews or 0) + 1
         user.save(update_fields=["points", "reviews"])
 
         SharedHelper._checkAndAwardBadges(user)
         return points
-
-    @staticmethod
-    def _awardPurchasePoints(user, price: Decimal) -> int:
-        config = GamificationConfig.load()
-
-        earned = min(int(float(price) * config.purchase_rate), config.purchase_max)
-
-        user.points += earned
-        user.readings = (user.readings or 0) + 1
-        user.save(update_fields=["points", "readings"])
-
-        SharedHelper._checkAndAwardBadges(user)
-        return earned
 
 # =========================================================
 # BOOK DETAIL
@@ -99,6 +103,7 @@ class BookDetailView(View):
             "book": book,
             "reviews": Review.objects.filter(book=book).order_by("-created_at")[:5],
             "owned": BookActionHelper.checkOwnership(user, book_id),
+            "borrowed": BookActionHelper.checkBorrowed(user, book_id),
             "user": user if user.is_authenticated else None,
             "featured": SharedHelper._getFeaturedPromos().first(),
             "book_detail": {
@@ -154,16 +159,13 @@ class BookBuyView(LoginRequiredMixin, View):
         UserBook.objects.create(user=user, book=book, ownership_type="bought")
 
         user.points -= cost
-        user.readings = (user.readings or 0) + 1
-        user.save(update_fields=["points", "readings"])
+        user.save(update_fields=["points"])
 
         inventory.stock -= 1
         inventory.save(update_fields=["stock"])
 
         book.sales = (book.sales or 0) + 1
         book.save(update_fields=["sales"])
-
-        SharedHelper._checkAndAwardBadges(user)
 
         messages.success(request, f"Successfully purchased! Order ID: {order_id}")
         return redirect("book_detail", book_id=book_id)
@@ -178,13 +180,30 @@ class BookBorrowView(LoginRequiredMixin, View):
         user = request.user
         book = get_object_or_404(Book, pk=book_id)
 
-        if BookActionHelper.checkOwnership(user, book.id):
+        if BookActionHelper.checkOwnership(user, book.id) or BookActionHelper.checkBorrowed(user, book.id):
             messages.error(request, "Already in your library.")
             return redirect("book_detail", book_id=book_id)
 
-        UserBook.objects.create(user=user, book=book, ownership_type="rented")
+        config = GamificationConfig.load()
 
-        messages.success(request, "Successfully borrowed to your library!")
+        if BookActionHelper.activeBorrowCount(user) >= config.borrow_limit:
+            messages.error(request, f"Borrow limit reached ({config.borrow_limit} max). Return a book first.")
+            return redirect("book_detail", book_id=book_id)
+
+        due_date = date.today() + timedelta(days=config.borrow_duration_days)
+
+        UserBook.objects.create(
+            user=user, book=book, ownership_type="rented", due_date=due_date
+        )
+
+        earned = min(int(float(book.price) * config.borrow_rate), config.borrow_max_points)
+        user.points += earned
+        user.readings = (user.readings or 0) + 1
+        user.save(update_fields=["points", "readings"])
+
+        SharedHelper._checkAndAwardBadges(user)
+
+        messages.success(request, f"Borrowed! You earned {earned} points. Due: {due_date}")
         return redirect("book_detail", book_id=book_id)
 
 # =========================================================
@@ -222,7 +241,10 @@ class BookReviewView(LoginRequiredMixin, View):
 
         points = BookActionHelper._awardReviewPoints(user, comment)
 
-        messages.success(request, f"Review added! You earned {points} points.")
+        if points:
+            messages.success(request, f"Review added! You earned {points} points.")
+        else:
+            messages.success(request, "Review added (below minimum length, no points earned).")
         return redirect("book_detail", book_id=book_id)
 
 # =========================================================
@@ -232,16 +254,14 @@ class HomeView(View):
     template_name = "Storefront/home.html"
 
     def get(self, request):
-        curated_setup = CuratedConfig.objects.first()
+        curated_configs = CuratedConfig.objects.select_related('book').all()
+        featured_books = Book.objects.filter(curated_configs__in=curated_configs) if curated_configs else []
 
         return render(request, self.template_name, {
             "featured_promos": FeaturedPromo.objects.filter(is_active=True),
             "trending_books": Book.objects.order_by("-sales")[:7],
-            "curated_books": (
-                Book.objects.filter(genre=curated_setup.display_genre)[:curated_setup.limit]
-                if curated_setup else []
-            ),
-            "curated_config": curated_setup,
+            "curated_books": featured_books,
+            "curated_configs": curated_configs,
         })
 
 # =========================================================
@@ -250,7 +270,7 @@ class HomeView(View):
 class CatalogView(ListView):
     model = Book
     template_name = "Storefront/store.html"
-    context_object_name = "page_obj"
+    context_object_name = "books"
     paginate_by = PAGE_SIZE
 
     def get_queryset(self):

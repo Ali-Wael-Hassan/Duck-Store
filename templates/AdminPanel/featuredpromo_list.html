@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Duck Library | Featured Promotions{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock style %}
+
+{% block navbar %}
+{% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="layout-wrapper">
+    {% include "includes/sidebar.html" %}
+    <main class="dashboard-main" style="padding: 30px;">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h1>Featured Promotions</h1>
+            <a href="{% url 'add_featured_promo' %}" class="btn-add">+ Add New</a>
+        </div>
+
+        {% if promos %}
+        <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+            <thead>
+                <tr style="background:#f1f5f9;text-align:left;">
+                    <th style="padding:12px;">Image</th>
+                    <th style="padding:12px;">Title</th>
+                    <th style="padding:12px;">Type</th>
+                    <th style="padding:12px;">Active</th>
+                    <th style="padding:12px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for promo in promos %}
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                    <td style="padding:12px;">
+                        {% if promo.image %}
+                        <img src="{{ promo.image.url }}" style="width:80px;height:45px;object-fit:cover;border-radius:4px;">
+                        {% endif %}
+                    </td>
+                    <td style="padding:12px;">{{ promo.title }}</td>
+                    <td style="padding:12px;">{{ promo.get_promo_type_display }}</td>
+                    <td style="padding:12px;">{{ promo.is_active|yesno:"Yes,No" }}</td>
+                    <td style="padding:12px;">
+                        <a href="{% url 'edit_featured_promo' promo.id %}" class="btn-sm">Edit</a>
+                        <form action="{% url 'delete_featured_promo' promo.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Delete this promotion?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="margin-top:30px;color:#64748b;">No promotions yet. Create one!</p>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock content %}

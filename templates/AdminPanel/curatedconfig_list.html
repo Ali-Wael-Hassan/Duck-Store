@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Duck Library | Curated For You{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock style %}
+
+{% block navbar %}
+{% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="layout-wrapper">
+    {% include "includes/sidebar.html" %}
+    <main class="dashboard-main" style="padding: 30px;">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <h1>Curated For You</h1>
+            <a href="{% url 'add_curated_config' %}" class="btn-add">+ Add New</a>
+        </div>
+
+        {% if configs %}
+        <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+            <thead>
+                <tr style="background:#f1f5f9;text-align:left;">
+                    <th style="padding:12px;">Book</th>
+                    <th style="padding:12px;">Cover</th>
+                    <th style="padding:12px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for config in configs %}
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                    <td style="padding:12px;">{{ config.book.title }}</td>
+                    <td style="padding:12px;">
+                        {% if config.book.cover_img %}
+                        <img src="{{ config.book.cover_img.url }}" style="width:50px;height:70px;object-fit:cover;">
+                        {% endif %}
+                    </td>
+                    <td style="padding:12px;">
+                        <a href="{% url 'edit_curated_config' config.id %}" class="btn-sm">Edit</a>
+                        <form action="{% url 'delete_curated_config' config.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-sm btn-danger" onclick="return confirm('Delete this configuration?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="margin-top:30px;color:#64748b;">No curated configurations yet. Create one!</p>
+        {% endif %}
+
+    </main>
+</div>
+{% endblock content %}

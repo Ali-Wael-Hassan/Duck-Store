@@ -15,5 +15,13 @@
     <a href="{% url 'gamification' %}" class="{% if request.resolver_match.url_name == 'gamification' %}active{% endif %}">
         <span class="material-symbols-outlined">trophy</span> Gamification
     </a>
+
+    <a href="{% url 'list_featured_promos' %}" class="{% if request.resolver_match.url_name == 'list_featured_promos' or request.resolver_match.url_name == 'add_featured_promo' or request.resolver_match.url_name == 'edit_featured_promo' %}active{% endif %}">
+        <span class="material-symbols-outlined">campaign</span> Featured Promos
+    </a>
+
+    <a href="{% url 'list_curated_configs' %}" class="{% if request.resolver_match.url_name == 'list_curated_configs' or request.resolver_match.url_name == 'add_curated_config' or request.resolver_match.url_name == 'edit_curated_config' %}active{% endif %}">
+        <span class="material-symbols-outlined">auto_awesome</span> Curated For You
+    </a>
 </aside>
 {% endblock sidebar %}
