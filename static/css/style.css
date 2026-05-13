@@ -38,6 +38,10 @@
     --nav-color: #0F172A;
 }
 
+a {
+    text-decoration: none;  
+}
+
 * {
     margin: 0;
     padding: 0;
