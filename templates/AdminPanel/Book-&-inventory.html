@@ -116,23 +116,18 @@
 
         <div class="pagination flex-between" id="inventory-pagination">
             <span class="subtext">
-                Showing {{ inventory_list.start_index }}-{{ inventory_list.end_index }} of {{
-                inventory_list.paginator.count }} books
+                Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books
             </span>
 
             <div class="page-controls">
-                {# Previous Button #}
-                {% if inventory_list.has_previous %}
-                <a href="?page={{ inventory_list.previous_page_number }}" class="btn-outline"
-                    style="text-decoration:none;">Previous</a>
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
                 {% else %}
                 <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Previous</button>
                 {% endif %}
 
-                {# Next Button #}
-                {% if inventory_list.has_next %}
-                <a href="?page={{ inventory_list.next_page_number }}" class="btn-outline"
-                    style="text-decoration:none;">Next</a>
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
                 {% else %}
                 <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Next</button>
                 {% endif %}
