@@ -118,7 +118,7 @@
             </div>
 
 
-            <div class="panel-card lg-col-span-2">
+            <div class="panel-card lg-col-span-2" id="transactions-panel">
 
                 <div class="panel-header flex-between">
                     <h3>Recent Transactions</h3>
@@ -179,15 +179,11 @@
 
                     <div class="page-controls">
                         {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline">Previous</a>
-                        {% else %}
-                        <button class="btn-outline" disabled>Previous</button>
+                        <a href="?page={{ page_obj.previous_page_number }}&period={{ current_period }}#transactions-panel" class="btn-outline">Previous</a>
                         {% endif %}
 
                         {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" class="btn-outline active">Next</a>
-                        {% else %}
-                        <button class="btn-outline" disabled>Next</button>
+                        <a href="?page={{ page_obj.next_page_number }}&period={{ current_period }}#transactions-panel" class="btn-outline active">Next</a>
                         {% endif %}
                     </div>
                     {% endif %}
