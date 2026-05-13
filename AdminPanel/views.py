@@ -274,10 +274,10 @@ class ToggleUserRoleView(View):
         if target_user == request.user:
             messages.error(request, "You cannot change your own role to prevent lockout.")
         else:
-            target_user.role = "admin" if target_user.role == "User" else "User"
+            target_user.role = "admin" if target_user.role == "user" else "user"
             target_user.save()
             
-            new_role = "admin" if target_user.role == "admin" else "User"
+            new_role = "admin" if target_user.role == "admin" else "user"
             messages.success(request, f"Updated {target_user.username} to {new_role}.")
             
         return redirect('roles')
