@@ -276,11 +276,11 @@ class CatalogView(ListView):
     def get_queryset(self):
         queryset = Book.objects.all()
 
-        category = self.request.GET.get("category")
+        categories = self.request.GET.getlist("category")
         sort_by = self.request.GET.get("sort", "popularity")
 
-        if category:
-            queryset = queryset.filter(genre__name__iexact=category)
+        if categories:
+            queryset = queryset.filter(genre__name__in=categories)
 
         try:
             if self.request.GET.get("minPrice"):
@@ -303,4 +303,9 @@ class CatalogView(ListView):
         context = super().get_context_data(**kwargs)
         context["genres"] = Genre.objects.all()
         context["current_sort"] = self.request.GET.get("sort", "popularity")
+        context["selected_categories"] = self.request.GET.getlist("category")
+        preserved = self.request.GET.copy()
+        if "page" in preserved:
+            del preserved["page"]
+        context["preserved_params"] = preserved.urlencode()
         return context

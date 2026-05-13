@@ -93,21 +93,16 @@ class Order(models.Model):
     
 # Configuration
 class CuratedConfig(models.Model):
-    book = models.ForeignKey('Book', null=True, blank=True, on_delete=models.CASCADE, related_name='curated_configs')
+    category = models.ForeignKey('Genre', null=True, blank=True, on_delete=models.SET_NULL, related_name='curated_configs')
+    book = models.ForeignKey('Book', null=True, blank=True, on_delete=models.SET_NULL, related_name='curated_configs')
 
     def __str__(self):
-        return f"Curated: {self.book.title}"
+        return f"Curated: {self.book.title if self.book else 'No book'}"
 
 class FeaturedPromo(models.Model):
-    PROMO_TYPES = [
-        ('banner', 'Banner'),
-        ('sidebar', 'Sidebar'),
-        ('popup', 'Popup'),
-        ('featured', 'Featured'),
-    ]
     title = models.CharField(max_length=200)
     description = models.TextField()
-    promo_type = models.CharField(max_length=50, choices=PROMO_TYPES, default='banner')
+    category = models.ForeignKey('Genre', null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_promos')
     badge_label = models.CharField(max_length=50)
     btn_text = models.CharField(max_length=100)
     image = models.ImageField(upload_to='promos/', null=True, blank=True)

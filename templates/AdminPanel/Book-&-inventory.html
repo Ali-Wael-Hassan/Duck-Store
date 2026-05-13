@@ -14,22 +14,7 @@
 
 
 {% block navbar %}
-<nav class="header" id="main-nav">
-    <div class="container header__inner">
-        <div class="logo-group">
-            <div class="logo-icon">
-                <span class="material-symbols-outlined">menu_book</span>
-            </div>
-            <div class="logo-text">DUCK</div>
-        </div>
-
-        <div class="header__actions">
-            <a href="{% url 'user_profile' %}" class="avatar-link">
-                <img src="{% static 'assets/images/logo.png' %}" class="avatar-img">
-            </a>
-        </div>
-    </div>
-</nav>
+    {% include "includes/navbar.html" %}
 {% endblock navbar %}
 
 {% block content %}
@@ -83,14 +68,7 @@
                         <td style="font-family:monospace;">{{ item.isbn }}</td>
                         <td style="font-family:monospace;">{{ item.sku }}</td>
                         <td>
-                            <div style="display:flex;align-items:center;gap:8px;">
-                                <div style="flex:1;height:6px;background:#e9ecef;border-radius:3px;">
-                                    <div
-                                        style="width:{{ item.stock_percent }}%;height:100%;background:{% if item.stock == 0 %}#ef4444{% elif item.stock_percent < 20 %}#f59e0b{% else %}#10b981{% endif %};border-radius:3px;">
-                                    </div>
-                                </div>
-                                <span style="font-weight:600;">{{ item.stock }}</span>
-                            </div>
+                            <span style="font-weight:600;">{{ item.stock }}</span>
                         </td>
                         <td>
                             <span
