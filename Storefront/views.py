@@ -5,8 +5,8 @@ from decimal import Decimal
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import ListView
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.db.models import Avg
 
 from Community.models import Badge, UserBadge
@@ -17,9 +17,7 @@ from Storefront.models import (
 )
 from AdminPanel.models import GamificationConfig
 
-
 PAGE_SIZE = 10
-
 
 # =========================================================
 # Shared utilities (no auth logic here)
@@ -44,7 +42,6 @@ class SharedHelper:
     def _getFeaturedPromos():
         return FeaturedPromo.objects.filter(is_active=True)
 
-
 # =========================================================
 # Book business logic
 # =========================================================
@@ -52,6 +49,8 @@ class BookActionHelper:
 
     @staticmethod
     def checkOwnership(user, book_id: int) -> bool:
+        if not user.is_authenticated:
+            return False
         return UserBook.objects.filter(user=user, book_id=book_id).exists()
 
     @staticmethod
@@ -82,12 +81,10 @@ class BookActionHelper:
         SharedHelper._checkAndAwardBadges(user)
         return earned
 
-
 # =========================================================
-# BOOK DETAIL (LOGIN REQUIRED)
+# BOOK DETAIL
 # =========================================================
-class BookDetailView(LoginRequiredMixin, View):
-    login_url = "login"
+class BookDetailView(View):
 
     def get(self, request, book_id: int):
         book = get_object_or_404(
@@ -101,16 +98,15 @@ class BookDetailView(LoginRequiredMixin, View):
             "book": book,
             "reviews": Review.objects.filter(book=book).order_by("-created_at")[:5],
             "owned": BookActionHelper.checkOwnership(user, book_id),
-            "user": user,
+            "user": user if user.is_authenticated else None,
             "featured": SharedHelper._getFeaturedPromos().first(),
             "book_detail": {
                 "synopsis": (book.description or "").strip()
                 or "No synopsis available for this book.",
-                "cover": book.cover_img.url if book.cover_img else None,
+                "cover": book.cover_img if book.cover_img else None,
                 "rating": float(book.rating or 0.0),
             },
         })
-
 
 # =========================================================
 # BUY BOOK (LOGIN REQUIRED)
@@ -124,10 +120,12 @@ class BookBuyView(LoginRequiredMixin, View):
         inventory = get_object_or_404(Inventory, book=book)
 
         if inventory.stock < 1:
-            return JsonResponse({"error": "Out of stock."}, status=400)
+            messages.error(request, "Out of stock.")
+            return redirect("book_detail", book_id=book_id)
 
         if BookActionHelper.checkOwnership(user, book.id):
-            return JsonResponse({"error": "Already owned."}, status=400)
+            messages.error(request, "Already owned.")
+            return redirect("book_detail", book_id=book_id)
 
         order_id = f"ORD-{uuid.uuid4().hex[:8].upper()}"
 
@@ -152,12 +150,8 @@ class BookBuyView(LoginRequiredMixin, View):
 
         points = BookActionHelper._awardPurchasePoints(user, book.price)
 
-        return JsonResponse({
-            "success": True,
-            "order_id": order_id,
-            "points_earned": points
-        })
-
+        messages.success(request, f"Successfully purchased! Earned {points} pts. Order ID: {order_id}")
+        return redirect("book_detail", book_id=book_id)
 
 # =========================================================
 # BORROW BOOK (LOGIN REQUIRED)
@@ -170,12 +164,13 @@ class BookBorrowView(LoginRequiredMixin, View):
         book = get_object_or_404(Book, pk=book_id)
 
         if BookActionHelper.checkOwnership(user, book.id):
-            return JsonResponse({"error": "Already in your library."}, status=400)
+            messages.error(request, "Already in your library.")
+            return redirect("book_detail", book_id=book_id)
 
         UserBook.objects.create(user=user, book=book, ownership_type="rented")
 
-        return JsonResponse({"success": True})
-
+        messages.success(request, "Successfully borrowed to your library!")
+        return redirect("book_detail", book_id=book_id)
 
 # =========================================================
 # ADD REVIEW (LOGIN REQUIRED)
@@ -187,11 +182,16 @@ class BookReviewView(LoginRequiredMixin, View):
         user = request.user
         book = get_object_or_404(Book, pk=book_id)
 
-        rating = int(request.POST.get("rating", 0))
+        try:
+            rating = int(request.POST.get("rating", 0))
+        except ValueError:
+            rating = 0
+            
         comment = request.POST.get("comment", "").strip()
 
         if not (1 <= rating <= 5):
-            return JsonResponse({"error": "Rating must be between 1 and 5."}, status=400)
+            messages.error(request, "Rating must be between 1 and 5.")
+            return redirect("book_detail", book_id=book_id)
 
         Review.objects.create(
             book=book,
@@ -207,12 +207,8 @@ class BookReviewView(LoginRequiredMixin, View):
 
         points = BookActionHelper._awardReviewPoints(user, comment)
 
-        return JsonResponse({
-            "success": True,
-            "points_earned": points,
-            "new_rating": book.rating
-        })
-
+        messages.success(request, f"Review added! You earned {points} points.")
+        return redirect("book_detail", book_id=book_id)
 
 # =========================================================
 # HOME (PUBLIC)
@@ -232,7 +228,6 @@ class HomeView(View):
             ),
             "curated_config": curated_setup,
         })
-
 
 # =========================================================
 # CATALOG (PUBLIC)

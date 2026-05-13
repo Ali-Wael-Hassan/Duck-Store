@@ -184,6 +184,27 @@ img {
     height: auto;
 }
 
+.placeholder-img img {
+    width: 100%;
+    height: 100%; /* Change to 100% instead of auto */
+    object-fit: cover; /* This makes the image crop nicely to fit the box without stretching */
+    display: block;
+    border-radius: 8px; /* Or use 'inherit' to perfectly match the parent's radius */
+}
+
+
+.messages {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+.message.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.message.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* Remove default list styling from details marker for a cleaner look */
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }
+
 @media (max-width: 768px) {
     body[data-page="book-view"] main {
         grid-template-columns: 1fr;

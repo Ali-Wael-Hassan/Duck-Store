@@ -17,7 +17,7 @@ urlpatterns = [
     path("book/<int:book_id>/", BookDetailView.as_view(), name="book_detail"),
 
     # API actions
-    path("api/book/<int:book_id>/buy/", BookBuyView.as_view(), name="buy_book"),
-    path("api/book/<int:book_id>/borrow/", BookBorrowView.as_view(), name="borrow_book"),
-    path("api/book/<int:book_id>/review/", BookReviewView.as_view(), name="add_review"),
+    path('book/<int:book_id>/buy/', BookBuyView.as_view(), name='buy_book'),
+    path('book/<int:book_id>/borrow/', BookBorrowView.as_view(), name='borrow_book'),
+    path('book/<int:book_id>/review/', BookReviewView.as_view(), name='review_book'),
 ]
