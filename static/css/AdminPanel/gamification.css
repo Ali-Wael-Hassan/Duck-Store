@@ -1,11 +1,11 @@
-main section {
+/* main section {
   margin-bottom: 24px;
 }
 
 .layout-wrapper {
   margin: 0 0;
   padding: 0 0;
-}
+} */
 
 .card {
     background-color: var(--card-bg);
@@ -44,6 +44,12 @@ main section {
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.5px;
+}
+
+.tab .card.is-inactive::after {
+    content: 'INACTIVE';
+    background-color: rgba(141, 148, 165, 0.15); 
+    color: #8D94A5; 
 }
 
 /* Form elements inside cards */
