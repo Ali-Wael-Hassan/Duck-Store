@@ -50,33 +50,11 @@
                         <img src="{% static 'assets/placeholder.png' %}" alt="No cover">
                     {% endif %}
 
-                    <div class="book-overlay">
-                        <button class="btn-read"
-                                onclick="window.location.href='{% url 'book_detail' user_book.book.id %}'">
-                            <i class="fas fa-play"></i>
-                            {% if user_book.progress == 100 %}
-                                Read Again
-                            {% else %}
-                                Continue
-                            {% endif %}
-                        </button>
-                    </div>
-
                 </div>
 
                 <div class="book-details">
                     <h3>{{ user_book.book.title }}</h3>
                     <p>{{ user_book.book.author }}</p>
-
-                    <div class="progress-meta">
-                        <span>Reading Progress</span>
-                        <span>{{ user_book.progress }}%</span>
-                    </div>
-
-                    <div class="progress-bar-bg">
-                        <div class="progress-fill" style="width: {{ user_book.progress }}%;"></div>
-                    </div>
-
                 </div>
 
             </article>

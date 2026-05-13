@@ -63,17 +63,17 @@
                     <span>to</span>
 
                     <input type="number" name="maxPrice" id="max-price"
-                           value="{{ request.GET.maxPrice|default:200 }}">
+                           value="{{ request.GET.maxPrice|default:20000 }}">
                 </div>
 
                 <div class="price-range">
                     <input type="range"
                            id="price-slider"
-                           min="0" max="200"
-                           value="{{ request.GET.maxPrice|default:200 }}">
+                           min="0" max="20000"
+                           value="{{ request.GET.maxPrice|default:20000 }}">
 
                     <div class="price-range__display">
-                        Max: <strong>$<span id="price-limit">{{ request.GET.maxPrice|default:200 }}</span></strong>
+                        Max: <strong><span id="price-limit">{{ request.GET.maxPrice|default:20000 }}</span> pts</strong>
                     </div>
                 </div>
 
@@ -144,7 +144,7 @@
                     <h4 class="book-card__title">{{ book.title }}</h4>
 
                     <div class="book-card__footer">
-                        <span class="price-value">${{ book.price }}</span>
+                        <span class="price-value">{{ book.price }} pts</span>
                     </div>
                 </div>
 
@@ -199,37 +199,6 @@
 
 
 {% block scripts %}
-<script>
-function applySort(val) {
-    document.getElementById('sort-input').value = val;
-    document.getElementById('filter-form').submit();
-}
-
-const trigger = document.getElementById('sort-trigger');
-const popup = document.getElementById('sort-popup');
-
-if (trigger && popup) {
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        popup.classList.toggle('active');
-    });
-}
-
-document.addEventListener('click', () => {
-    if (popup) popup.classList.remove('active');
-});
-
-const slider = document.getElementById('price-slider');
-const output = document.getElementById('price-limit');
-const maxInput = document.getElementById('max-price');
-
-if (slider) {
-    slider.oninput = function () {
-        output.innerText = this.value;
-        maxInput.value = this.value;
-    };
-}
-</script>
-
+<script src="{% static 'JS/store.js' %}"></script>
 <script type="module" src="{% static 'js/main.js' %}"></script>
 {% endblock scripts %}

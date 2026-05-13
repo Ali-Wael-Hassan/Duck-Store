@@ -43,10 +43,15 @@
                         OWNED
                     </button>
                 {% else %}
+                    {% if user.is_authenticated %}
+                    <p style="text-align:center;margin:0 0 8px;font-size:0.9rem;color:var(--text-muted);">
+                        Your balance: <strong>{{ user.points }}</strong> pts
+                    </p>
+                    {% endif %}
                     <form action="{% url 'buy_book' book.id %}" method="POST" style="margin: 0; width: 100%;">
                         {% csrf_token %}
                         <button type="submit" class="btn-primary" style="width: 100%;">
-                            BUY - ${{ book.price }}
+                            BUY - {{ book.price }} pts
                         </button>
                     </form>
                     

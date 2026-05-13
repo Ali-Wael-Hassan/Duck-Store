@@ -30,6 +30,9 @@
                 <h2 class="section-title">Profile Information</h2>
                 <p class="section-subtitle">Basic details for your public identification.</p>
             </div>
+            <div class="header-actions">
+                <a href="{% url 'logout' %}" class="btn-logout" onclick="return confirm('Log out?')">Logout</a>
+            </div>
         </header>
 
         <div class="profile-card-body">
@@ -43,7 +46,7 @@
 
                     <label for="avatar-upload" class="avatar-upload-label">
                         <span class="camera-icon">📷</span>
-                        <input type="file" name="avatar" id="avatar-upload" hidden accept="image/*">
+                        <input type="file" name="avatar" id="avatar-upload" hidden accept="image/*" data-upload-url="{% url 'update_avatar' %}">
                     </label>
 
                 </div>
@@ -198,3 +201,7 @@
 </main>
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'JS/profile.js' %}"></script>
+{% endblock scripts %}

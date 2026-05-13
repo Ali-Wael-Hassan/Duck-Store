@@ -3,7 +3,7 @@ import { BookViewPage } from './pages/book-view.js';
 import { UserProfile } from './pages/user-profile-script.js';
 import { AuthManager } from './modules/AuthManager.js';
 
-// All URLs are flat (no html/ prefix) - served by Django
+// All URLs
 const URLS = {
     login:     '/sign-in.html',
     home:      '/home.html',

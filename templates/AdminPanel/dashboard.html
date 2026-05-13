@@ -45,12 +45,6 @@
         <section class="stats-row" id="stats-container">
             {% for stat in stats %}
             <div class="stat-card shadow-sm">
-                <div class="card-header">
-                    <div class="icon-wrapper">
-                        <span class="material-symbols-outlined">{{ stat.icon_name }}</span>
-                    </div>
-                    <span class="trend">{{ stat.trend_text }}</span>
-                </div>
 
                 <div class="card-body">
                     <span class="stat-label">{{ stat.label }}</span>
@@ -102,12 +96,12 @@
                 <div class="book-list" id="trending-books-list">
                     {% for book in trending_books %}
                     <div class="book-item">
-                        <img src="{{ book.cover_image_url }}" alt="cover">
+                        <img src="{% if book.cover_img %}{{ book.cover_img.url }}{% endif %}" alt="cover">
                         <div class="book-details">
                             <span class="book-title">{{ book.title }}</span>
                             <span class="book-meta">{{ book.genre }} • {{ book.sales }} sales</span>
                         </div>
-                        <span class="book-price">${{ book.price }}</span>
+                        <span class="book-price">{{ book.price }} pts</span>
                     </div>
                     {% empty %}
                     <p class="subtext">No trending books.</p>

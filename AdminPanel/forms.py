@@ -2,7 +2,7 @@ from django import forms
 
 
 from .models import GamificationConfig
-from Storefront.models import Book
+from Storefront.models import Book, Genre
 from Authentication.models import User
 
 
@@ -34,10 +34,14 @@ class BookForm(forms.ModelForm):
     isbn = forms.CharField(max_length=20, required=True, label="ISBN")
     sku = forms.CharField(max_length=20, required=True, label="SKU")
     stock = forms.IntegerField(label="Current Stock", initial=0, min_value=0)
+    genre_name = forms.CharField(
+        max_length=100, required=True, label="Genre",
+        widget=forms.TextInput(attrs={'list': 'genre-list', 'placeholder': 'Type or pick a genre'}),
+    )
     
     class Meta:
         model = Book
-        fields = ['title', 'author', 'genre', 'price', 'pages',
+        fields = ['title', 'author', 'price', 'pages',
                   'published_date', 'rating', 'description', 'cover_img', 'stock']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
@@ -47,6 +51,22 @@ class BookForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={'step': 1, 'min': 0}),
             'pages': forms.NumberInput(attrs={'step': 1, 'min': 1}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.genre_id:
+            self.fields['genre_name'].initial = self.instance.genre.name
+
+    def clean_genre_name(self):
+        name = self.cleaned_data['genre_name'].strip()
+        if not name:
+            raise forms.ValidationError("Genre is required.")
+        genre, _ = Genre.objects.get_or_create(
+            name=name,
+            defaults={'slug': name.lower().replace(' ', '-')},
+        )
+        self.instance.genre = genre
+        return name
 
 class AddUserForm(forms.ModelForm):
     # We add a custom choice field for the Role since 'is_staff' is a boolean

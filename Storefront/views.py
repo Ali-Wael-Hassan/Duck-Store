@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.db.models import Avg
 
 from Community.models import Badge, UserBadge
+
 from Storefront.models import (
     Book, Review, Inventory, Order,
     FeaturedPromo, UserBook,
@@ -103,7 +104,7 @@ class BookDetailView(View):
             "book_detail": {
                 "synopsis": (book.description or "").strip()
                 or "No synopsis available for this book.",
-                "cover": book.cover_img if book.cover_img else None,
+                "cover": book.cover_img.url if book.cover_img else None,
                 "rating": float(book.rating or 0.0),
             },
         })
@@ -117,7 +118,12 @@ class BookBuyView(LoginRequiredMixin, View):
     def post(self, request, book_id: int):
         user = request.user
         book = get_object_or_404(Book, pk=book_id)
-        inventory = get_object_or_404(Inventory, book=book)
+
+        try:
+            inventory = book.inventory
+        except Inventory.DoesNotExist:
+            messages.error(request, "This book is not available for purchase.")
+            return redirect("book_detail", book_id=book_id)
 
         if inventory.stock < 1:
             messages.error(request, "Out of stock.")
@@ -125,6 +131,11 @@ class BookBuyView(LoginRequiredMixin, View):
 
         if BookActionHelper.checkOwnership(user, book.id):
             messages.error(request, "Already owned.")
+            return redirect("book_detail", book_id=book_id)
+
+        cost = int(book.price)
+        if user.points < cost:
+            messages.error(request, f"Not enough points. You need {cost} pts but only have {user.points}.")
             return redirect("book_detail", book_id=book_id)
 
         order_id = f"ORD-{uuid.uuid4().hex[:8].upper()}"
@@ -142,15 +153,19 @@ class BookBuyView(LoginRequiredMixin, View):
 
         UserBook.objects.create(user=user, book=book, ownership_type="bought")
 
+        user.points -= cost
+        user.readings = (user.readings or 0) + 1
+        user.save(update_fields=["points", "readings"])
+
         inventory.stock -= 1
         inventory.save(update_fields=["stock"])
 
         book.sales = (book.sales or 0) + 1
         book.save(update_fields=["sales"])
 
-        points = BookActionHelper._awardPurchasePoints(user, book.price)
+        SharedHelper._checkAndAwardBadges(user)
 
-        messages.success(request, f"Successfully purchased! Earned {points} pts. Order ID: {order_id}")
+        messages.success(request, f"Successfully purchased! Order ID: {order_id}")
         return redirect("book_detail", book_id=book_id)
 
 # =========================================================

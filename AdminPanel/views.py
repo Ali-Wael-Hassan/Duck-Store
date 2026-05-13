@@ -11,7 +11,7 @@ from django.db.models import Sum, Q
 import csv
 from .models import GamificationConfig, DashboardStat, SalesPerformance
 from .forms import AddUserForm, GamificationConfigForm, BookForm
-from Storefront.models import Inventory, Order, Book
+from Storefront.models import Inventory, Order, Book, Genre
 
 User = get_user_model()
 
@@ -132,6 +132,7 @@ class BookBaseView:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_edit'] = self.object is not None
+        context['genres'] = Genre.objects.all().order_by('name')
         return context
 
 

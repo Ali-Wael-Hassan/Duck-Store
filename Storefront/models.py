@@ -16,7 +16,7 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     pages = models.IntegerField()
     rating = models.FloatField(default=0.0)
-    cover_img = models.CharField(max_length=255)
+    cover_img = models.ImageField(upload_to='covers/', null=True, blank=True)
     published_date = models.TextField()
     description = models.TextField()
     sales = models.IntegerField(default = 0)
@@ -31,6 +31,20 @@ class Inventory(models.Model):
     stock = models.IntegerField(default=0)
     max_stock = models.IntegerField(default=100)
     
+    @property
+    def stock_percent(self):
+        if self.max_stock > 0:
+            return int((self.stock / self.max_stock) * 100)
+        return 0
+
+    @property
+    def get_status(self):
+        if self.stock == 0:
+            return "Out of Stock"
+        if self.stock_percent < 20:
+            return "Low Stock"
+        return "In Stock"
+
     def __str__(self):
         return f"Inventory: {self.book.title}"
     
@@ -57,9 +71,6 @@ class Review(models.Model):
     rating = models.IntegerField()
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'book')
 
     def __str__(self):
         return f"{self.rating} Stars by {self.user_name}"

@@ -30,18 +30,10 @@
                 <p class="text-muted">Join our elite community of readers.</p>
             </header>
 
-            <form id="signup-form" class="form-auth" method="POST" action="{% url 'signup' %}">
-                {% csrf_token %}
+            <div id="signup-error" class="form-auth__errors" style="display:none;"></div>
 
-                {% if form.errors %}
-                    <div class="form-auth__errors">
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <p><strong>{{ field.label }}:</strong> {{ error }}</p>
-                            {% endfor %}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+            <form id="signup-form" class="form-auth" method="POST" action="{% url 'signup' %}" novalidate>
+                {% csrf_token %}
 
                 <button type="button" class="btn btn-outline">
                     <i class="bi bi-google"></i>
@@ -52,34 +44,28 @@
 
                 <!-- NAME -->
                 <div class="form-auth__field">
-                    <label class="form-auth__label" for="{{ form.name.id_for_label }}">
-                        Full Name
-                    </label>
+                    <label class="form-auth__label" for="id_name">Full Name</label>
                     <div class="form-auth__input-group">
                         <i class="bi bi-person form-auth__icon"></i>
-                        {{ form.name }}
+                        <input type="text" name="name" id="id_name" class="form-auth__input" placeholder="Full name" required>
                     </div>
                 </div>
 
                 <!-- EMAIL -->
                 <div class="form-auth__field">
-                    <label class="form-auth__label" for="{{ form.email.id_for_label }}">
-                        Email Address
-                    </label>
+                    <label class="form-auth__label" for="id_email">Email Address</label>
                     <div class="form-auth__input-group">
                         <i class="bi bi-envelope form-auth__icon"></i>
-                        {{ form.email }}
+                        <input type="email" name="email" id="id_email" class="form-auth__input" placeholder="name@example.com" required>
                     </div>
                 </div>
 
                 <!-- PASSWORD -->
                 <div class="form-auth__field">
-                    <label class="form-auth__label" for="{{ form.password.id_for_label }}">
-                        Password
-                    </label>
+                    <label class="form-auth__label" for="id_password">Password</label>
                     <div class="form-auth__input-group">
                         <i class="bi bi-lock form-auth__icon"></i>
-                        {{ form.password }}
+                        <input type="password" name="password" id="id_password" class="form-auth__input" placeholder="••••••••" required>
                     </div>
                 </div>
 
@@ -91,7 +77,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn-primary">Create Account</button>
+                <button type="submit" class="btn-primary" id="signup-btn">Create Account</button>
             </form>
 
             <footer class="auth-split__footer">
@@ -105,3 +91,7 @@
     </article>
 </main>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'JS/auth.js' %}"></script>
+{% endblock scripts %}

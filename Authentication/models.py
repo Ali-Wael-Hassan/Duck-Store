@@ -16,7 +16,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=255, unique=True)
 
     role = models.CharField(max_length=20, default='user')
-    avatar = models.CharField(max_length=255, null=True, blank=True)
+    avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
 
     points = models.IntegerField(default=0)
     readings = models.IntegerField(default=0)

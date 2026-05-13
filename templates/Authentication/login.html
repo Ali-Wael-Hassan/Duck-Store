@@ -25,23 +25,17 @@
             <p class="text-accent">Access your premium digital library</p>
         </header>
 
-        <form id="login-form" class="form-auth" method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
+        <div id="login-error" class="form-auth__errors" style="display:none;"></div>
 
-            {% if form.non_field_errors %}
-                <div class="form-auth__errors">
-                    {% for error in form.non_field_errors %}
-                        <p><strong>{{ error }}</strong></p>
-                    {% endfor %}
-                </div>
-            {% endif %}
+        <form id="login-form" class="form-auth" method="POST" action="{% url 'login' %}" novalidate>
+            {% csrf_token %}
 
             <!-- EMAIL -->
             <div class="form-auth__field">
                 <label class="form-auth__label" for="email-input">Email Address</label>
                 <div class="form-auth__input-group">
                     <i class="bi bi-envelope form-auth__icon"></i>
-                    {{ form.email }}
+                    <input type="email" name="email" id="email-input" class="form-auth__input" placeholder="name@example.com" required>
                 </div>
             </div>
 
@@ -50,14 +44,13 @@
                 <div class="form-auth__row-space">
                     <label class="form-auth__label" for="password-input">Password</label>
                 </div>
-
                 <div class="form-auth__input-group">
                     <i class="bi bi-lock form-auth__icon"></i>
-                    {{ form.password }}
+                    <input type="password" name="password" id="password-input" class="form-auth__input" placeholder="••••••••" required>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn--primary">Sign Into Library</button>
+            <button type="submit" class="btn btn--primary" id="login-btn">Sign Into Library</button>
 
             <div class="divider">OR CONTINUE WITH</div>
 
@@ -77,3 +70,7 @@
     </section>
 </main>
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'JS/auth.js' %}"></script>
+{% endblock scripts %}

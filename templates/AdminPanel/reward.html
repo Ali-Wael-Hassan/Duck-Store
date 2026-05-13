@@ -35,6 +35,7 @@
     </nav>
 
     <div class="layout-wrapper">
+        {% csrf_token %}
         <main>
             <header class="reward-header">
                 <h1>Rewards Hub</h1>
@@ -74,7 +75,7 @@
                             {% for reward in rewards %}
                             <div class="reward-card">
                                 {% if reward.cover_image %}
-                                <img src="{{ reward.cover_image.url }}" alt="{{ reward.title }}" class="reward-img">
+                                <img src="{{ reward.cover_image }}" alt="{{ reward.title }}" class="reward-img">
                                 {% endif %}
                                 <div class="reward-card__body">
                                     <h3>{{ reward.title }}</h3>
@@ -116,21 +117,6 @@
         </main>
     </div>
 
-    <script>
-    // Redeem button handler
-    document.querySelectorAll('.redeem-btn').forEach(btn => {
-        btn.addEventListener('click', async function() {
-            const rewardId = this.dataset.rewardId;
-            const res = await fetch(`/api/rewards/${rewardId}/redeem/`, {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}});
-            const data = await res.json();
-            if (data.success) {
-                alert('Reward redeemed! Your new balance: ' + data.new_points + ' pts');
-                location.reload();
-            } else {
-                alert(data.error || 'Could not redeem reward.');
-            }
-        });
-    });
-    </script>
+    <script src="{% static 'JS/reward.js' %}"></script>
 </body>
 </html>

@@ -33,8 +33,13 @@
                 <form method="POST" enctype="multipart/form-data" class="compact-form">
                     {% csrf_token %}
                     
+                    <datalist id="genre-list">
+                        {% for genre in genres %}
+                        <option value="{{ genre.name }}">
+                        {% endfor %}
+                    </datalist>
+
                     <div class="form-grid">
-                        {# Your CSS styles the <p> tags generated here #}
                         {{ form.as_p }}
                     </div>
 

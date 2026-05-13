@@ -33,7 +33,7 @@
         <div class="featured-grid">
             {% for promo in featured_promos %}
             <article class="featured-card {{ promo.promo_type }}"
-                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ promo.image.url }}');">
+                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ promo.image }}');">
 
                 {% if promo.badge_label %}
                 <span class="badge">{{ promo.badge_label }}</span>
@@ -66,7 +66,11 @@
                 <a href="{% url 'book_detail' book.id %}" class="book-main-link">
 
                     <figure class="book-cover">
-                        <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                        {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                        {% else %}
+                            <img src="{% static 'assets/images/logo.png' %}" alt="default">
+                        {% endif %}
                     </figure>
 
                     <div class="book-info">
@@ -74,7 +78,7 @@
                         <p class="author">{{ book.author }}</p>
                     </div>
 
-                    <span class="price">${{ book.price }}</span>
+                    <span class="price">{{ book.price }} pts</span>
 
                 </a>
             </div>
