@@ -1,7 +1,7 @@
 /* user-roles.css */
 
-/* REMOVED: .layout-wrapper and .users-main margin/padding logic.
-   This is handled by style.css to keep the sidebar aligned.
+/* REMOVED: Generic table and input styles already handled by style.css.
+   This file now only contains layout logic specific to the User Roles management view.
 */
 
 /* Rectangular Buttons Container  */
@@ -56,12 +56,12 @@
     color: var(--background-color);
 }
 
-/* Table Design */
+/* Table Wrapper - Only specific overrides for the user list */
 .table-responsive {
     overflow-x: auto;
     margin: 24px 0;
     background: var(--input-bg);
-    border-radius: 8px;
+    border-radius: var(--radius-main);
     border: 1px solid var(--border-color);
 }
 
@@ -71,15 +71,14 @@ table {
     min-width: 700px;
 }
 
+/* Specific Cell Padding for this view */
 th, td {
     padding: 16px;
-    text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
 
 th {
     background: rgba(255, 255, 255, 0.02);
-    color: var(--text-main);
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -110,9 +109,8 @@ th {
     background: currentColor;
 }
 
-/* Toggle Button Styling */
+/* Outline Buttons (View specific toggle styling) */
 .btn-outline {
-    /* Existing styles from your file */
     background: transparent;
     border: 1px solid var(--border-color);
     padding: 6px 16px;
@@ -121,17 +119,14 @@ th {
     font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.2s;
-
-    /* ADD THESE TO FIX THE LOOK */
-    text-decoration: none; /* Removes the underline */
-    display: inline-flex;  /* Ensures padding and height work correctly */
+    text-decoration: none;
+    display: inline-flex;
     align-items: center;
 }
 
 .btn-outline:hover {
     border-color: var(--brand-primary);
     color: var(--brand-primary);
-    text-decoration: none; /* Keeps underline off on hover */
 }
 
 /* Pagination */
@@ -152,7 +147,5 @@ th {
         flex-direction: column;
         align-items: stretch;
     }
-    .search-box {
-        width: 100%;
-    }
+    /* Search box now inherits global input styles from style.css */
 }

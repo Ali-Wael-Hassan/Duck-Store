@@ -5,9 +5,29 @@
 
 {% block style %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/AdminPanel/user-roles.css' %}">
 {% endblock style %}
+
+{% block navbar %}
+<nav class="header" id="main-nav">
+    <div class="container header__inner">
+        <div class="logo-group">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">menu_book</span>
+            </div>
+            <div class="logo-text">DUCK</div>
+        </div>
+
+        <div class="header__actions">
+            <a href="{% url 'user_profile' %}" class="avatar-link">
+                <img src="{% static 'assets/images/logo.png' %}" class="avatar-img">
+            </a>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
 
 {% block content %}
 <div class="layout-wrapper">
@@ -27,7 +47,8 @@
                 <h1>Users & Roles</h1>
                 <p style="color: #666; font-size: 0.9rem;">Manage team permissions and account security.</p>
             </div>
-            <a href="{% url 'add_user' %}" class="btn-save" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+            <a href="{% url 'add_user' %}" class="btn-save"
+                style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
                 <span class="material-symbols-outlined">person_add</span> Add New User
             </a>
         </header>
@@ -38,7 +59,7 @@
                 <a href="?role=admin" class="filter {% if current_filter == 'admin' %}active{% endif %}">Admins</a>
                 <a href="?role=user" class="filter {% if current_filter == 'user' %}active{% endif %}">Users</a>
             </div>
-            
+
             <form action="" method="GET" class="search-box" style="display: flex; gap: 10px;">
                 <input type="text" name="search" placeholder="Search by name or email..." value="{{ search_query }}">
                 <button type="submit" class="btn-outline">Search</button>
@@ -84,7 +105,8 @@
                             <td style="text-align: right;">
                                 <form action="{% url 'toggle_user_role' u.id %}" method="POST" style="display:inline;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-outline-sm" onclick="return confirm('Change role for {{ u.username }}?')">
+                                    <button type="submit" class="btn-outline-sm"
+                                        onclick="return confirm('Change role for {{ u.username }}?')">
                                         Toggle Role
                                     </button>
                                 </form>
@@ -107,11 +129,13 @@
                 </span>
                 <div class="page-controls">
                     {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}&role={{ current_filter }}" class="btn-outline">Previous</a>
+                    <a href="?page={{ page_obj.previous_page_number }}&role={{ current_filter }}"
+                        class="btn-outline">Previous</a>
                     {% endif %}
 
                     {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}&role={{ current_filter }}" class="btn-outline">Next</a>
+                    <a href="?page={{ page_obj.next_page_number }}&role={{ current_filter }}"
+                        class="btn-outline">Next</a>
                     {% endif %}
                 </div>
             </div>

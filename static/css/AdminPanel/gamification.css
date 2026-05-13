@@ -1,11 +1,11 @@
-main section {
+/* main section {
   margin-bottom: 24px;
 }
 
 .layout-wrapper {
   margin: 0 0;
   padding: 0 0;
-}
+} */
 
 .card {
     background-color: var(--card-bg);
