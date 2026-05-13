@@ -199,29 +199,6 @@ class BookDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         return redirect(self.success_url)
 
-class SalesRefundsView(View):
-    def get(self, request):
-        orders_qs = Order.objects.all().order_by('-date')
-        
-        refund_filter = Q(status__iexact='Refunded') | Q(status__iexact='Refund')
-        
-        gross_sales = orders_qs.exclude(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
-        total_refunds = orders_qs.filter(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
-        net_sales = gross_sales - total_refunds
-
-        paginator = Paginator(orders_qs, 5)
-        page_number = request.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
-
-        context = {
-            'stat_gross': gross_sales,
-            'stat_refunds': total_refunds,
-            'stat_net': net_sales,
-            'page_obj': page_obj,
-            'total_count': orders_qs.count(),
-        }
-        return render(request, 'AdminPanel/sales_refunds.html', context)
-
 class UsersRolesIndexView(View):
     def get(self, request):
         role_filter = request.GET.get('role', 'all').lower()
