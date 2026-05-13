@@ -282,9 +282,9 @@ class UsersRolesIndexView(View):
         user_list = User.objects.all().order_by('-date_joined')
 
         if role_filter == 'admin':
-            user_list = user_list.filter(is_staff=True)
+            user_list = user_list.filter(role='admin')
         elif role_filter == 'user':
-            user_list = user_list.filter(is_staff=False)
+            user_list = user_list.filter(role='user')
 
         if search_query:
             user_list = user_list.filter(
