@@ -39,13 +39,16 @@
                                name="category"
                                value="{{ genre.name }}"
                                class="filter-item__checkbox"
-                               onchange="this.form.submit()"
-                               {% if request.GET.category == genre.name %}checked{% endif %}>
+                               {% if genre.name in selected_categories %}checked{% endif %}>
 
                         <span class="filter-item__label">{{ genre.name }}</span>
                     </label>
                     {% endfor %}
                 </div>
+
+                <button type="submit" class="filter-apply-btn" style="margin-top:10px;">
+                    Apply Filters
+                </button>
             </div>
 
 
@@ -161,7 +164,7 @@
 
             {% if page_obj.has_previous %}
             <a class="pagination__btn"
-               href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
+               href="?page={{ page_obj.previous_page_number }}&{{ preserved_params }}">
                 ← Prev
             </a>
             {% endif %}
@@ -172,7 +175,7 @@
                         <span class="pagination__num active">{{ num }}</span>
                     {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                         <a class="pagination__num"
-                           href="?page={{ num }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
+                           href="?page={{ num }}&{{ preserved_params }}">
                             {{ num }}
                         </a>
                     {% endif %}
@@ -181,7 +184,7 @@
 
             {% if page_obj.has_next %}
             <a class="pagination__btn"
-               href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category|default:'' }}&minPrice={{ request.GET.minPrice|default:'' }}&maxPrice={{ request.GET.maxPrice|default:'' }}&sort={{ current_sort }}">
+               href="?page={{ page_obj.next_page_number }}&{{ preserved_params }}">
                 Next →
             </a>
             {% endif %}

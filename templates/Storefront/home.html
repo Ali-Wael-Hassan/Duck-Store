@@ -32,8 +32,8 @@
 
         <div class="featured-grid">
             {% for promo in featured_promos %}
-            <article class="featured-card {{ promo.promo_type }}"
-                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ promo.image }}');">
+            <article class="featured-card"
+                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% if promo.image %}{{ promo.image.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}');">
 
                 {% if promo.badge_label %}
                 <span class="badge">{{ promo.badge_label }}</span>
@@ -42,7 +42,7 @@
                 <h3>{{ promo.title }}</h3>
                 <p>{{ promo.description }}</p>
 
-                <a href="{% url 'store' %}?category={{ promo.promo_type }}">
+                <a href="{% url 'store' %}?category={{ promo.category.name|default:'' }}">
                     {{ promo.btn_text }}
                 </a>
 

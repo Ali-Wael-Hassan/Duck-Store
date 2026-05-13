@@ -42,7 +42,7 @@
                         {% endif %}
                     </td>
                     <td style="padding:12px;">{{ promo.title }}</td>
-                    <td style="padding:12px;">{{ promo.get_promo_type_display }}</td>
+                    <td style="padding:12px;">{{ promo.category.name|default:"—" }}</td>
                     <td style="padding:12px;">{{ promo.is_active|yesno:"Yes,No" }}</td>
                     <td style="padding:12px;">
                         <a href="{% url 'edit_featured_promo' promo.id %}" class="btn-sm">Edit</a>

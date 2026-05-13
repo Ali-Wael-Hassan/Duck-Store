@@ -5,12 +5,12 @@
     <div class="container header__inner">
 
         <!-- Logo -->
-        <div class="logo-group">
+        <a href="{% if user.is_authenticated and user.role == 'admin' %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="logo-group">
             <div class="logo-icon">
                 <span class="material-symbols-outlined">menu_book</span>
             </div>
             <div class="logo-text">DUCK</div>
-        </div>
+        </a>
 
         <!-- Navigation -->
         <div class="nav">

@@ -14,22 +14,7 @@
 
 
 {% block navbar %}
-<nav class="header" id="main-nav">
-    <div class="container header__inner">
-        <div class="logo-group">
-            <div class="logo-icon">
-                <span class="material-symbols-outlined">menu_book</span>
-            </div>
-            <div class="logo-text">DUCK</div>
-        </div>
-
-        <div class="header__actions">
-            <a href="{% url 'user_profile' %}" class="avatar-link">
-                <img src="{% static 'assets/images/logo.png' %}" class="avatar-img">
-            </a>
-        </div>
-    </div>
-</nav>
+    {% include "includes/navbar.html" %}
 {% endblock navbar %}
 
 

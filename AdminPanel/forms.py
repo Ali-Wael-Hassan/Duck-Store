@@ -72,17 +72,19 @@ class BookForm(forms.ModelForm):
 class FeaturedPromoForm(forms.ModelForm):
     class Meta:
         model = FeaturedPromo
-        fields = ['title', 'description', 'promo_type', 'badge_label', 'btn_text', 'image', 'is_active']
+        fields = ['title', 'description', 'category', 'badge_label', 'btn_text', 'image', 'is_active']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
+            'category': forms.Select(attrs={'class': 'combobox'}),
         }
 
 
 class CuratedConfigForm(forms.ModelForm):
     class Meta:
         model = CuratedConfig
-        fields = ['book']
+        fields = ['category', 'book']
         widgets = {
+            'category': forms.Select(attrs={'class': 'combobox'}),
             'book': forms.Select(attrs={'class': 'combobox'}),
         }
 
