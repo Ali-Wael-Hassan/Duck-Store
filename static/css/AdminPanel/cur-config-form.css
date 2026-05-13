@@ -1,0 +1,150 @@
+.form-main-content {
+    max-width: 850px;
+    margin: 40px auto;
+}
+
+/* Header styling */
+.inventory-header {
+    margin-bottom: 24px;
+}
+
+.inventory-header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.inventory-header p {
+    color: var(--text-muted);
+    font-size: var(--font-size-base);
+}
+
+/* Form Card Container */
+.book-form-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-main);
+    padding: var(--spacing-card);
+    margin-top: 20px;
+}
+
+/* Grid Layout for the form fields */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Handle Django's as_p output within the grid */
+.compact-form p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* Force specific fields to span full width */
+.compact-form p:has(textarea),
+.compact-form p:has(input[type="file"]),
+.compact-form p:has(select) {
+    grid-column: span 2;
+}
+
+.compact-form label {
+    font-size: var(--font-size-small);
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0; /* Reset global label margin */
+}
+
+/* Input overrides for consistency */
+.compact-form input, 
+.compact-form select, 
+.compact-form textarea {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 12px;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    width: 100% !important; /* Ensure it stays full width of the grid cell */
+    transition: border-color var(--transition-speed);
+}
+
+.compact-form input:focus,
+.compact-form select:focus,
+.compact-form textarea:focus {
+    border-color: var(--brand-primary);
+    outline: none;
+}
+
+/* Action section styling */
+.form-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* FIX: Using high specificity to override the global 'button' 
+   style from style.css which sets width: 100% 
+*/
+form.compact-form .form-actions-row button.btn-save {
+    width: auto; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0; 
+    padding: 12px 30px;
+    background-color: var(--brand-primary);
+    color: #000;
+    border: none;
+}
+
+form.compact-form .form-actions-row button.btn-save:hover {
+    background-color: var(--brand-primary-hover);
+    transform: translateY(-2px);
+}
+
+.btn-cancel-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: var(--font-size-small);
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.btn-cancel-link:hover {
+    color: var(--brand-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .compact-form p:has(textarea),
+    .compact-form p:has(input[type="file"]),
+    .compact-form p:has(select) {
+        grid-column: span 1;
+    }
+
+    .form-actions-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    form.compact-form .form-actions-row button.btn-save {
+        width: 100%;
+    }
+
+    .btn-cancel-link {
+        text-align: center;
+        padding: 10px;
+    }
+}

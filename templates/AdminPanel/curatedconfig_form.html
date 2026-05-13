@@ -7,6 +7,7 @@
 {% block style %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/AdminPanel/cur-config-form.css' %}">
 
 {% endblock style %}
 
@@ -17,14 +18,30 @@
 {% block content %}
 <div class="layout-wrapper">
     {% include "includes/sidebar.html" %}
-    <main class="dashboard-main" style="padding: 30px;">
-        <h1>{% if object %}Edit{% else %}Add{% endif %} Curated For You</h1>
-        <form method="post" style="max-width:600px;">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Save" class="btn-add">
-            <a href="{% url 'list_curated_configs' %}" class="btn-outline">Cancel</a>
-        </form>
+    <main class="dashboard-main">
+        <div class="form-main-content">
+            <header class="inventory-header">
+                <h1>{% if object %}Edit{% else %}Add{% endif %} Curated For You</h1>
+                <p>Configure the curated book selections for users.</p>
+            </header>
+            
+            <div class="book-form-card">
+                <form method="post" class="compact-form">
+                    {% csrf_token %}
+                    <div class="form-grid">
+                        {{ form.as_p }}
+                    </div>
+                    
+                    <div class="form-actions-row">
+                        <button type="submit" class="btn-save">
+                            <span class="material-symbols-outlined">save</span>
+                            Save Configuration
+                        </button>
+                        <a href="{% url 'list_curated_configs' %}" class="btn-cancel-link">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 </div>
 {% endblock content %}
