@@ -33,7 +33,7 @@
 <div class="layout-wrapper">
     {% include "includes/sidebar.html" %}
 
-    <main class>
+    <main>
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -45,10 +45,9 @@
         <header class="users-header">
             <div>
                 <h1>Users & Roles</h1>
-                <p style="color: #666; font-size: 0.9rem;">Manage team permissions and account security.</p>
+                <p class="text-secondary">Manage team permissions and account security.</p>
             </div>
-            <a href="{% url 'add_user' %}" class="btn-save"
-                style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+            <a href="{% url 'add_user' %}" class="btn-save btn-add-user">
                 <span class="material-symbols-outlined">person_add</span> Add New User
             </a>
         </header>
@@ -60,7 +59,7 @@
                 <a href="?role=user" class="filter {% if current_filter == 'user' %}active{% endif %}">Users</a>
             </div>
 
-            <form action="" method="GET" class="search-box" style="display: flex; gap: 10px;">
+            <form action="" method="GET" class="search-form">
                 <input type="text" name="search" placeholder="Search by name or email..." value="{{ search_query }}">
                 <button type="submit" class="btn-outline">Search</button>
             </form>
@@ -75,19 +74,19 @@
                             <th>Role</th>
                             <th>Status</th>
                             <th>Last Active</th>
-                            <th style="text-align: right;">Actions</th>
+                            <th class="text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for u in page_obj %}
                         <tr>
                             <td>
-                                <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="user-cell-wrapper">
                                     <img src="{% if u.avatar %}{{ u.avatar.url }}{% else %}{% static 'assets/users/guest.png' %}{% endif %}"
-                                        style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover;">
+                                        class="user-avatar">
                                     <div class="user-info">
-                                        <div style="font-weight: 600; color: #1a1a1a;">{{ u.username }}</div>
-                                        <div style="font-size: 0.8rem; color: #666;">{{ u.email }}</div>
+                                        <div class="user-name">{{ u.username }}</div>
+                                        <div class="subtext">{{ u.email }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -102,8 +101,8 @@
                                 </span>
                             </td>
                             <td>{{ u.last_login|date:"M d, Y"|default:"Never" }}</td>
-                            <td style="text-align: right;">
-                                <form action="{% url 'toggle_user_role' u.id %}" method="POST" style="display:inline;">
+                            <td class="text-right">
+                                <form action="{% url 'toggle_user_role' u.id %}" method="POST" class="inline-form">
                                     {% csrf_token %}
                                     <button type="submit" class="btn-outline-sm"
                                         onclick="return confirm('Change role for {{ u.username }}?')">
@@ -114,7 +113,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" style="text-align:center; padding: 3rem; color: #666;">
+                            <td colspan="5" class="text-center empty-state">
                                 No users found matching your criteria.
                             </td>
                         </tr>

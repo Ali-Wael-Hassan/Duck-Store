@@ -149,3 +149,69 @@ th {
     }
     /* Search box now inherits global input styles from style.css */
 }
+.text-secondary {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.subtext {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Header & Search Layout */
+.btn-add-user {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-form {
+    display: flex; 
+    gap: 10px;
+}
+
+/* User Cell Styling */
+.user-cell-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+/* Table Alignment & Empty States */
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.empty-state {
+    padding: 3rem;
+    color: #666;
+}
+
+/* Form & Actions */
+.inline-form {
+    display: inline;
+}
+
+/* Small variation for the toggle button if needed */
+.btn-outline-sm {
+    /* Inherit from .btn-outline and add specific small tweaks */
+    padding: 4px 12px;
+    font-size: 0.75rem;
+}
