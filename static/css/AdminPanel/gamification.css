@@ -46,6 +46,12 @@ main section {
     letter-spacing: 0.5px;
 }
 
+.tab .card.is-inactive::after {
+    content: 'INACTIVE';
+    background-color: rgba(141, 148, 165, 0.15); 
+    color: #8D94A5; 
+}
+
 /* Form elements inside cards */
 .card label {
     color: var(--text-muted);
