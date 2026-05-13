@@ -1,90 +1,115 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duck Library | Sales & Refunds</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="{% static 'css/component.css' %}">
-    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
-    <link rel="stylesheet" href="{% static 'css/Pages/sales_refunds.css' %}">
-</head>
-<body data-page="sales-refunds">
 
-    <nav class="header" id="main-nav">
-        <div class="container header__inner">
-            <div class="logo-group">
-                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
-                <div class="logo-text">DUCK</div>
+{% block title %}DUCK Library | Sales & Refunds{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'css/AdminPanel/sales_refunds.css' %}">
+{% endblock style %}
+
+{% block navbar %}
+<nav class="header" id="main-nav">
+    <div class="container header__inner">
+        <div class="logo-group">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">menu_book</span>
             </div>
-            <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
+            <div class="logo-text">DUCK</div>
+        </div>
+
+        <div class="header__actions">
+            <a href="{% url 'user_profile' %}" class="avatar-link">
+                <img src="{% static 'assets/images/logo.png' %}" class="avatar-img">
+            </a>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
+
+{% block content %}
+<div class="layout-wrapper">
+    <!-- SIDEBAR (now included properly) -->
+    {% include "includes/sidebar.html" %}
+
+    <main class="sales-main">
+        <div class="sales-header">
+            <h1>Sales & Refunds</h1>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <h4>Total Gross Sales</h4>
+                <p class="yellow" id="stat-gross">${{ stat_gross|floatformat:2 }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Total Refunds Issued</h4>
+                <p class="red" id="stat-refunds">-${{ stat_refunds|floatformat:2 }}</p>
+            </div>
+            <div class="stat-card">
+                <h4>Net Revenue</h4>
+                <p class="yellow" id="stat-net">${{ stat_net|floatformat:2 }}</p>
             </div>
         </div>
-    </nav>
 
-    <div class="layout-wrapper">
-        <aside>
-            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
-            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
-            <a href="users_roles.html"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
-            <a href="sales_refunds.html" class="active"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
-            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
-        </aside>
+        <div class="table-responsive">
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>BOOK</th>
+                        <th>CUSTOMER</th>
+                        <th>STATUS</th>
+                        <th>DATE</th>
+                        <th>AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-tbody">
+                    {% for order in page_obj %}
+                    <tr>
+                        <td data-label="BOOK">{{ order.book_title }}</td>
+                        <td data-label="CUSTOMER">{{ order.customer_name }}</td>
+                        <td data-label="STATUS">
+                            <span class="{% if 'Refund' in order.status %}refund{% else %}paid{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td data-label="DATE">{{ order.date|date:"Y-m-d" }}</td>
+                        <td data-label="AMOUNT" class="{% if 'Refund' in order.status %}red{% else %}yellow{% endif %}">
+                            {% if 'Refund' in order.status %}-{% endif %}${{ order.total|floatformat:2 }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem;">No transactions found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-        <main class="sales-main">
-            <div class="sales-header">
-                <h1>Sales & Refunds</h1>
+        <div class="pagination flex-between" id="sales-pagination">
+            <span class="subtext">
+                Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ total_count }} transactions
+            </span>
+            <div class="page-controls">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline">Previous</a>
+                {% else %}
+                <button class="btn-outline" disabled>Previous</button>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn-outline">Next</a>
+                {% else %}
+                <button class="btn-outline" disabled>Next</button>
+                {% endif %}
             </div>
+        </div>
+    </main>
+</div>
 
-            <div class="stats-row">
-                <div class="stat-card">
-                    <h4>Total Gross Sales</h4>
-                    <p class="yellow" id="stat-gross">$0.00</p>
-                </div>
-                <div class="stat-card">
-                    <h4>Total Refunds Issued</h4>
-                    <p class="red" id="stat-refunds">-$0.00</p>
-                </div>
-                <div class="stat-card">
-                    <h4>Net Revenue</h4>
-                    <p class="yellow" id="stat-net">$0.00</p>
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="sales-table">
-                    <thead>
-                        <tr>
-                            <th>BOOK</th>
-                            <th>CUSTOMER</th>
-                            <th>STATUS</th>
-                            <th>DATE</th>
-                            <th>AMOUNT</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sales-tbody">
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 2rem;">Loading transactions...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination flex-between" id="sales-pagination">
-                <span class="subtext">Showing 0-0 of 0 transactions</span>
-                <div class="page-controls">
-                    <button class="btn-outline" id="prev-page">Previous</button>
-                    <button class="btn-outline" id="next-page">Next</button>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script type="module" src="{% static 'js/main.js' %}"></script>
-</body>
-</html>
+{% endblock content %}

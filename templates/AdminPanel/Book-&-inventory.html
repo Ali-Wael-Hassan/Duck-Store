@@ -43,9 +43,9 @@
                     <p>Manage your global catalog and real-time stock levels.</p>
                 </div>
                 <div>
-                    <button class="btn-primary" id="add-book-btn">
+                    <a href="{% url 'add_book' %}" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                         <i class="fas fa-plus"></i> Add New Book
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
                     <tbody id="inventory-tbody">
-                        {% for item in page_obj %}
+                        {% for item in inventory_list %}
                         <tr>
                             <td>
                                 <div style="display:flex;align-items:center;gap:12px;">
@@ -95,9 +95,9 @@
                                 </span>
                             </td>
                             <td>
-                                <button class="btn-outline edit-btn" data-book-id="{{ item.book.id }}" style="padding:5px 10px;font-size:0.8rem;">
+                                <a href="{% url 'edit_book' item.book.id %}" class="btn-outline" style="text-decoration: none; padding: 5px 10px; font-size: 0.8rem;">
                                     Edit
-                                </button>
+                                </a>
                             </td>
                         </tr>
                         {% empty %}
@@ -108,17 +108,23 @@
             </div>
 
             <div class="pagination flex-between" id="inventory-pagination">
-                <span class="subtext">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books</span>
+                <span class="subtext">
+                    Showing {{ inventory_list.start_index }}-{{ inventory_list.end_index }} of {{ inventory_list.paginator.count }} books
+                </span>
+
                 <div class="page-controls">
-                    {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
+                    {# Previous Button #}
+                    {% if inventory_list.has_previous %}
+                        <a href="?page={{ inventory_list.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
                     {% else %}
-                    <button class="btn-outline" disabled>Previous</button>
+                        <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Previous</button>
                     {% endif %}
-                    {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
+
+                    {# Next Button #}
+                    {% if inventory_list.has_next %}
+                        <a href="?page={{ inventory_list.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
                     {% else %}
-                    <button class="btn-outline" disabled>Next</button>
+                        <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Next</button>
                     {% endif %}
                 </div>
             </div>

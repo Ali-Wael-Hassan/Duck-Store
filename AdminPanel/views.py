@@ -10,7 +10,7 @@ from django.db.models import Sum, Q
 
 import csv
 from .models import GamificationConfig, DashboardStat, SalesPerformance
-from .forms import GamificationConfigForm, BookForm
+from .forms import AddUserForm, GamificationConfigForm, BookForm
 from Storefront.models import Inventory, Order, Book
 
 User = get_user_model()
@@ -118,7 +118,7 @@ class ExportOrdersCSVView(View):
 class InventoryDashboardView(ListView):
     model = Inventory
     template_name = 'AdminPanel/Book-&-inventory.html'
-    context_object_name = 'page_obj'
+    context_object_name = 'inventory_list'
     paginate_by = 5
     ordering = ['-id']
 
@@ -127,7 +127,7 @@ class BookBaseView:
     model = Book
     form_class = BookForm
     template_name = 'AdminPanel/book_form.html'
-    success_url = reverse_lazy('inventory_dashboard')
+    success_url = reverse_lazy('inventory')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -142,12 +142,17 @@ class BookCreateView(BookBaseView, CreateView):
         
         # 2. Get the stock value from the cleaned form data
         stock_value = form.cleaned_data.get('stock')
-        
+        isbn_value = form.cleaned_data.get('isbn')
+        sku_value = form.cleaned_data.get('sku')
         # 3. Create or update the Inventory record for this book
         # Assuming Inventory has a field named 'book' that links to Book
         Inventory.objects.update_or_create(
             book=self.object, 
-            defaults={'stock': stock_value}
+            defaults={
+                'stock': stock_value,
+                'isbn': isbn_value,
+                'sku': sku_value
+            }
         )
         
         return response
@@ -160,23 +165,30 @@ class BookUpdateView(BookBaseView, UpdateView):
         inventory_item = Inventory.objects.filter(book=self.get_object()).first()
         if inventory_item:
             initial['stock'] = inventory_item.stock
+            initial['isbn'] = inventory_item.isbn
+            initial['sku'] = inventory_item.sku
         return initial
 
     def form_valid(self, form):
         response = super().form_valid(form)
         stock_value = form.cleaned_data.get('stock')
-        
+        isbn_value = form.cleaned_data.get('isbn')
+        sku_value = form.cleaned_data.get('sku')
         # Update the related inventory
         Inventory.objects.update_or_create(
             book=self.object,
-            defaults={'stock': stock_value}
+            defaults={
+                'stock': stock_value,
+                'isbn': isbn_value,
+                'sku': sku_value
+            }
         )
         return response
 
 
 class BookDeleteView(DeleteView):
     model = Book
-    success_url = reverse_lazy('inventory_dashboard')
+    success_url = reverse_lazy('inventory')
 
     def post(self, request, *args, **kwargs):
         book = self.get_object()
@@ -186,13 +198,12 @@ class BookDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         return redirect(self.success_url)
 
-
 class SalesRefundsView(View):
     def get(self, request):
         orders_qs = Order.objects.all().order_by('-date')
-
+        
         refund_filter = Q(status__iexact='Refunded') | Q(status__iexact='Refund')
-
+        
         gross_sales = orders_qs.exclude(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
         total_refunds = orders_qs.filter(refund_filter).aggregate(Sum('total'))['total__sum'] or 0
         net_sales = gross_sales - total_refunds
@@ -210,7 +221,6 @@ class SalesRefundsView(View):
         }
         return render(request, 'AdminPanel/sales_refunds.html', context)
 
-
 class UsersRolesIndexView(View):
     def get(self, request):
         role_filter = request.GET.get('role', 'all').lower()
@@ -225,7 +235,7 @@ class UsersRolesIndexView(View):
 
         if search_query:
             user_list = user_list.filter(
-                Q(username__icontains=search_query) |
+                Q(username__icontains=search_query) | 
                 Q(email__icontains=search_query) |
                 Q(first_name__icontains=search_query) |
                 Q(last_name__icontains=search_query)
@@ -240,40 +250,34 @@ class UsersRolesIndexView(View):
             'current_filter': role_filter,
             'search_query': search_query,
             'total_count': user_list.count(),
+            'form': AddUserForm(),  # Add this line
         }
         return render(request, 'AdminPanel/users_roles.html', context)
 
-
 class AddUserView(View):
+    def get(self, request):
+        form = AddUserForm()
+        return render(request, 'AdminPanel/user_form.html', {'form': form})
+
     def post(self, request):
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        role = request.POST.get('role')
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
-        else:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            if role == 'admin':
-                user.is_staff = True
-                user.save()
-            messages.success(request, f"User {username} created successfully!")
-
-        return redirect('users_roles_index')
-
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"User {form.cleaned_data['username']} created successfully!")
+            return redirect('roles')
+        return render(request, 'AdminPanel/user_form.html', {'form': form})
 
 class ToggleUserRoleView(View):
     def post(self, request, user_id):
         target_user = get_object_or_404(User, id=user_id)
-
+        
         if target_user == request.user:
             messages.error(request, "You cannot change your own role to prevent lockout.")
         else:
-            target_user.is_staff = not target_user.is_staff
+            target_user.role = "admin" if target_user.role == "User" else "User"
             target_user.save()
-
-            new_role = "Admin" if target_user.is_staff else "User"
+            
+            new_role = "admin" if target_user.role == "admin" else "User"
             messages.success(request, f"Updated {target_user.username} to {new_role}.")
-
-        return redirect('users_roles_index')
+            
+        return redirect('roles')

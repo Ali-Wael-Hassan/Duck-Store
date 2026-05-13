@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | {% if target_user %}Edit{% else %}Add{% endif %} User{% endblock title %}
+
+{% block style %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/AdminPanel/book_form.css' %}">
+{% endblock style %}
+
+{% block content %}
+    <div class="layout-wrapper">
+        <main class="form-main-content">
+            
+            <div class="inventory-header">
+                <div>
+                    <h1>{% if target_user %}Edit User Account{% else %}Add New User{% endif %}</h1>
+                    <p>
+                        {% if target_user %}
+                        Update account details and permissions for <strong>{{ target_user.username }}</strong>.
+                        {% else %}
+                        Create a new account and assign system roles.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="book-form-card">
+                <form method="POST" class="compact-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>{{ form.username.label }}</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}<span class="error">{{ form.username.errors.0 }}</span>{% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label>{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<span class="error">{{ form.email.errors.0 }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>{{ form.password.label }}</label>
+                                {{ form.password }}
+                                {% if not target_user %}
+                                    <small style="color: #666;">Set a secure initial password.</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label>{{ form.role.label }}</label>
+                                {{ form.role }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions-row" style="margin-top: 2rem;">
+                        <button type="submit" class="btn-save">
+                            <span class="material-symbols-outlined">person_check</span> 
+                            {% if target_user %}Update User{% else %}Create User Account{% endif %}
+                        </button>
+                        
+                        <a href="{% url 'roles' %}" class="btn-cancel-link">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+{% endblock content %}
