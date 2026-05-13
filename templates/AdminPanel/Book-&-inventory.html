@@ -4,11 +4,12 @@
 {% block title %}DUCK Library | Books & Inventory{% endblock title %}
 
 {% block style %}
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/AdminPanel/Book-&-inventory.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/AdminPanel/Book-&-inventory.css' %}">
 {% endblock style %}
 
 
@@ -32,96 +33,106 @@
 {% endblock navbar %}
 
 {% block content %}
-    <div class="layout-wrapper">
-        <!-- SIDEBAR (now included properly) -->
-        {% include "includes/sidebar.html" %}
+<div class="layout-wrapper">
+    <!-- SIDEBAR (now included properly) -->
+    {% include "includes/sidebar.html" %}
 
-        <main class="inventory-main">
-            <div class="inventory-header">
-                <div>
-                    <h1>Books & Inventory</h1>
-                    <p>Manage your global catalog and real-time stock levels.</p>
-                </div>
-                <div>
-                    <button class="btn-primary" id="add-book-btn">
-                        <i class="fas fa-plus"></i> Add New Book
-                    </button>
-                </div>
+    <main class="inventory-main">
+        <div class="inventory-header">
+            <div>
+                <h1>Books & Inventory</h1>
+                <p>Manage your global catalog and real-time stock levels.</p>
             </div>
+            <div>
+                <a href="{% url 'add_book' %}" class="btn-add">
+                    <i class="fas fa-plus"></i> Add New Book
+                </a>
+            </div>
+        </div>
 
-            <div class="table-responsive">
-                <table class="inventory-table">
-                    <thead>
-                        <tr>
-                            <th>Book Title & Author</th>
-                            <th>ISBN-13</th>
-                            <th>SKU</th>
-                            <th>Stock Level</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-tbody">
-                        {% for item in page_obj %}
-                        <tr>
-                            <td>
-                                <div style="display:flex;align-items:center;gap:12px;">
-                                    {% if item.book.cover_img %}
-                                    <img src="{{ item.book.cover_img.url }}" alt="{{ item.book.title }}" style="width:40px;height:55px;object-fit:cover;border-radius:3px;">
-                                    {% else %}
-                                    <div style="width:40px;height:55px;background:#e9ecef;border-radius:3px;"></div>
-                                    {% endif %}
-                                    <div>
-                                        <div style="font-weight:600;">{{ item.book.title }}</div>
-                                        <div style="font-size:0.85rem;color:#888;">{{ item.book.author }}</div>
-                                        <div style="font-size:0.8rem;color:#aaa;">{{ item.book.genre.name }}</div>
+        <div class="table-responsive">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Book Title & Author</th>
+                        <th>ISBN-13</th>
+                        <th>SKU</th>
+                        <th>Stock Level</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-tbody">
+                    {% for item in inventory_list %}
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                {% if item.book.cover_img %}
+                                <img src="{{ item.book.cover_img.url }}" alt="{{ item.book.title }}"
+                                    style="width:40px;height:55px;object-fit:cover;border-radius:3px;">
+                                {% else %}
+                                <div style="width:40px;height:55px;background:#e9ecef;border-radius:3px;"></div>
+                                {% endif %}
+                                <div>
+                                    <div style="font-weight:600;">{{ item.book.title }}</div>
+                                    <div style="font-size:0.85rem;color:#888;">{{ item.book.author }}</div>
+                                    <div style="font-size:0.8rem;color:#aaa;">{{ item.book.genre.name }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="font-family:monospace;">{{ item.isbn }}</td>
+                        <td style="font-family:monospace;">{{ item.sku }}</td>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <div style="flex:1;height:6px;background:#e9ecef;border-radius:3px;">
+                                    <div
+                                        style="width:{{ item.stock_percent }}%;height:100%;background:{% if item.stock == 0 %}#ef4444{% elif item.stock_percent < 20 %}#f59e0b{% else %}#10b981{% endif %};border-radius:3px;">
                                     </div>
                                 </div>
-                            </td>
-                            <td style="font-family:monospace;">{{ item.isbn }}</td>
-                            <td style="font-family:monospace;">{{ item.sku }}</td>
-                            <td>
-                                <div style="display:flex;align-items:center;gap:8px;">
-                                    <div style="flex:1;height:6px;background:#e9ecef;border-radius:3px;">
-                                        <div style="width:{{ item.stock_percent }}%;height:100%;background:{% if item.stock == 0 %}#ef4444{% elif item.stock_percent < 20 %}#f59e0b{% else %}#10b981{% endif %};border-radius:3px;"></div>
-                                    </div>
-                                    <span style="font-weight:600;">{{ item.stock }}/{{ item.max_stock }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span style="padding:3px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;
+                                <span style="font-weight:600;">{{ item.stock }}/{{ item.max_stock }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span
+                                style="padding:3px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;
                                     background:{% if item.get_status == 'In Stock' %}#d1fae5;color:#065f46{% elif item.get_status == 'Low Stock' %}#fef3c7;color:#92400e{% else %}#fee2e2;color:#991b1b{% endif %};">
-                                    {{ item.get_status }}
-                                </span>
-                            </td>
-                            <td>
-                                <button class="btn-outline edit-btn" data-book-id="{{ item.book.id }}" style="padding:5px 10px;font-size:0.8rem;">
-                                    Edit
-                                </button>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr><td colspan="6" style="text-align:center;padding:30px;color:#888;">No inventory found.</td></tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                {{ item.get_status }}
+                            </span>
+                        </td>
+                        <td style="text-align: right; width: 100px;">
+                            <a href="{% url 'edit_book' item.book.id %}" class="btn-outline">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;padding:30px;color:#888;">No inventory found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-            <div class="pagination flex-between" id="inventory-pagination">
-                <span class="subtext">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books</span>
-                <div class="page-controls">
-                    {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
-                    {% else %}
-                    <button class="btn-outline" disabled>Previous</button>
-                    {% endif %}
-                    {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
-                    {% else %}
-                    <button class="btn-outline" disabled>Next</button>
-                    {% endif %}
-                </div>
+        <div class="pagination flex-between" id="inventory-pagination">
+            <span class="subtext">
+                Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} books
+            </span>
+
+            <div class="page-controls">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline" style="text-decoration:none;">Previous</a>
+                {% else %}
+                <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Previous</button>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn-outline" style="text-decoration:none;">Next</a>
+                {% else %}
+                <button class="btn-outline" disabled style="opacity: 0.5; cursor: not-allowed;">Next</button>
+                {% endif %}
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 {% endblock content %}

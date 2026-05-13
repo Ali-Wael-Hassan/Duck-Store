@@ -5,7 +5,8 @@
 
 {% block style %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
 
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/AdminPanel/dashboard.css' %}">
@@ -73,8 +74,10 @@
                     </div>
 
                     <div class="toggle-group">
-                        <a href="?period=weekly" class="toggle-btn {% if current_period != 'monthly' %}active{% endif %}">Week</a>
-                        <a href="?period=monthly" class="toggle-btn {% if current_period == 'monthly' %}active{% endif %}">Month</a>
+                        <a href="?period=weekly"
+                            class="toggle-btn {% if current_period != 'monthly' %}active{% endif %}">Week</a>
+                        <a href="?period=monthly"
+                            class="toggle-btn {% if current_period == 'monthly' %}active{% endif %}">Month</a>
                     </div>
                 </div>
 
@@ -98,9 +101,13 @@
 
                 <div class="book-list" id="trending-books-list">
                     {% for book in trending_books %}
-                    <div class="book-item flex-between" style="padding: 10px 0; border-bottom: 1px solid #eee;">
-                        <span>{{ book.title }}</span>
-                        <span class="badge">{{ book.sales }} sold</span>
+                    <div class="book-item">
+                        <img src="{{ book.cover_image_url }}" alt="cover">
+                        <div class="book-details">
+                            <span class="book-title">{{ book.title }}</span>
+                            <span class="book-meta">{{ book.genre }} • {{ book.sales }} sales</span>
+                        </div>
+                        <span class="book-price">${{ book.price }}</span>
                     </div>
                     {% empty %}
                     <p class="subtext">No trending books.</p>
@@ -111,7 +118,7 @@
             </div>
 
 
-            <div class="panel-card lg-col-span-2">
+            <div class="panel-card lg-col-span-2" id="transactions-panel">
 
                 <div class="panel-header flex-between">
                     <h3>Recent Transactions</h3>
@@ -142,12 +149,13 @@
                                 <td>{{ order.customer_name|default:"Guest" }}</td>
                                 <td>{{ order.date|date:"M d, Y" }}</td>
                                 <td>${{ order.total_amount|default:"0.00" }}</td>
-                                <td><span class="status-badge">{{ order.status }}</span></td>
+                                <td><span class="status-badge {{ order.status|lower }}">{{ order.status }}</span></td>
                                 <td>
                                     <form action="{% url 'delete_order' order.id %}" method="post"
-                                          onsubmit="return confirm('Delete this order?');">
+                                        onsubmit="return confirm('Delete this order?');">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn-outline" style="color: red; border-color: red;">
+                                        <button type="submit" class="btn-outline"
+                                            style="color: red; border-color: red;">
                                             <span class="material-symbols-outlined">delete</span>
                                         </button>
                                     </form>
@@ -171,15 +179,11 @@
 
                     <div class="page-controls">
                         {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}" class="btn-outline">Previous</a>
-                        {% else %}
-                        <button class="btn-outline" disabled>Previous</button>
+                        <a href="?page={{ page_obj.previous_page_number }}&period={{ current_period }}#transactions-panel" class="btn-outline">Previous</a>
                         {% endif %}
 
                         {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}" class="btn-outline active">Next</a>
-                        {% else %}
-                        <button class="btn-outline" disabled>Next</button>
+                        <a href="?page={{ page_obj.next_page_number }}&period={{ current_period }}#transactions-panel" class="btn-outline active">Next</a>
                         {% endif %}
                     </div>
                     {% endif %}

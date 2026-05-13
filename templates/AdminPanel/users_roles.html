@@ -1,147 +1,144 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duck Library | Users & Roles</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <link rel="stylesheet" href="{% static 'css/component.css' %}">
-    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
-    <link rel="stylesheet" href="{% static 'css/Pages/user-roles.css' %}">
-</head>
-<body data-page="users-roles">
+{% block title %}DUCK Library | Users & Roles{% endblock title %}
 
-    <nav class="header" id="main-nav">
-        <div class="container header__inner">
-            <div class="logo-group">
-                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
-                <div class="logo-text">DUCK</div>
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/AdminPanel/user-roles.css' %}">
+{% endblock style %}
+
+{% block navbar %}
+<nav class="header" id="main-nav">
+    <div class="container header__inner">
+        <div class="logo-group">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">menu_book</span>
             </div>
-            <div class="header__actions">
-                <a href="user_profile.html" class="avatar-link"><img src="#" class="avatar-img"></a>
-            </div>
+            <div class="logo-text">DUCK</div>
         </div>
-    </nav>
 
-    <div class="layout-wrapper">
-        <aside>
-            <a href="dashboard.html"><span class="material-symbols-outlined">bar_chart</span> Dashboard</a>
-            <a href="Book-&-inventory.html"><span class="material-symbols-outlined">inventory_2</span> Books & Inventory</a>
-            <a href="users_roles.html" class="active"><span class="material-symbols-outlined">groups</span> Users & Roles</a>
-            <a href="sales_refunds.html"><span class="material-symbols-outlined">payments</span> Sales & Refunds</a>
-            <a href="Gamification_Admen.html"><span class="material-symbols-outlined"> trophy </span> Gamification</a>
-        </aside>
+        <div class="header__actions">
+            <a href="{% url 'user_profile' %}" class="avatar-link">
+                <img src="{% static 'assets/images/logo.png' %}" class="avatar-img">
+            </a>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
 
-        <main class="users-main">
-            <header class="users-header">
+{% block content %}
+<div class="layout-wrapper">
+    {% include "includes/sidebar.html" %}
+
+    <main>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <header class="users-header">
+            <div>
                 <h1>Users & Roles</h1>
-                <button class="add" id="open-add-modal">
-                    <span class="material-symbols-outlined">person_add</span> Add User
-                </button>
-            </header>
+                <p class="text-secondary">Manage team permissions and account security.</p>
+            </div>
+            <a href="{% url 'add_user' %}" class="btn-save btn-add-user">
+                <span class="material-symbols-outlined">person_add</span> Add New User
+            </a>
+        </header>
 
-            <div class="actions">
-                <div class="role-filter" id="role-filters">
-                    <button class="filter active" data-role="all">All Roles</button>
-                    <button class="filter" data-role="admin">Admin</button>
-                    <button class="filter" data-role="user">User</button>
-                </div>
+        <div class="actions">
+            <div class="role-filter">
+                <a href="?role=all" class="filter {% if current_filter == 'all' %}active{% endif %}">All Roles</a>
+                <a href="?role=admin" class="filter {% if current_filter == 'admin' %}active{% endif %}">Admins</a>
+                <a href="?role=user" class="filter {% if current_filter == 'user' %}active{% endif %}">Users</a>
             </div>
 
-            <div class="table-card">
-                <div class="table-responsive">
-                    <table id="users-table">
-                        <thead>
-                            <tr>
-                                <th>USER</th>
-                                <th>ROLE</th>
-                                <th>STATUS</th>
-                                <th>LAST ACTIVE</th>
-                                <th style="text-align: right;">ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-tbody">
-                            <tr>
-                                <td colspan="5" class="loading-cell">
-                                    <span class="material-symbols-outlined spin">autorenew</span> Loading users...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <form action="" method="GET" class="search-form">
+                <input type="text" name="search" placeholder="Search by name or email..." value="{{ search_query }}">
+                <button type="submit" class="btn-outline">Search</button>
+            </form>
+        </div>
 
-                <div class="pagination">
-                    <span class="subtext" id="pagination-info">Showing 0-0 of 0 users</span>
-                    <div class="page-controls">
-                        <button class="btn-outline" id="prev-page" disabled>Previous</button>
-                        <button class="btn-outline" id="next-page" disabled>Next</button>
-                    </div>
-                </div>
-            </div>
-
-            <hr class="section-divider">
-
-            <h3>Permissions Matrix Preview</h3>
+        <div class="table-card">
             <div class="table-responsive">
-                <table class="matrix">
+                <table>
                     <thead>
                         <tr>
-                            <th>Resource</th>
-                            <th>Admin</th>
-                            <th>User</th>
+                            <th>User Details</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Last Active</th>
+                            <th class="text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for u in page_obj %}
                         <tr>
-                            <td>Inventory Catalog</td>
-                            <td><div class="circle active"></div></td>
-                            <td><div class="circle"></div></td>
+                            <td>
+                                <div class="user-cell-wrapper">
+                                    <img src="{% if u.avatar %}{{ u.avatar.url }}{% else %}{% static 'assets/users/guest.png' %}{% endif %}"
+                                        class="user-avatar">
+                                    <div class="user-info">
+                                        <div class="user-name">{{ u.username }}</div>
+                                        <div class="subtext">{{ u.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="role {% if u.role == 'admin' %}admin{% else %}user{% endif %}">
+                                    {% if u.role == "admin" %}Admin{% else %}User{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status {% if u.is_active %}active-status{% else %}offline{% endif %}">
+                                    {% if u.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </td>
+                            <td>{{ u.last_login|date:"M d, Y"|default:"Never" }}</td>
+                            <td class="text-right">
+                                <form action="{% url 'toggle_user_role' u.id %}" method="POST" class="inline-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-outline-sm"
+                                        onclick="return confirm('Change role for {{ u.username }}?')">
+                                        Toggle Role
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
+                        {% empty %}
                         <tr>
-                            <td>User Profile</td>
-                            <td><div class="circle active"></div></td>
-                            <td><div class="circle"></div></td>
+                            <td colspan="5" class="text-center empty-state">
+                                No users found matching your criteria.
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Purchase Records</td>
-                            <td><div class="circle active"></div></td>
-                            <td><div class="circle active"></div></td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
-        </main>
-    </div>
 
-    <div class="modal" id="add-user-modal">
-        <div class="modal-content">
-            <button class="close-modal"><span class="material-symbols-outlined">close</span></button>
-            <h2>Add New User</h2>
-            <form id="add-user-form">
-                <label>Name</label>
-                <input type="text" id="add-user-name" placeholder="Full Name" required>
-                
-                <label>Email</label>
-                <input type="email" id="add-user-email" placeholder="email@gmail.com" required>
-                
-                <label>Role</label>
-                <select id="add-user-role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-                
-                <div class="modal-actions">
-                    <button type="button" class="button-secondary close-modal">Cancel</button>
-                    <button type="submit" class="primary">Create User</button>
+            <div class="pagination">
+                <span class="subtext">
+                    Showing <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong> of {{ total_count }}
+                </span>
+                <div class="page-controls">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}&role={{ current_filter }}"
+                        class="btn-outline">Previous</a>
+                    {% endif %}
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&role={{ current_filter }}"
+                        class="btn-outline">Next</a>
+                    {% endif %}
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-
-    <script type="module" src="{% static 'js/main.js' %}"></script>
-</body>
-</html>
+    </main>
+</div>
+{% endblock content %}
