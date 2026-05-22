@@ -1,10 +1,12 @@
 from django.db import models
+
+from django.db import models
 from django.conf import settings
-from Storefront.models import Genre
-from Storefront.models import FeaturedPromo, CuratedConfig
+# from Storefront.models import Genre, Book
+# from Storefront.models import FeaturedPromo, CuratedConfig
 
-# GAMIFICATION & REWARDS
-
+    
+    
 class Badge(models.Model):
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=10)
@@ -78,10 +80,32 @@ class GamificationConfig(models.Model):
     review_base = models.IntegerField(default=25)
     review_bonus = models.IntegerField(default=50)
     review_min_char = models.IntegerField(default=100)
-    purchase_rate = models.FloatField(default=2.0)
-    purchase_max = models.IntegerField(default=500)
+    borrow_rate = models.FloatField(default=2.0, help_text="Points per $1 of book price for borrowing")
+    borrow_max_points = models.IntegerField(default=500, help_text="Max points per borrow transaction")
     signup_bonus = models.IntegerField(default=50)
+    borrow_limit = models.IntegerField(default=5, help_text="Max books a user can borrow at once")
+    borrow_duration_days = models.IntegerField(default=14, help_text="Borrow duration in days")
 
     class Meta:
         verbose_name = "Gamification Configuration"
 
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+class Order(models.Model):
+    id = models.CharField(max_length=20, primary_key=True)
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer_name = models.CharField(max_length=150)
+    
+    book = models.ForeignKey(
+        'Storefront.Book', 
+        on_delete=models.CASCADE, 
+        related_name='admin_orders'
+    )
+    
+    book_title = models.CharField(max_length=255)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20)
+    date = models.DateField()

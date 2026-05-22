@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | Profile{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/UserAccount/user-profile-style.css' %}">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<main class="dashboard-content">
+
+    {% csrf_token %}
+
+    <!-- PROFILE CARD -->
+    <section class="profile-card-container">
+
+        <header class="profile-card-header">
+            <div class="header-text">
+                <h2 class="section-title">Profile Information</h2>
+                <p class="section-subtitle">Basic details for your public identification.</p>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'logout' %}" class="btn-logout" onclick="return confirm('Log out?')">Logout</a>
+            </div>
+        </header>
+
+        <div class="profile-card-body">
+
+            <div class="profile-avatar-column">
+                <div class="avatar-relative">
+
+                    <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/images/logo.png' %}{% endif %}"
+                         id="user-avatar"
+                         class="user-avatar-img">
+
+                    <label for="avatar-upload" class="avatar-upload-label">
+                        <span class="camera-icon">📷</span>
+                        <input type="file" name="avatar" id="avatar-upload" hidden accept="image/*" data-upload-url="{% url 'update_avatar' %}">
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="profile-details-grid">
+
+                <div class="detail-item">
+                    <span class="detail-label">FULL NAME</span>
+                    <p class="detail-value">{{ user.name }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">EMAIL ADDRESS</span>
+                    <p class="detail-value">{{ user.email }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">USERNAME</span>
+                    <p class="detail-value">@{{ user.username }}</p>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">MEMBER SINCE</span>
+                    <p class="detail-value">{{ user.date_joined|date:"M d, Y" }}</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- PAGE INTRO -->
+    <header class="page-intro">
+
+        <h1 class="page-title">Achievements & Badges</h1>
+
+        <p class="page-description">
+            Track your literary milestones and unlock exclusive rewards as you explore the world of books.
+        </p>
+
+        <div class="action-buttons">
+            <a href="{% url 'community' %}" class="btn-primary">
+                View Leaderboard
+            </a>
+        </div>
+
+    </header>
+
+
+    <!-- STATS -->
+    <section class="stats-overview">
+
+        <article class="stat-card">
+            <h2>Total Points</h2>
+            <p>{{ user.points }}</p>
+        </article>
+
+        <article class="stat-card">
+            <h2>Global Rank</h2>
+            <p>#{{ global_rank }}</p>
+            <p>{{ tier }} Tier</p>
+        </article>
+
+        <article class="stat-card">
+            <h2>Total Books Read</h2>
+            <p>{{ user.readings }}</p>
+        </article>
+
+    </section>
+
+
+
+
+</main>
+
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'JS/profile.js' %}"></script>
+{% endblock scripts %}

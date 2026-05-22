@@ -1,0 +1,253 @@
+.content-area {
+    flex: 1;
+    padding: 40px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.add-book-btn {
+    background: var(--text-link);
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tabs {
+    display: flex;
+    gap: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.tab-link {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 10px 0;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.tab-link.active {
+    color: var(--text-link);
+    border-bottom: 2px solid var(--text-link);
+}
+
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+/* --- Book Card Styling --- */
+.book-card {
+    background: var(--nav-color);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--brand-primary);
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: #222;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rental-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--brand-primary);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.book-details {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: var(--text-main);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.author {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+}
+
+.due-date {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    margin-top: auto;
+}
+
+.due-date.overdue {
+    color: #ff4d4d;
+}
+
+/* --- Pagination Styling --- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0 1rem;
+    gap: 1.5rem;
+}
+
+.pagination__btn {
+    text-decoration: none;
+    background: var(--input-bg);
+    color: var(--brand-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem 1.4rem;
+    border-radius: var(--radius-input);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination__btn:hover {
+    background: var(--brand-primary);
+    color: #0a0c12;
+    border-color: var(--brand-primary);
+}
+
+.pagination__numbers {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* --- Empty State --- */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state .material-symbols-outlined {
+    font-size: 4rem;
+    margin-bottom: 15px;
+    opacity: 0.3;
+}
+
+.empty-state-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: var(--brand-primary);
+    color: #000;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .content-area {
+        padding: 20px;
+    }
+
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 20px;
+    }
+
+    .book-details {
+        padding: 12px;
+    }
+
+    .book-details h3 {
+        font-size: 0.9rem;
+    }
+
+    .author {
+        font-size: 0.75rem;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-area {
+        padding: 15px;
+    }
+
+    .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+
+    .image-container {
+        aspect-ratio: 2 / 2.8;
+    }
+
+    .rental-tag {
+        font-size: 0.5rem;
+        padding: 2px 6px;
+    }
+
+    .book-details {
+        padding: 8px;
+    }
+
+    .book-details h3 {
+        font-size: 0.8rem;
+    }
+
+    .author {
+        font-size: 0.7rem;
+        margin-bottom: 8px;
+    }
+}

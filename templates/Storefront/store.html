@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | Book Marketplace{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/Storefront/store.css' %}">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<div class="layout-wrapper">
+
+    <!-- ================= FILTERS ================= -->
+    <aside class="store-filters">
+
+        <form id="filter-form" method="GET" action="{% url 'store' %}">
+
+            <!-- CATEGORIES -->
+            <div class="filter-group">
+                <h3 class="filter-group__title">
+                    <span class="material-symbols-outlined">category</span>
+                    CATEGORIES
+                </h3>
+
+                <div id="genre-filters">
+                    {% for genre in genres %}
+                    <label class="filter-item">
+                        <input type="checkbox"
+                               name="category"
+                               value="{{ genre.name }}"
+                               class="filter-item__checkbox"
+                               {% if genre.name in selected_categories %}checked{% endif %}>
+
+                        <span class="filter-item__label">{{ genre.name }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="filter-apply-btn" style="margin-top:10px;">
+                    Apply Filters
+                </button>
+            </div>
+
+
+            <!-- PRICE -->
+            <div class="filter-group">
+                <h3 class="filter-group__title">
+                    <span class="material-symbols-outlined">payments</span>
+                    PRICE RANGE
+                </h3>
+
+                <div class="price-inputs">
+                    <input type="number" name="minPrice" id="min-price"
+                           value="{{ request.GET.minPrice|default:0 }}">
+
+                    <span>to</span>
+
+                    <input type="number" name="maxPrice" id="max-price"
+                           value="{{ request.GET.maxPrice|default:20000 }}">
+                </div>
+
+                <div class="price-range">
+                    <input type="range"
+                           id="price-slider"
+                           min="0" max="20000"
+                           value="{{ request.GET.maxPrice|default:20000 }}">
+
+                    <div class="price-range__display">
+                        Max: <strong><span id="price-limit">{{ request.GET.maxPrice|default:20000 }}</span> pts</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="filter-apply-btn">
+                    Apply Price
+                </button>
+            </div>
+
+            <input type="hidden" name="sort" id="sort-input" value="{{ current_sort }}">
+
+        </form>
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+    <main class="store-main">
+
+        <!-- HEADER -->
+        <div class="catalog__header">
+            <div class="catalog__controls">
+
+                <span class="results-meta">
+                    Showing
+                    <strong>{{ page_obj.start_index }}-{{ page_obj.end_index }}</strong>
+                    of
+                    <strong>{{ page_obj.paginator.count }}</strong>
+                </span>
+
+
+                <!-- SORT DROPDOWN (PRESERVED) -->
+                <div class="sort-by-container">
+
+                    <div class="sort-by" id="sort-trigger">
+                        <span>Sort by:</span>
+                        <strong>{{ current_sort|title }}</strong>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+
+                    <div class="sort-popup" id="sort-popup">
+                        <div class="sort-option" onclick="applySort('popularity')">Popularity</div>
+                        <div class="sort-option" onclick="applySort('price-low')">Price: Low to High</div>
+                        <div class="sort-option" onclick="applySort('price-high')">Price: High to Low</div>
+                        <div class="sort-option" onclick="applySort('title')">Title (A-Z)</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- BOOK GRID -->
+        <div class="book-grid">
+
+            {% for book in books %}
+            <a href="{% url 'book_detail' book.id %}" class="book-card">
+
+                <div class="book-card__image-container">
+                    {% if book.cover_img %}
+                        <img src="{{ book.cover_img.url }}" class="book-card__image">
+                    {% else %}
+                        <img src="{% static 'img/no-cover.png' %}" class="book-card__image">
+                    {% endif %}
+                </div>
+
+                <div class="book-card__body">
+                    <p class="book-card__genre">{{ book.genre.name }}</p>
+                    <h4 class="book-card__title">{{ book.title }}</h4>
+
+                    <div class="book-card__footer">
+                        <span class="price-value">{{ book.price }} pts</span>
+                    </div>
+                </div>
+
+            </a>
+            {% empty %}
+                <div class="no-results">No books found matching your criteria.</div>
+            {% endfor %}
+
+        </div>
+
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+
+            {% if page_obj.has_previous %}
+            <a class="pagination__btn"
+               href="?page={{ page_obj.previous_page_number }}&{{ preserved_params }}">
+                ← Prev
+            </a>
+            {% endif %}
+
+            <div class="pagination__numbers">
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="pagination__num active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class="pagination__num"
+                           href="?page={{ num }}&{{ preserved_params }}">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+            <a class="pagination__btn"
+               href="?page={{ page_obj.next_page_number }}&{{ preserved_params }}">
+                Next →
+            </a>
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+{% endblock content %}
+
+
+{% block footer %}{% endblock footer %}
+
+
+{% block scripts %}
+<script src="{% static 'JS/store.js' %}"></script>
+{% endblock scripts %}

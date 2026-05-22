@@ -1,6 +1,10 @@
 from django.urls import path
-# from .views import Your Views
+from . import views
 
 urlpatterns = [
-    # Put here the urls
+    path("my-books/", views.MyBooksView.index, name="my_books"),
+    path("api/my-books/<str:filter_type>/", views.MyBooksView.filter, name="my_books_filter"),
+
+    path("profile/", views.UserProfileView.index, name="user_profile"),
+    path("api/profile/update-avatar/", views.UserProfileView.updateAvatar, name="update_avatar"),
 ]

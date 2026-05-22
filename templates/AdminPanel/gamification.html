@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Duck Library | Gamification Configuration{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap"
+    rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/AdminPanel/gamification.css' %}">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<div class="layout-wrapper">
+
+    <!-- SIDEBAR (included properly) -->
+    {% include "includes/sidebar.html" %}
+
+    <main>
+
+        <section>
+            <h1>Gamification Configuration</h1>
+            <p>Configure how users earn gold points across the Duck platform.</p>
+        </section>
+
+
+        <section id="config-points" class="tab">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div
+                    class="card {% if not form.login_points.value or form.login_points.value == 0 %}is-inactive{% endif %}">
+                    <div>
+                        <h3>Daily Login Reward</h3>
+                        <p>Reward users for logging in once every 24 hours.</p>
+                    </div>
+                    <div>
+                        <label>Gold Points Per Login</label>
+                        {{ form.login_points }}
+                        {{ form.login_points.errors }}
+                    </div>
+                </div>
+
+
+                <div
+                    class="card {% if form.review_base.value == 0 and form.review_bonus.value == 0 and form.review_min_char.value == 0 %}is-inactive{% endif %}">
+                    <div>
+                        <h3>Book Review Reward</h3>
+                        <p>Points granted when a user submits a valid review.</p>
+                    </div>
+                    <div>
+                        <label>Base Points</label>
+                        {{ form.review_base }}
+
+                        <label>Bonus Points (if featured)</label>
+                        {{ form.review_bonus }}
+
+                        <label>Min. Character Count</label>
+                        {{ form.review_min_char }}
+
+                        {% if form.review_base.errors or form.review_bonus.errors or form.review_min_char.errors %}
+                        <div class="error-text">Please check your values.</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                <div
+                    class="card {% if form.borrow_rate.value == 0 and form.borrow_max_points.value == 0 %}is-inactive{% endif %}">
+                    <div>
+                        <h3>Borrow Reward</h3>
+                        <p>Points awarded when a user borrows a book (rate × price, capped at max).</p>
+                    </div>
+                    <div>
+                        <label>Points per $1 of book price</label>
+                        {{ form.borrow_rate }}
+
+                        <label>Maximum points per borrow</label>
+                        {{ form.borrow_max_points }}
+                    </div>
+                </div>
+
+                <div
+                    class="card {% if form.borrow_limit.value == 0 %}is-inactive{% endif %}">
+                    <div>
+                        <h3>Borrow Limits</h3>
+                        <p>Max concurrent borrows per user and loan duration.</p>
+                    </div>
+                    <div>
+                        <label>Max books a user can borrow at once</label>
+                        {{ form.borrow_limit }}
+
+                        <label>Borrow duration (days)</label>
+                        {{ form.borrow_duration_days }}
+                    </div>
+                </div>
+
+
+                <div
+                    class="card {% if not form.signup_bonus.value or form.signup_bonus.value == 0 %}is-inactive{% endif %}">
+                    <div>
+                        <h3>New User Reward</h3>
+                        <p>One-time bonus granted upon account creation.</p>
+                    </div>
+                    <div>
+                        <label>Signup Bonus Points</label>
+                        {{ form.signup_bonus }}
+                    </div>
+                </div>
+
+
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+
+                <div id="form-actions">
+                    <button type="submit" class="btn-primary" id="update-points">
+                        Update Configuration
+                    </button>
+                    <button type="submit" name="reset" id="reset-points" onclick="return confirm('Reset to defaults?')">
+                        Reset to Defaults
+                    </button>
+
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+</div>
+
+{% endblock content %}

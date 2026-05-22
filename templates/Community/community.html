@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Duck Library | Community Leaderboard{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/Community/community.css' %}">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+
+{% block content %}
+
+<div class="layout-wrapper">
+
+    <main class="leaderboard-main">
+
+        <!-- ================= HEADER ================= -->
+        <header class="leaderboard-header">
+            <div class="leaderboard-header__tag">
+                <i class="bi bi-trophy-fill"></i> GLOBAL RANKING
+            </div>
+
+            <h1 class="leaderboard-header__title">
+                Community Leaderboard
+            </h1>
+
+            <p class="leaderboard-header__subtitle">
+                Recognizing our most dedicated scholars, readers, and knowledge contributors.
+            </p>
+        </header>
+
+
+        <!-- ================= PODIUM ================= -->
+        <section class="podium">
+
+            {% for item in podium %}
+            <article class="podium__card {{ item.slot }}">
+
+                {% if item.rank == 1 %}
+                <span class="podium__leader-tag">Current Leader</span>
+                {% endif %}
+
+                <div class="podium__avatar">
+                    <img src="{% if item.user.avatar %}{{ item.user.avatar.url }}{% else %}{% static 'assets/dummy/a1.jpg' %}{% endif %}">
+                    <span class="podium__rank">{{ item.rank }}</span>
+                </div>
+
+                <h2 class="podium__name">{{ item.user.name }}</h2>
+
+                <span class="podium__role">
+                    {{ item.user.rank.name|default:"Scholar" }}
+                </span>
+
+                <div class="podium__points">
+                    {{ item.user.points }}
+                    <span class="podium__points-label">PTS</span>
+                </div>
+
+            </article>
+            {% empty %}
+                <div>No scholars ranked yet...</div>
+            {% endfor %}
+
+        </section>
+
+
+        <!-- ================= SCHOLARS TABLE ================= -->
+        <section class="scholars-section">
+
+            <header class="scholars-section__header">
+
+                <h2>Top Scholars</h2>
+
+            </header>
+
+
+            <div class="scholars-table-wrapper">
+
+                <table class="scholars-table">
+
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Scholar</th>
+                            <th>Readings</th>
+                            <th>Reviews</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="scholars-table-body">
+
+                        {% for scholar in scholars %}
+                        <tr class="{% if scholar.id == user.id %}scholars-table__user-row{% endif %}">
+
+                            <td>#{{ scholars.start_index|add:forloop.counter0 }}</td>
+
+                            <td>
+                                <div class="scholar-info">
+
+                                    <img src="{% if scholar.avatar %}{{ scholar.avatar.url }}{% else %}{% static 'assets/dummy/a1.jpg' %}{% endif %}">
+
+                                    <div>
+                                        <span class="scholar-info__name">
+                                            {% if scholar.id == user.id %}
+                                                You ({{ scholar.name }})
+                                            {% else %}
+                                                {{ scholar.name }}
+                                            {% endif %}
+                                        </span>
+
+                                        <span class="scholar-info__meta">
+                                            Member since {{ scholar.date_joined|date:"Y" }}
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>{{ scholar.readings }} books</td>
+                            <td>{{ scholar.reviews }}</td>
+                            <td class="highlighted-points">{{ scholar.points }}</td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% if scholars.has_other_pages %}
+            <div class="pagination">
+                {% if scholars.has_previous %}
+                <a href="?page={{ scholars.previous_page_number }}" class="pagination__btn">← Prev</a>
+                {% endif %}
+                <span class="subtext">Page {{ scholars.number }} of {{ scholars.paginator.num_pages }}</span>
+                {% if scholars.has_next %}
+                <a href="?page={{ scholars.next_page_number }}" class="pagination__btn">Next →</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </section>
+
+
+    </main>
+
+</div>
+
+{% endblock content %}

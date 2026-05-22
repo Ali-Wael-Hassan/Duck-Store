@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | {% if is_edit %}Edit{% else %}Add{% endif %} Book{% endblock title %}
+
+{% block style %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdminPanel/book_form.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+    <div class="layout-wrapper">
+        <main class="form-main-content">
+            
+            <div class="inventory-header">
+                <div>
+                    <h1>{% if is_edit %}Edit Book{% else %}Add New Book{% endif %}</h1>
+                    <p>
+                        {% if is_edit %}
+                        Update the metadata and stock levels for this entry.
+                        {% else %}
+                        Enter book metadata and real-time stock levels.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="book-form-card">
+                <form method="POST" enctype="multipart/form-data" class="compact-form">
+                    {% csrf_token %}
+                    
+                    <datalist id="genre-list">
+                        {% for genre in genres %}
+                        <option value="{{ genre.name }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <div class="form-grid">
+                        {{ form.as_p }}
+                    </div>
+
+                    <div class="form-actions-row">
+                        <button type="submit" class="btn-save">
+                            <span class="material-symbols-outlined">save</span> 
+                            {% if is_edit %}Update Changes{% else %}Save to Inventory{% endif %}
+                        </button>
+                        
+                        <a href="{% url 'inventory' %}" class="btn-cancel-link">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            {% if is_edit %}
+            <div class="book-form-card">
+                <h3>Remove from Catalog</h3>
+                <p>Deleting this book is a permanent action.</p>
+                
+                <form action="{% url 'delete_book' form.instance.pk %}" method="POST" onsubmit="return confirm('Are you sure?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-cancel">
+                        Delete Permanently
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+{% endblock content %}

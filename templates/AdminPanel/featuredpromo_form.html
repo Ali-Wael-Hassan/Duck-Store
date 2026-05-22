@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Duck Library | Featured Promotion{% endblock title %}
+
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/AdminPanel/fetured-form.css' %}">
+{% endblock style %}
+
+{% block navbar %}
+{% include "includes/navbar.html" %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="layout-wrapper">
+    {% include "includes/sidebar.html" %}
+    <main class="dashboard-main" style="padding: 30px;">
+        <h1>{% if object %}Edit{% else %}Add{% endif %} Featured Promotion</h1>
+<form method="post" enctype="multipart/form-data" style="max-width:600px;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" class="btn-add">
+    <a href="{% url 'list_featured_promos' %}" class="btn-outline">Cancel</a>
+</form>
+    </main>
+</div>
+{% endblock content %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}DUCK Library | Home Page{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/Storefront/home-page.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+{% endblock style %}
+
+
+{% block navbar %}
+    {% include 'includes/navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+
+<body data-page="browse">
+
+<main class="dashboard-container">
+
+    <!-- ================= FEATURED ================= -->
+    <section class="featured-section">
+        <header class="section-header">
+            <h2>Featured Subscriptions</h2>
+            <div class="carousel-controls">
+                <button class="prev-btn">❮</button>
+                <button class="next-btn">❯</button>
+            </div>
+        </header>
+
+        <div class="featured-grid">
+            {% for promo in featured_promos %}
+            <article class="featured-card"
+                style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% if promo.image %}{{ promo.image.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}');">
+
+                {% if promo.badge_label %}
+                <span class="badge">{{ promo.badge_label }}</span>
+                {% endif %}
+
+                <h3>{{ promo.title }}</h3>
+                <p>{{ promo.description }}</p>
+
+                <a href="{% url 'store' %}?category={{ promo.category.name|default:'' }}">
+                    {{ promo.btn_text }}
+                </a>
+
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+
+    <!-- ================= TRENDING ================= -->
+    <section class="trending-section">
+
+        <header class="section-header">
+            <h2>Trending Books</h2>
+            <a href="{% url 'store' %}?sort=popularity" class="view-all">View All</a>
+        </header>
+
+        <div class="books-grid">
+            {% for book in trending_books %}
+            <div class="book-item">
+                <a href="{% url 'book_detail' book.id %}" class="book-main-link">
+
+                    <figure class="book-cover">
+                        {% if book.cover_img %}
+                            <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                        {% else %}
+                            <img src="{% static 'assets/images/logo.png' %}" alt="default">
+                        {% endif %}
+                    </figure>
+
+                    <div class="book-info">
+                        <h3>{{ book.title }}</h3>
+                        <p class="author">{{ book.author }}</p>
+                    </div>
+
+                    <span class="price">{{ book.price }} pts</span>
+
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </section>
+
+
+    <!-- ================= CURATED ================= -->
+    <section class="curated-section">
+
+        <header class="section-header">
+            <h2>Curated For You</h2>
+
+            {% if curated_configs %}
+            <a href="{% url 'store' %}" class="view-all">
+                See recommendations
+            </a>
+            {% endif %}
+
+        </header>
+
+        <div class="curated-grid">
+
+            {% for book in curated_books %}
+            <a href="{% url 'book_detail' book.id %}" class="curated-card">
+
+                <div class="curated-thumb">
+                    <img src="{{ book.cover_img.url }}" alt="{{ book.title }}">
+                </div>
+
+                <div class="curated-details">
+                    <span class="reason-tag">
+                        CURATED FOR YOU
+                    </span>
+
+                    <h4>{{ book.title }}</h4>
+                    <span class="status">Recommended</span>
+                </div>
+
+            </a>
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+
+{% endblock content %}

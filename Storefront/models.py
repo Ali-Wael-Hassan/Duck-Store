@@ -16,7 +16,7 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     pages = models.IntegerField()
     rating = models.FloatField(default=0.0)
-    cover_img = models.CharField(max_length=255)
+    cover_img = models.ImageField(upload_to='covers/', null=True, blank=True)
     published_date = models.TextField()
     description = models.TextField()
     sales = models.IntegerField(default = 0)
@@ -31,6 +31,20 @@ class Inventory(models.Model):
     stock = models.IntegerField(default=0)
     max_stock = models.IntegerField(default=100)
     
+    @property
+    def stock_percent(self):
+        if self.max_stock > 0:
+            return int((self.stock / self.max_stock) * 100)
+        return 0
+
+    @property
+    def get_status(self):
+        if self.stock == 0:
+            return "Out of Stock"
+        if self.stock_percent < 20:
+            return "Low Stock"
+        return "In Stock"
+
     def __str__(self):
         return f"Inventory: {self.book.title}"
     
@@ -41,6 +55,7 @@ class UserBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='owned_by')
     ownership_type = models.CharField(max_length=10)
     acquired_at = models.DateField(auto_now_add=True)
+    due_date = models.DateField(null=True, blank=True)
     progress = models.IntegerField(default=0)
     
     class Meta:
@@ -57,9 +72,6 @@ class Review(models.Model):
     rating = models.IntegerField()
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'book')
 
     def __str__(self):
         return f"{self.rating} Stars by {self.user_name}"
@@ -81,19 +93,19 @@ class Order(models.Model):
     
 # Configuration
 class CuratedConfig(models.Model):
-    display_genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
-    limit = models.IntegerField(default=4)
+    category = models.ForeignKey('Genre', null=True, blank=True, on_delete=models.SET_NULL, related_name='curated_configs')
+    book = models.ForeignKey('Book', null=True, blank=True, on_delete=models.SET_NULL, related_name='curated_configs')
 
     def __str__(self):
-        return f"Curated: {self.display_genre.name}"
+        return f"Curated: {self.book.title if self.book else 'No book'}"
 
 class FeaturedPromo(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    promo_type = models.CharField(max_length=50)
+    category = models.ForeignKey('Genre', null=True, blank=True, on_delete=models.SET_NULL, related_name='featured_promos')
     badge_label = models.CharField(max_length=50)
     btn_text = models.CharField(max_length=100)
-    image = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='promos/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

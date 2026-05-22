@@ -1,0 +1,353 @@
+/* --- OVERALL DASHBOARD LAYOUT --- */
+.layout-wrapper {
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+main.dashboard-main {
+    padding: 20px !important; 
+    background-color: transparent; 
+    border: none; 
+}
+
+.dashboard-main {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* --- UTILITIES --- */
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- STATS CARDS --- */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background-color: #1a202e; 
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    background-color: #1e2533;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2d3748; 
+    color: var(--brand-primary);
+}
+
+.trend {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+.trend.positive { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.trend.negative { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+.card-body .stat-label {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.card-body .stat-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+/* --- SALES CHART & TRENDING GRID --- */
+.content-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr; 
+    gap: 24px;
+    align-items: stretch;
+}
+
+.panel-card {
+    background-color: #1a202e;
+    border: 1px solid #2d3748;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;         
+    flex-direction: column; 
+}
+
+.lg-col-span-2 {
+    grid-column: 1 / -1;
+}
+
+/* --- BUTTON REFINEMENTS --- */
+.btn-outline, 
+.btn-block-subtle, 
+.toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    gap: 8px;
+    border: 1px solid #30363D;
+    background: transparent;
+    color: #e2e8f0;
+}
+
+.btn-outline:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.btn-outline.active {
+    background: var(--brand-primary);
+    color: #0B0E11;
+    border-color: var(--brand-primary);
+}
+
+.btn-outline[style*="red"]:hover {
+    background: rgba(255, 0, 0, 0.1) !important;
+    border-color: red !important;
+    color: red !important;
+}
+
+.btn-block-subtle {
+    width: 100%;
+    background: #1C2128;
+    color: #8B949E;
+}
+
+.btn-block-subtle:hover {
+    background: #30363D;
+    color: #FFFFFF;
+}
+
+.toggle-group {
+    display: flex;
+    background: #0B0E11;
+    border: 1px solid #30363D;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.toggle-btn {
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    color: #94a3b8;
+}
+
+.toggle-btn.active {
+    background: #30363D;
+    color: var(--brand-primary);
+}
+
+/* --- SALES CHART BARS (FIXED) --- */
+.chart-area {
+    flex-grow: 1;           
+    display: flex;          
+    flex-direction: column;
+    min-height: 250px; /* Ensures chart area has a base height */
+}
+
+.chart-grid {
+    display: flex;
+    justify-content: space-around; /* Spreads bars evenly */
+    align-items: flex-end;
+    flex-grow: 1;           
+    padding: 20px 0 10px 0;
+}
+
+.chart-bar-wrapper {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center; /* Centers the bar and label */
+    position: relative;
+    z-index: 1;
+}
+
+.bar {
+    width: 15%; /* Fixed width to prevent bars from touching */
+    background: var(--brand-primary);
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    min-height: 2px; /* Visual aid for zero values */
+    transition: height 0.3s ease;
+}
+
+.bar-label {
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+.chart-bar-wrapper::before {
+    content: '';
+    position: absolute;
+    bottom: 28px; /* Adjusted to sit behind the bar, above the label */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15%;
+    height: calc(100% - 28px);
+    background: rgba(255, 255, 255, 0.03); 
+    border-radius: 4px;
+    z-index: -1;
+}
+
+/* --- TRENDING BOOKS LIST --- */
+.book-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #2d3748 !important;
+}
+
+.book-item:last-child { border-bottom: none !important; }
+
+.book-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background-color: #2d3748;
+}
+
+.book-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    display: block;
+}
+
+.book-meta { font-size: 0.8rem; color: #94a3b8; }
+.book-price { 
+    margin-left: auto;      
+    color: var(--brand-primary); 
+    font-weight: 700; 
+    font-size: 1rem; 
+    text-align: right;      
+}
+
+/* --- RECENT TRANSACTIONS TABLE --- */
+.table-responsive table {
+    width: 100%;
+    border-spacing: 0;
+}
+
+thead th {
+    text-align: left;
+    padding: 16px;
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #2d3748;
+}
+
+tbody td {
+    padding: 16px;
+    border-bottom: 1px solid #2d3748;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.completed { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.status-badge.pending { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+@media (max-width: 1024px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .content-grid-wrapper { grid-template-columns: 1fr; }
+}
+
+/* --- PAGINATION FIXES --- */
+.page-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px; 
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.btn-outline.active {
+    background-color: var(--brand-primary);
+    color: #0B0E11;
+    border-color: var(--brand-primary);
+}
+
+.btn-outline:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--border-color);
+    color: var(--text-muted);
+}
+
+.btn-outline:hover:not(:disabled) {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.btn-outline.active:hover {
+    background-color: var(--brand-primary-hover);
+    color: #000;
+}

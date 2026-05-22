@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliophile Gold - Achievements & Badges</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/classes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'css/Pages/user-profile-style.css' %}">
+</head>
+
+<body data-page="user-profile">
+    <nav class="header" id="main-nav">
+        <div class="container header__inner">
+            <div class="logo-group">
+                <div class="logo-icon"><span class="material-symbols-outlined">menu_book</span></div>
+                <div class="logo-text">DUCK</div>
+            </div>
+            <div class="nav">
+                <a href="home.html">Home</a>
+                <a href="store.html">Store</a>
+                <a href="my-Books.html">My Books</a>
+                <a href="community.html">Community</a>
+                <a href="reward.html">Rewards</a>
+            </div>
+            <div class="header__actions">
+                <a href="user_profile.html" class="avatar-link"><img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/default-avatar.png' %}{% endif %}" class="avatar-img"></a>
+                
+                <button class="btn-primary" onclick="window.AuthEngine.logout()">Log-out</button>
+            </div>
+        </div>
+    </nav>
+    <main class="dashboard-content">
+        {% csrf_token %}
+
+        <section class="profile-card-container">
+            <header class="profile-card-header">
+                <div class="header-text">
+                    <h2 class="section-title">Profile Information</h2>
+                    <p class="section-subtitle">Basic details for your public identification.</p>
+                </div>
+            </header>
+
+            <div class="profile-card-body">
+                <div class="profile-avatar-column">
+                    <div class="avatar-relative">
+                        <img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/default-avatar.png' %}{% endif %}" alt="Profile Picture" id="user-avatar" class="user-avatar-img">
+                        <label for="avatar-upload" class="avatar-upload-label">
+                            <span class="camera-icon">📷</span>
+                            <input type="file" id="avatar-upload" hidden accept="image/*">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="profile-details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label" >FULL NAME</span>
+                        <p class="detail-value" id="profile-full-name">{{ user.name }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">EMAIL ADDRESS</span>
+                        <p class="detail-value" id="profile-email">{{ user.email }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">USERNAME</span>
+                        <p class="detail-value" id="user-name">@{{ user.uname }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">MEMBER SINCE</span>
+                        <p class="detail-value" id="profile-member-since">{{ user.join_date|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <header class="page-intro">
+            <h1 class="page-title">Achievements & Badges</h1>
+            <p class="page-description">Track your literary milestones and unlock exclusive rewards as you explore the
+                world of books.</p>
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="window.location.href='community.html'">View Leaderboard</button>
+            </div>
+        </header>
+
+        <section class="stats-overview" aria-label="Quick Stats">
+            <article class="stat-card">
+                <h2 class="stat-label">Total Points</h2>
+                <p class="stat-value">
+                    <span id="stat-unlocked-count">{{ user.points }}</span>
+                </p>
+            </article>
+
+            <article class="stat-card">
+                <h2 class="stat-label">Global Rank</h2>
+                <p class="stat-value" id="stat-global-rank">#{{ global_rank }}</p>
+                <p class="stat-trend" id="stat-rank-trend">{{ tier }} Tier</p>
+            </article>
+
+            <article class="stat-card">
+                <h2 class="stat-label">Total Books Read</h2>
+                <p class="stat-value">{{ user.readings }}</p>
+            </article>
+        </section>
+
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Reading Streaks</h2>
+            </header>
+            <div class="badge-grid" id="dynamic-badge-grid">
+                {% for badge in badges %}
+                <article class="badge-item">
+                    <div class="badge-icon">
+                        {{ badge.badge__icon|default:'🏆' }}
+                    </div>
+                    <div class="badge-level">LEVEL {{ badge.badge__level }}</div>
+                    <h3 class="badge-name">{{ badge.badge__name }}</h3>
+                    <p class="badge-status">Unlocked: {{ badge.unlocked_at|date:"M d, Y" }}</p>
+                </article>
+                {% empty %}
+                <p>No badges unlocked yet. Keep reading!</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="achievement-section">
+            <header class="section-header">
+                <h2 class="section-title">Genre Master</h2>
+            </header>
+            <div class="genre-grid" id="dynamic-genre-grid">
+                {% for genre in genre_progress %}
+                <article class="genre-card">
+                    <div class="genre-card-header">
+                        <span class="genre-icon">📚</span>
+                        <span class="status-tag">In Progress</span>
+                    </div>
+                    <h3 class="genre-title">{{ genre.book__genre__name }}</h3>
+                    <p class="genre-detail">Books read: {{ genre.count }}</p>
+                    <progress value="{{ genre.count }}" max="10" class="genre-progress"></progress>
+                </article>
+                {% empty %}
+                <p>You haven't read any books yet.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="achievement-section">
+            <h2>Community Contributor</h2>
+            <ul class="contributor-grid">
+            </ul>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>Keep reading to unlock more mysteries of the library.</p>
+        </footer>
+    </main>
+    {% comment %} <script type="module" src="{% static 'js/main.js' %}"></script> {% endcomment %}
+    <script>
+        document.getElementById('avatar-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            // Fetch CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            fetch("{% url 'update_avatar' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('user-avatar').src = data.avatar_url;
+                    document.querySelector('.avatar-img').src = data.avatar_url;
+                } else {
+                    alert(data.error || 'Error uploading avatar');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during upload.');
+            });
+        });
+    </script>
+</body>
+
+</html>
